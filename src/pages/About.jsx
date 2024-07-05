@@ -13,7 +13,7 @@ export const PageAbout = () => {
     <div className='flex'>
       <Sidebar />
       <Container className='space-y-10'>
-        <Section className='lg:grid lg:grid-cols-2'>
+        <Section className='p-8 border-b border-black lg:grid lg:grid-cols-2'>
           <div className='flex items-center space-x-2'>
             <Avatar imgSrc="/img/templates/profile.jpg" size={96}/>
             <div>
@@ -39,7 +39,7 @@ export const PageAbout = () => {
             </ul>
           </div>
         </Section>
-        <div className='grid h-fit lg:grid-cols-2 gap-10'>
+        <div className='pb-8 border-b border-black grid h-fit lg:grid-cols-2 gap-10'>
           <Section className='h-full space-y-2 col-span-2 lg:col-span-1'>
             <h2><b>Unidade de Saúde</b></h2>
             <p>Nome: SEC. MUN. DE SAÚDE DE MANAUS</p>

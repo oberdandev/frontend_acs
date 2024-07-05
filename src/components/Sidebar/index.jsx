@@ -78,14 +78,12 @@ const Sidebar = ({children}) => {
   }
 
   return (
-    <>
-        <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 h-screen bg-sky-900 relative  p-5 pt-8 shadow-md shadow-slate-800`}>
-  
-          <SidebarHeader />
-          <SidebarMenus />
-          
-        </div>
-    </>
+    <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 min-h-screen bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
+
+      <SidebarHeader />
+      <SidebarMenus />
+      
+    </div>
   );
 };
 
