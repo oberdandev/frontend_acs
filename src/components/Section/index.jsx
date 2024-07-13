@@ -1,8 +1,8 @@
 import styles from "./Section.module.css"
 
-export default function Section( {children, className} ) {
+export default function Section( {children, id, className} ) {
     return (
-        <section className={`${styles.section} ${className}`}>
+        <section id={id} className={`${styles.section} ${className}`}>
             {children}
         </section>
     );
