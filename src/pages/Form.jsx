@@ -3,63 +3,38 @@ import Container from '../components/Container'
 import Section from '../components/Section'
 import InputField from '../components/InputField'
 import Button from '../components/Button'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { inserirDataAtividade, retorno } from '../hooks/utils.jsx';
+import { inserirValor, checkForm } from '../hooks/utils.jsx';
 
 function DayForm( {id, name, className} ) {
-  const [dataAtividade, setDataAtividade] = useState("");
-  const [quarteiroes, setQuarteiroes] = useState("");
-
-  const [inspecionados, setInspecionados] = useState("");
-  const [fechados, setFechados] = useState("");
-  const [positivos, setPositivos] = useState("");
-
-  const [checklists, setChecklists] = useState("");
-
-  const [checkSim, setCheckSim] = useState("");
-  const [checkNao, setCheckNao] = useState("");
-  const [checkParcial, setCheckParcial] = useState("");
-
-  const [depA1, setDepA1] = useState("");
-  const [depA2, setDepA2] = useState("");
-  const [depB, setDepB] = useState("");
-  const [depC, setDepC] = useState("");
-  const [depD1, setDepD1] = useState("");
-  const [depD2, setDepD2] = useState("");
-  const [depE, setDepE] = useState("");
-
-  const [depEliminados, setDepEliminados] = useState("");
-  const [depPositivos, setDepPositivos] = useState("");
-  const [depTratamento, setDepTratamento] = useState("");
-
   return (
     <Section id={id} className={`transition-all duration-500 space-y-4 ${className}`}>
       <div className='p-2 pb-0 border-t border-black bg-slate-100'>
         <h2 className='font-bold'>{name}</h2>
       </div>
       <div className='p-2 pb-0 border-t border-black lg:grid lg:grid-cols-2 lg:space-x-8 bg-slate-100'>
-        <InputField type='date' label='Data da Atividade: ' inputOnChange={(e) => inserirDataAtividade(e.target.value)}/>
-        <InputField type='text' label='Quarteirões Trabalhados: '  inputSize="lg" inputOnChange={(e) => setQuarteiroes(e.target.value)}/>
+        <InputField id="dataAtividade" type='date' label='Data da Atividade: ' inputOnChange={(e) => inserirValor(e.target.value, 'dataAtividade')}/>
+        <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="lg" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
       </div>
       <div className='space-y-4 lg:space-y-0 lg:grid lg:grid-cols-4 lg:space-x-4'>
         <div className='space-y-4 p-2 border-t border-black bg-slate-100'>
           <p>Total de imóveis:</p>
           <div>
-            <InputField type='text' label='Inspecionados: ' inputSize='sm' labelPos="side" inputOnChange={(e) => setInspecionados(e.target.value)}/>
-            <InputField type='text' label='Fechados: ' inputSize="sm" labelPos="side" inputOnChange={(e) => setFechados(e.target.value)}/>
-            <InputField type='text' label='Positivos: ' inputSize="sm" labelPos="side" inputOnChange={(e) => setPositivos(e.target.value)}/>
+            <InputField id="inspecionados" type='text' label='Inspecionados: ' inputSize='sm' labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'inspecionados')}/>
+            <InputField id="fechados" type='text' label='Fechados: ' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'fechados')}/>
+            <InputField id="positivos" type='text' label='Positivos: ' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'positivos')}/>
           </div>   
         </div>
         <div className='space-y-4 p-2 border-t border-black bg-slate-100'>
           <div>
-            <InputField type='text' label='Checklist implantados:' inputSize="sm" inputOnChange={(e) => setChecklists(e.target.value)}/>
+            <InputField id="checklists" type='text' label='Checklists implantados:' inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'checklists')}/>
           </div>
           <p>Monitoramento de adesão ao checklist:</p>
           <div>
-            <InputField type='text' label='Sim' inputSize="sm" labelPos="side" inputOnChange={(e) => setCheckSim(e.target.value)}/>
-            <InputField type='text' label='Não' inputSize="sm" labelPos="side" inputOnChange={(e) => setCheckNao(e.target.value)}/>
-            <InputField type='text' label='Parcial' inputSize="sm" labelPos="side" inputOnChange={(e) => setCheckParcial(e.target.value)}/>
+            <InputField id="checkSim" type='text' label='Sim' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'checkSim')}/>
+            <InputField id="checkNao" type='text' label='Não' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'checkNao')}/>
+            <InputField id="checkParcial" type='text' label='Parcial' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'checkParcial')}/>
           </div>
         </div>
         <div className='space-y-4 p-2 col-span-2 border-t border-black bg-slate-100'>
@@ -67,25 +42,25 @@ function DayForm( {id, name, className} ) {
           <div className='block'>
             <div className='grid grid-cols-3'>
               <div>
-                <InputField type='text' label='A1' inputSize="sm" labelPos="side" inputOnChange={(e) => setDepA1(e.target.value)}/>
-                <InputField type='text' label='A2' inputSize="sm" labelPos="side" inputOnChange={(e) => setDepA2(e.target.value)}/>
-                <InputField type='text' label='B' inputSize="sm" labelPos="side" inputOnChange={(e) => setDepB(e.target.value)}/>
+                <InputField id="depA1" type='text' label='A1' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depA1')}/>
+                <InputField id="depA2" type='text' label='A2' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depA2')}/>
+                <InputField id="depB" type='text' label='B' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depB')}/>
               </div>
               <div> 
-                <InputField type='text' label='C' inputSize="sm" labelPos="side" inputOnChange={(e) => setDepC(e.target.value)}/>
-                <InputField type='text' label='D1' inputSize="sm" labelPos="side" inputOnChange={(e) => setDepD1(e.target.value)}/>
-                <InputField type='text' label='D2' inputSize="sm" labelPos="side" inputOnChange={(e) => setDepD2(e.target.value)}/>
+                <InputField id="depC" type='text' label='C' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depC')}/>
+                <InputField id="depD1" type='text' label='D1' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depD1')}/>
+                <InputField id="depD2" type='text' label='D2' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depD2')}/>
               </div>
               <div>
-                <InputField type='text' label='E' inputSize="sm" labelPos="side" inputOnChange={(e) => setDepE(e.target.value)}/>
+                <InputField id="depE" type='text' label='E' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depE')}/>
               </div>
               
               
             </div>
             <div className='grid grid-cols-2'>
-              <InputField type='text' label='N° de depósitos eliminados:' inputSize='sm' inputOnChange={(e) => setDepEliminados(e.target.value)}/>
-              <InputField type='text' label='N° de depósitos positivos:' inputSize='sm' inputOnChange={(e) => setDepPositivos(e.target.value)}/>
-              <InputField className="col-span-2" type='text' label='N° de encaminhamentos p/ tratamento:' inputSize='sm' inputOnChange={(e) => setDepTratamento(e.target.value)}/>
+              <InputField id="depEliminados" type='text' label='N° de depósitos eliminados:' inputSize='sm' inputOnChange={(e) => inserirValor(e.target.value, 'depEliminados')}/>
+              <InputField id="depPositivos" type='text' label='N° de depósitos positivos:' inputSize='sm' inputOnChange={(e) => inserirValor(e.target.value, 'depPositivos')}/>
+              <InputField id="depTratamento" className="col-span-2" type='text' label='N° de encaminhamentos p/ tratamento:' inputSize='sm' inputOnChange={(e) => inserirValor(e.target.value, 'depTratamento')}/>
             </div>
           </div>
           
@@ -100,8 +75,29 @@ function DayForm( {id, name, className} ) {
 export default function PageForm() {
   const [currentForm, setCurrentForm] = useState('form-seg');
 
+  useEffect(() => {
+    const dayForm = document.querySelector(`#${currentForm}`);
+    const dayJSONData = JSON.parse(localStorage.getItem(currentForm));
+
+    if (dayJSONData === null) 
+      return;
+
+    for (const input of dayForm.querySelectorAll('input')) {
+      input.value = dayJSONData[input.id];  
+    }
+  });
+
   function advanceForm() {
-    checkForm();
+    const dayForm = document.querySelector(`#${currentForm}`);
+
+    for (const input of dayForm.querySelectorAll('input')) {
+      inserirValor(input.value, input.id);
+    }
+
+    if (checkForm( currentForm ) === false) {
+      alert("O formulário não foi preenchido corretamente!");
+      return;
+    }
 
     const currentFormElement = document.querySelector(`#${currentForm}`);
     const currentFormSibling = currentFormElement.nextSibling;
@@ -132,12 +128,12 @@ export default function PageForm() {
           <InputField type='text' label='Sublocalidade: ' inputSize='lg'/>
         </Section>
 
-        <div className='overflow-scroll'>
-          <DayForm id="form-seg" name="Segunda" className='day-form'/>
-          <DayForm id="form-ter" name="Terça" className="day-form absolute opacity-0 invisible translate-x-32"/>
-          <DayForm id="form-qua" name="Quarta" className="day-form absolute opacity-0 invisible translate-x-32"/>
-          <DayForm id="form-qui" name="Quinta" className="day-form absolute opacity-0 invisible translate-x-32"/>
-          <DayForm id="form-sex" name="Sexta" className="day-form absolute opacity-0 invisible translate-x-32"/>
+        <div className='flex overflow-scroll'>
+          <DayForm id="form-seg" name="Segunda" className='day-form '/>
+          <DayForm id="form-ter" name="Terça" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
+          <DayForm id="form-qua" name="Quarta" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
+          <DayForm id="form-qui" name="Quinta" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
+          <DayForm id="form-sex" name="Sexta" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
         </div>
 
         <Button label="Avançar" onButtonClick={() => advanceForm()} />
