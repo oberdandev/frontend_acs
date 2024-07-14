@@ -76,6 +76,11 @@ export default function PageForm() {
   const [currentForm, setCurrentForm] = useState('form-seg');
 
   useEffect(() => {
+    if (document.querySelector(`#${currentForm}`).nextSibling === null) {
+      //Troca a label do botão de avançar no fim do formulário
+      document.querySelector('#button-advance').textContent = "Enviar";
+    }
+
     const dayForm = document.querySelector(`#${currentForm}`);
     const dayJSONData = JSON.parse(localStorage.getItem(currentForm));
 
@@ -94,10 +99,10 @@ export default function PageForm() {
       inserirValor(input.value, input.id);
     }
 
-    if (checkForm( currentForm ) === false) {
+    /*if (checkForm( currentForm ) === false) {
       alert("O formulário não foi preenchido corretamente!");
       return;
-    }
+    }*/
 
     const currentFormElement = document.querySelector(`#${currentForm}`);
     const currentFormSibling = currentFormElement.nextSibling;
@@ -116,6 +121,9 @@ export default function PageForm() {
       currentFormSibling.classList.remove("translate-x-32");
 
       setCurrentForm(currentFormSibling.getAttribute("id"));
+    } else {
+      //Envio do formulário
+      
     }
   }
 
@@ -136,7 +144,7 @@ export default function PageForm() {
           <DayForm id="form-sex" name="Sexta" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
         </div>
 
-        <Button label="Avançar" onButtonClick={() => advanceForm()} />
+        <Button id="button-advance" label="Avançar" onButtonClick={() => advanceForm()} />
       </Container>
     </div>
   );
