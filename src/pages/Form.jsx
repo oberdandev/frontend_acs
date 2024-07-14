@@ -5,17 +5,15 @@ import InputField from '../components/InputField'
 import Button from '../components/Button'
 import { useEffect, useState } from 'react';
 
-import { inserirValor, checkForm } from '../hooks/utils.jsx';
+import { inserirValor, checkForm, sendForm } from '../hooks/utils.js';
+import ProgressBar from '../components/ProgressBar/index.jsx'
 
-function DayForm( {id, name, className} ) {
+function DayForm( {id, className} ) {
   return (
     <Section id={id} className={`transition-all duration-500 space-y-4 ${className}`}>
-      <div className='p-2 pb-0 border-t border-black bg-slate-100'>
-        <h2 className='font-bold'>{name}</h2>
-      </div>
       <div className='p-2 pb-0 border-t border-black lg:grid lg:grid-cols-2 lg:space-x-8 bg-slate-100'>
         <InputField id="dataAtividade" type='date' label='Data da Atividade: ' inputOnChange={(e) => inserirValor(e.target.value, 'dataAtividade')}/>
-        <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="lg" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
+        <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
       </div>
       <div className='space-y-4 lg:space-y-0 lg:grid lg:grid-cols-4 lg:space-x-4'>
         <div className='space-y-4 p-2 border-t border-black bg-slate-100'>
@@ -74,6 +72,8 @@ function DayForm( {id, name, className} ) {
 
 export default function PageForm() {
   const [currentForm, setCurrentForm] = useState('form-seg');
+  const [progress, setProgress] = useState(0);
+  const weekDays = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
 
   useEffect(() => {
     if (document.querySelector(`#${currentForm}`).nextSibling === null) {
@@ -106,6 +106,24 @@ export default function PageForm() {
 
     const currentFormElement = document.querySelector(`#${currentForm}`);
     const currentFormSibling = currentFormElement.nextSibling;
+
+    if(currentFormSibling === null) {
+      const microareaElement = document.querySelector("#microarea");
+      const sublocalidadeElement = document.querySelector("#sublocalidade");
+
+      if (sendForm (microareaElement.value, sublocalidadeElement.value)) {
+        const buttonAdvance = document.querySelector('#button-advance');
+        const buttonRetract = document.querySelector('#button-retract');
+
+        buttonAdvance.setAttribute("disabled", "");
+        buttonRetract.setAttribute("disabled", "");
+
+        buttonAdvance.classList.add("disabled");
+        buttonRetract.classList.add("disabled");
+      } else 
+        return;
+    }
+
     currentFormElement.classList.add("invisible");
     currentFormElement.classList.add("absolute");
     currentFormElement.classList.add("opacity-0");
@@ -121,16 +139,17 @@ export default function PageForm() {
       currentFormSibling.classList.remove("translate-x-32");
 
       setCurrentForm(currentFormSibling.getAttribute("id"));
+      setProgress(progress + 1);
     } else {
       //Envio do formulário
-
+      
     }
   }
 
   function retractForm() {
     const multiForm = document.querySelector("#multi-form");
 
-    for (const formDay of multiForm.childNodes) {
+    for (const formDay of multiForm.querySelectorAll(".day-form")) {
       if (formDay.getAttribute("id") === currentForm) 
         return;
 
@@ -146,6 +165,7 @@ export default function PageForm() {
         formDay.nextSibling.classList.add("translate-x-32");
 
         setCurrentForm(formDay.getAttribute("id"));
+        setProgress(progress - 1);
       }
     }
   }
@@ -153,11 +173,16 @@ export default function PageForm() {
   return (
     <div className='flex'>
       <Sidebar />
-      <Container>
+      <Container >
         <Section className='lg:grid lg:grid-cols-2 lg:space-x-8'>
-          <InputField type='text' label='Microárea: ' inputSize='lg'/>
-          <InputField type='text' label='Sublocalidade: ' inputSize='lg'/>
+          <InputField id="microarea" type='text' label='Microárea: ' inputSize='lg'/>
+          <InputField id="sublocalidade" type='text' label='Sublocalidade: ' inputSize='lg'/>
         </Section>
+
+        <div className='flex justify-center w-3/4'>
+          <ProgressBar progress={progress} steps={weekDays} className='mb-4 w-3/4' />
+        </div>  
+        
 
         <div id="multi-form" className='flex'>
           <DayForm id="form-seg" name="Segunda" className='day-form '/>

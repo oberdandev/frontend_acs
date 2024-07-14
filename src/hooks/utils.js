@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 let dataAtividade = '';
 let quarteiroes = '';
 
@@ -87,26 +85,54 @@ export const inserirValor = (value, dataField) => {
     }
 };
 
+export const sendForm = (microarea, sublocalidade) => {
+    console.log("Relatório enviado!");
+
+    if (microarea.length === 0 || sublocalidade.length === 0) {
+        alert("Microárea ou Sublocalidade não foram preenchidos!");
+        return false;
+    }
+
+    console.log("microarea: " + microarea);
+    console.log("sublocalidade: " + sublocalidade);
+
+    const segData = JSON.parse(localStorage.getItem("form-seg"));
+    const terData = JSON.parse(localStorage.getItem("form-ter"));
+    const quaData = JSON.parse(localStorage.getItem("form-qua"));
+    const quiData = JSON.parse(localStorage.getItem("form-qui"));
+    const sexData = JSON.parse(localStorage.getItem("form-sex"));
+
+    console.log(segData);
+    console.log(terData);
+    console.log(quaData);
+    console.log(quiData);
+    console.log(sexData);
+
+    return true;
+}
+
 export const checkForm = ( diaSemana ) => {
-    if (dataAtividade.trim().length !== 0 &&
-        quarteiroes.trim().length !== 0 &&
-        inspecionados.trim().length !== 0 &&
-        fechados.trim().length !== 0 &&
-        positivos.trim().length !== 0 &&
-        checklists.trim().length !== 0 &&
-        checkSim.trim().length !== 0 &&
-        checkNao.trim().length !== 0 &&
-        checkParcial.trim().length !== 0 &&
-        depA1.trim().length !== 0 &&
-        depA2.trim().length !== 0 &&
-        depB.trim().length !== 0 &&
-        depC.trim().length !== 0 &&
-        depD1.trim().length !== 0 &&
-        depD2.trim().length !== 0 &&
-        depE.trim().length !== 0 &&
-        depEliminados.trim().length !== 0 &&
-        depPositivos.trim().length !== 0 &&
-        depTratamento.trim().length !== 0
+    //@TODO Exibir mensagens de erro mais significativas
+
+    if (dataAtividade.trim().length !== 0 && 
+        quarteiroes.trim().length !== 0 && !isNaN(quarteiroes) &&
+        inspecionados.trim().length !== 0 && !isNaN(inspecionados) &&
+        fechados.trim().length !== 0 && !isNaN(fechados) &&
+        positivos.trim().length !== 0 && !isNaN(positivos) &&
+        checklists.trim().length !== 0 && !isNaN(checklists) &&
+        checkSim.trim().length !== 0 && !isNaN(checkSim) &&
+        checkNao.trim().length !== 0 && !isNaN(checkNao) &&
+        checkParcial.trim().length !== 0 && !isNaN(checkParcial) &&
+        depA1.trim().length !== 0 && !isNaN(depA1) &&
+        depA2.trim().length !== 0 && !isNaN(depA2) &&
+        depB.trim().length !== 0 && !isNaN(depB) &&
+        depC.trim().length !== 0 && !isNaN(depC) &&
+        depD1.trim().length !== 0 && !isNaN(depD1) &&
+        depD2.trim().length !== 0 && !isNaN(depD2) &&
+        depE.trim().length !== 0 && !isNaN(depE) &&
+        depEliminados.trim().length !== 0 && !isNaN(depEliminados) &&
+        depPositivos.trim().length !== 0 && !isNaN(depPositivos) &&
+        depTratamento.trim().length !== 0 && !isNaN(depTratamento)
     ) {
         const formDia = {
             dataAtividade: dataAtividade,
