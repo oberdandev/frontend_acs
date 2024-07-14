@@ -1,4 +1,6 @@
-export default function InputField( {className, id, type, label, inputSize, labelPos} ) {
+import { useState } from "react";
+
+export default function InputField( {className, id, type, label, inputSize, labelPos, inputOnChange} ) {
     const finalID = (() => {
         if (id === undefined) return label;
         else return id;
@@ -18,7 +20,8 @@ export default function InputField( {className, id, type, label, inputSize, labe
                 <label className='block'>{label}</label>
                 <input id={finalID} name={finalID} 
                     className={`pl-1 pr-1 text-left border border-black ${inputSizeClasses} ${inputSize === "sm" && 'text-center'}`} 
-                    type={type}/>
+                    type={type}
+                    onChange={inputOnChange}/>
             </div>         
         </div>
     );

@@ -21,7 +21,7 @@ const validateCPF = {
 }
 const baseUrl = "http://localhost:2101/login";
 
-const PageLogin = () => {
+const Login = () => {
   const toastId = useRef(null);
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
@@ -151,4 +151,4 @@ const PageLogin = () => {
   );
 };
 
-export default PageLogin;
+export default Login;
