@@ -99,10 +99,10 @@ export default function PageForm() {
       inserirValor(input.value, input.id);
     }
 
-    /*if (checkForm( currentForm ) === false) {
+    if (checkForm( currentForm ) === false) {
       alert("O formulário não foi preenchido corretamente!");
       return;
-    }*/
+    }
 
     const currentFormElement = document.querySelector(`#${currentForm}`);
     const currentFormSibling = currentFormElement.nextSibling;
@@ -123,7 +123,30 @@ export default function PageForm() {
       setCurrentForm(currentFormSibling.getAttribute("id"));
     } else {
       //Envio do formulário
-      
+
+    }
+  }
+
+  function retractForm() {
+    const multiForm = document.querySelector("#multi-form");
+
+    for (const formDay of multiForm.childNodes) {
+      if (formDay.getAttribute("id") === currentForm) 
+        return;
+
+      if (formDay.nextSibling.getAttribute("id") === currentForm) {
+        formDay.classList.remove("absolute");
+        formDay.classList.remove("invisible");
+        formDay.classList.remove("opacity-0");
+        formDay.classList.remove("-translate-x-32");
+
+        formDay.nextSibling.classList.add("absolute");
+        formDay.nextSibling.classList.add("invisible");
+        formDay.nextSibling.classList.add("opacity-0");
+        formDay.nextSibling.classList.add("translate-x-32");
+
+        setCurrentForm(formDay.getAttribute("id"));
+      }
     }
   }
 
@@ -136,7 +159,7 @@ export default function PageForm() {
           <InputField type='text' label='Sublocalidade: ' inputSize='lg'/>
         </Section>
 
-        <div className='flex overflow-scroll'>
+        <div id="multi-form" className='flex'>
           <DayForm id="form-seg" name="Segunda" className='day-form '/>
           <DayForm id="form-ter" name="Terça" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
           <DayForm id="form-qua" name="Quarta" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
@@ -144,7 +167,11 @@ export default function PageForm() {
           <DayForm id="form-sex" name="Sexta" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
         </div>
 
-        <Button id="button-advance" label="Avançar" onButtonClick={() => advanceForm()} />
+        <div className='flex space-x-4'>
+          <Button id="button-retract" color="gray" label="Voltar" onButtonClick={() => retractForm()} />
+          <Button id="button-advance" label="Avançar" onButtonClick={() => advanceForm()} />
+        </div>
+        
       </Container>
     </div>
   );

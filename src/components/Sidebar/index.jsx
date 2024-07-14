@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import { SquareChevronLeft, Brain } from 'lucide-react';
-import { FaCircleArrowLeft, FaCircleArrowRight  } from "react-icons/fa6";
+import { SquareChevronLeft } from 'lucide-react';
+import { AiOutlineForm } from "react-icons/ai";
+import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
 import Avatar from '../Avatar';
 
 const Sidebar = ({children}) => {
@@ -13,8 +14,8 @@ const Sidebar = ({children}) => {
   };
   
   const Logo = {
-    title: "Texto",
-    icon: <Brain />
+    title: "SISCV",
+    icon: <FaMosquito size={32} />
   }
   
   const Menus = [
@@ -25,7 +26,7 @@ const Sidebar = ({children}) => {
     },
     {
       title: "Relatório",
-      icon: <Brain />,
+      icon: <AiOutlineForm size={24}/>,
       href: '/form'
     },
     {
