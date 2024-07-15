@@ -7,13 +7,14 @@ import svgBirthday from '../assets/birthday.svg';
 import svgJob from '../assets/job.svg';
 import svgPhone from '../assets/phone.svg';
 import ProfileCard from '../components/ProfileCard';
+import ListItem from '../components/ListItem';
 
 export const PageAbout = () => {
   return (
     <div className='flex'>
       <Sidebar />
       <Container className='space-y-10'>
-        <Section className='p-8 items-center border-2 rounded-xl border-slate-400 shadow-md lg:grid lg:grid-cols-2'>
+        <Section className='p-8 items-center border-2 rounded-xl border-slate-400 shadow-md flex justify-between pr-24'>
           <div className='flex items-center space-x-4'>
             <Avatar imgSrc="/img/templates/profile.jpg" size={128}/>
             <div className='space-y-4'>
@@ -38,14 +39,11 @@ export const PageAbout = () => {
           <Section className='text-center h-full space-y-2 col-span-2 lg:col-span-1'>
             <h2><b>Unidade de Saúde</b></h2>
             <div className='text-left p-4 border-2 rounded-xl border-slate-400 shadow-md space-y-2'>
-              <div>
-                <p className='p-2 border border-2 bg-slate-100'>Nome: SEC. MUN. DE SAÚDE DE MANAUS</p>
-              </div>
-              
-              <p>CNES: 703208606963795</p>
-              <p>Endereço: AVENIDA MARIO YPIRANGA, 1695 - ADRIANOPOLIS</p>
-              <p>Telefone: (92) - 32369142</p>
-              <p>Email: GABINETE.SEMSA@PMM.AM.GOV.BR</p>
+              <ListItem label="Nome: " value="SEC. MUN. DE SAÚDE DE MANAUS" />
+              <ListItem label="CNES: " value="703208606963795" />
+              <ListItem label="Endereço: " value="AVENIDA MARIO YPIRANGA, 1695 - ADRIANOPOLIS" />
+              <ListItem label="Telefone: " value="(92) - 32369142" />
+              <ListItem label="Email: " value="GABINETE.SEMSA@PMM.AM.GOV.BR" />
             </div>
           </Section>
           <Section className='space-y-2 text-center lg:col-span-1'>
