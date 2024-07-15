@@ -9,11 +9,17 @@ import { inserirValor, checkForm } from './utils.js';
 import { sendForm } from './sendForm.js'
 import ProgressBar from '../../components/ProgressBar/index.jsx'
 
+import Modal from '../../components/Modal'
+
+
 function DayForm( {id, className} ) {
+
+
+
   return (
     <Section id={id} className={`transition-all duration-500 space-y-4 ${className}`}>
       <div className='shadow-md p-2 pb-0 border-t border-black lg:grid lg:grid-cols-2 lg:space-x-8 bg-slate-100'>
-        <InputField id="dataAtividade" type='date' label='Data da Atividade: ' inputOnChange={(e) => inserirValor(e.target.value, 'dataAtividade')}/>
+        <InputField  id="dataAtividade" type='date' label='Data da Atividade: ' inputOnChange={(e) => inserirValor(e.target.value, 'dataAtividade')}/>
         <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
       </div>
       <div className='space-y-4 lg:space-y-0 lg:grid lg:grid-cols-4 lg:space-x-4'>
@@ -67,7 +73,10 @@ function DayForm( {id, className} ) {
         
       </div>
       
+      
     </Section>
+
+    
   );
 }
 
@@ -75,6 +84,11 @@ export default function PageForm() {
   const [currentForm, setCurrentForm] = useState('form-seg');
   const [progress, setProgress] = useState(0);
   const weekDays = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
+
+  const [showModalError,    setshowModalError]    = useState(false)
+  const [messageModalError, setMessageModalError] = useState(false)
+
+
 
   useEffect(() => {
     document.querySelector('#button-advance').textContent = "Avançar";
@@ -102,7 +116,12 @@ export default function PageForm() {
     }
 
     if (checkForm( currentForm ) === false) {
-      alert("O formulário não foi preenchido corretamente!");
+      setshowModalError(true)
+      setMessageModalError("O formulário não foi preenchido corretamente!")
+      setTimeout(function() {
+        setshowModalError(false)
+      }, 5000)
+      //alert("O formulário não foi preenchido corretamente!");
       return;
     }
 
@@ -200,6 +219,15 @@ export default function PageForm() {
         </div>
         
       </Container>
+
+      <Modal isOpen={showModalError}    onClose={() => setshowModalError(false)} headerColor="#FE5B3A" title="Alerta" >
+        <section>
+          <div style={{padding: "0.3rem"}}>
+            <span>{messageModalError}</span>
+          </div>   
+        </section>
+      </Modal>
+
     </div>
   );
 }
