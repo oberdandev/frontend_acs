@@ -25,10 +25,6 @@ export const PageAbout = () => {
           <div className='flex-none ml-28 lg:flex items-center'>
             <ul className='space-y-2'>
               <li className='flex items-center space-x-2'>
-                <img src={svgBirthday} alt="Aniversário" style={{'height': '22px'}}/> 
-                <p>31 de Janeiro, 1996</p>
-              </li>
-              <li className='flex items-center space-x-2'>
                 <img src={svgJob} alt="Trabalho" style={{'height': '22px'}}/> 
                 <p>Agente de Campo</p>
               </li>

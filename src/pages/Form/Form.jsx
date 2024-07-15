@@ -181,17 +181,17 @@ export default function PageForm() {
             <InputField id="sublocalidade" type='text' label='Sublocalidade: ' inputSize='lg'/>
           </Section>
 
-          <div className='flex justify-center w-3/4'>
+          <div className='flex justify-center w-full'>
             <ProgressBar progress={progress} steps={weekDays} className='mb-4 w-3/4' />
           </div>  
         </div>
 
         <div id="multi-form" className='flex'>
-          <DayForm id="form-seg" name="Segunda" className='day-form '/>
-          <DayForm id="form-ter" name="Terça" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
-          <DayForm id="form-qua" name="Quarta" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
-          <DayForm id="form-qui" name="Quinta" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
-          <DayForm id="form-sex" name="Sexta" className="day-form absolute h-0 opacity-0 invisible translate-x-32"/>
+          <DayForm id="form-seg" name="Segunda" className='day-form w-full'/>
+          <DayForm id="form-ter" name="Terça" className="day-form absolute h-0 opacity-0 invisible translate-x-32 w-full"/>
+          <DayForm id="form-qua" name="Quarta" className="day-form absolute h-0 opacity-0 invisible translate-x-32 w-full"/>
+          <DayForm id="form-qui" name="Quinta" className="day-form absolute h-0 opacity-0 invisible translate-x-32 w-full"/>
+          <DayForm id="form-sex" name="Sexta" className="day-form absolute h-0 opacity-0 invisible translate-x-32 w-full"/>
         </div>
 
         <div className='flex space-x-4'>
