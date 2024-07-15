@@ -64,9 +64,9 @@ const Login = () => {
     return (
       <div className="w-2/3 h-screen hidden lg:block">
       <img
-        src={props.imgSrc}
+        src="/logo.png"
         alt="Placeholder Image"
-        className="object-cover w-full h-full"
+        className="object-cover w-full h-full bg-sky-800"
       />
     </div>
     )

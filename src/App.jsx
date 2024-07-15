@@ -1,13 +1,13 @@
+import Sidebar from "./components/Sidebar"
 
 function App() {
 
   return (
-    <>
-      <div>
-        <h1>Hello world!</h1>
-      </div>
-    </>
+    <div className="h-full">
+      <Sidebar />
+      <h1>Hello world!</h1>
+    </div>
   )
 }
 
-export default App
+export default App;
