@@ -36,9 +36,9 @@ export const PageAbout = () => {
           </ul>
         </Section>
         <div className='pb-8 grid h-fit lg:grid-cols-2 gap-10'>
-          <Section className='text-center h-full space-y-2 col-span-2 lg:col-span-1'>
+          <Section className='text-center space-y-2 col-span-2 lg:col-span-1'>
             <h2><b>Unidade de Saúde</b></h2>
-            <div className='text-left p-4 border-2 rounded-xl border-slate-400 shadow-md space-y-2'>
+            <div className='text-left min-h-72 p-4 border-2 rounded-xl border-slate-400 shadow-md space-y-2'>
               <ListItem label="Nome: " value="SEC. MUN. DE SAÚDE DE MANAUS" />
               <ListItem label="CNES: " value="703208606963795" />
               <ListItem label="Endereço: " value="AVENIDA MARIO YPIRANGA, 1695 - ADRIANOPOLIS" />
@@ -48,39 +48,15 @@ export const PageAbout = () => {
           </Section>
           <Section className='space-y-2 text-center lg:col-span-1'>
             <h2><b>Equipe de Saúde</b></h2>
-            <ul className='p-4 text-left h-64 border-2 border-slate-400 rounded-xl overflow-scroll text-left space-y-2'>
+            <ul className='p-4 text-left min-h-72 border-2 border-slate-400 rounded-xl overflow-scroll text-left space-y-2'>
               <li>
-                <ProfileCard />
+                <ProfileCard name="José Freitas" role="Agente de Campo" imgSrc="/img/templates/profile2.jpg" />
               </li>
               <li>
-                <ProfileCard />
+                <ProfileCard name="Nazaré Ribeiro" role="Enfermeira" imgSrc="/img/templates/profile3.jpg"/>
               </li>
               <li>
-                <ProfileCard />
-              </li>
-              <li>
-                <ProfileCard />
-              </li>
-              <li>
-                <ProfileCard />
-              </li>
-              <li>
-                <ProfileCard />
-              </li>
-              <li>
-                <ProfileCard />
-              </li>
-              <li>
-                <ProfileCard />
-              </li>
-              <li>
-                <ProfileCard />
-              </li>
-              <li>
-                <ProfileCard />
-              </li>
-              <li>
-                <ProfileCard />
+                <ProfileCard name="Ricardo Costa" role="Enfermeiro" imgSrc="/img/templates/profile4.jpg"/>
               </li>
               
             </ul>
