@@ -1,12 +1,13 @@
-import Sidebar from '../components/Sidebar'
-import Container from '../components/Container'
-import Section from '../components/Section'
-import InputField from '../components/InputField'
-import Button from '../components/Button'
+import Sidebar from '../../components/Sidebar/index.jsx'
+import Container from '../../components/Container/index.jsx'
+import Section from '../../components/Section/index.jsx'
+import InputField from '../../components/InputField/index.jsx'
+import Button from '../../components/Button/index.jsx'
 import { useEffect, useState } from 'react';
 
-import { inserirValor, checkForm, sendForm } from '../hooks/utils.js';
-import ProgressBar from '../components/ProgressBar/index.jsx'
+import { inserirValor, checkForm } from './utils.js';
+import { sendForm } from './sendForm.js'
+import ProgressBar from '../../components/ProgressBar/index.jsx'
 
 function DayForm( {id, className} ) {
   return (
@@ -108,6 +109,8 @@ export default function PageForm() {
     const currentFormSibling = currentFormElement.nextSibling;
 
     if(currentFormSibling === null) {
+      //Envio de formulário
+
       const microareaElement = document.querySelector("#microarea");
       const sublocalidadeElement = document.querySelector("#sublocalidade");
 
@@ -140,9 +143,6 @@ export default function PageForm() {
 
       setCurrentForm(currentFormSibling.getAttribute("id"));
       setProgress(progress + 1);
-    } else {
-      //Envio do formulário
-      
     }
   }
 

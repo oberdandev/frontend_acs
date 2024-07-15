@@ -4,7 +4,7 @@ import App from './App.jsx'
 import './index.css'
 import PageAbout from './pages/About.jsx'
 import PageLogin from './pages/Login/Login.jsx'
-import PageForm from './pages/Form.jsx'
+import PageForm from './pages/Form/Form.jsx'
 import PageException from './pages/Exception/Exception.jsx'
 import PageNotFound from './pages/Exception/PageNotFound.jsx'
 import { ToastContainer } from 'react-toastify';
