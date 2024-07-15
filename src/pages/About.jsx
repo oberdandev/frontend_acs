@@ -13,40 +13,71 @@ export const PageAbout = () => {
     <div className='flex'>
       <Sidebar />
       <Container className='space-y-10'>
-        <Section className='p-8 border-b border-black lg:grid lg:grid-cols-2'>
-          <div className='flex items-center space-x-2'>
-            <Avatar imgSrc="/img/templates/profile.jpg" size={96}/>
-            <div>
-              <b>Ana Maria Santos</b>
-              <p>anamaria1995@gmail.com</p>
+        <Section className='p-8 items-center border-2 rounded-xl border-slate-400 shadow-md lg:grid lg:grid-cols-2'>
+          <div className='flex items-center space-x-4'>
+            <Avatar imgSrc="/img/templates/profile.jpg" size={128}/>
+            <div className='space-y-4'>
+              <div>
+                <b className='text-lg'>Ana Maria Santos</b>
+                <p className='text-lg'>anamaria1995@gmail.com</p>
+              </div>
             </div>
           </div>
-
-          <div className='flex-none ml-28 lg:flex items-center'>
-            <ul className='space-y-2'>
-              <li className='flex items-center space-x-2'>
+          <ul className='space-y-2'>
+            <li className='flex items-center space-x-2'>
                 <img src={svgJob} alt="Trabalho" style={{'height': '22px'}}/> 
-                <p>Agente de Campo</p>
+                <p className='text-lg'>Agente de Campo</p>
               </li>
               <li className='flex items-center space-x-2'>
                 <img src={svgPhone} alt="Telefone" style={{'height': '22px'}}/> 
-                <p>(92)99999-9999</p>
+                <p className='text-lg'>(92)99999-9999</p>
               </li>
-            </ul>
-          </div>
+          </ul>
         </Section>
-        <div className='pb-8 border-b border-black grid h-fit lg:grid-cols-2 gap-10'>
-          <Section className='h-full space-y-2 col-span-2 lg:col-span-1'>
+        <div className='pb-8 grid h-fit lg:grid-cols-2 gap-10'>
+          <Section className='text-center h-full space-y-2 col-span-2 lg:col-span-1'>
             <h2><b>Unidade de Saúde</b></h2>
-            <p>Nome: SEC. MUN. DE SAÚDE DE MANAUS</p>
-            <p>CNES: 703208606963795</p>
-            <p>Endereço: AVENIDA MARIO YPIRANGA, 1695 - ADRIANOPOLIS</p>
-            <p>Telefone: (92) - 32369142</p>
-            <p>Email: GABINETE.SEMSA@PMM.AM.GOV.BR</p>
+            <div className='text-left p-4 border-2 rounded-xl border-slate-400 shadow-md space-y-2'>
+              <div>
+                <p className='p-2 border border-2 bg-slate-100'>Nome: SEC. MUN. DE SAÚDE DE MANAUS</p>
+              </div>
+              
+              <p>CNES: 703208606963795</p>
+              <p>Endereço: AVENIDA MARIO YPIRANGA, 1695 - ADRIANOPOLIS</p>
+              <p>Telefone: (92) - 32369142</p>
+              <p>Email: GABINETE.SEMSA@PMM.AM.GOV.BR</p>
+            </div>
           </Section>
-          <Section className='h-full space-y-2 col-span-2 lg:col-span-1'>
+          <Section className='space-y-2 text-center lg:col-span-1'>
             <h2><b>Equipe de Saúde</b></h2>
-            <ul className='space-y-2'>
+            <ul className='p-4 text-left h-64 border-2 border-slate-400 rounded-xl overflow-scroll text-left space-y-2'>
+              <li>
+                <ProfileCard />
+              </li>
+              <li>
+                <ProfileCard />
+              </li>
+              <li>
+                <ProfileCard />
+              </li>
+              <li>
+                <ProfileCard />
+              </li>
+              <li>
+                <ProfileCard />
+              </li>
+              <li>
+                <ProfileCard />
+              </li>
+              <li>
+                <ProfileCard />
+              </li>
+              <li>
+                <ProfileCard />
+              </li>
+              <li>
+                <ProfileCard />
+              </li>
               <li>
                 <ProfileCard />
               </li>
