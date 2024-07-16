@@ -7,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
 import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { api } from '../../services/api';
 
  
 const validatePassword = {
@@ -21,19 +23,21 @@ const validateCPF = {
       message: 'CPF inválido'
     }
 }
-const baseUrl = "http://localhost:2101/login";
+
 
 const Login = () => {
-  const toastId = useRef(null);
-  const passwordRef = useRef(null); 
+
   const { register, handleSubmit, formState: { errors }, setValue, setFocus, watch } = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
+  const [focusPassword, setFocusPassword] = useState(false);
 
   useEffect(() => {
-    if (errors.password) {
+    if(focusPassword){
       setFocus('password');
     }
-  }, [errors.password, setFocus]);
+  })
+
+
 
   const onSubmit = async (data) => {
     try {
@@ -44,7 +48,7 @@ const Login = () => {
         cpf: data.cpf.replace(/\D/g, '') // Remove os caracteres não numéricos do CPF.
       };
 
-      const response = await axios.post(baseUrl, {
+      const response = await axios.post('/login', {
           cpf: formattedData.cpf,
           password: formattedData.password
         });
@@ -91,7 +95,11 @@ const Login = () => {
           <InputMask
             mask="999.999.999-99"
             {...register('cpf', validateCPF)}
-            onChange={(e) => setValue('cpf', e.target.value)} // Ensure the value is set correctly
+            onChange={(e) => {
+              
+              setValue('cpf', e.target.value)
+
+            }} // Ensure the value is set correctly
         >
             {(inputProps) => (
               <input
@@ -109,20 +117,35 @@ const Login = () => {
     )
   }
 
-  function InputPassword () {
-    return(
-    <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-600">Senha</label>
-              <input
-                type="password"
-                id="password"
-                {...register('password', validatePassword)}
-                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                autoComplete="off"
-              />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-    </div>
-    )
+
+  function InputPassword() {
+    const [showPassword, setShowPassword] = useState(false);
+  
+    const toggleShowPassword = () => {
+      setShowPassword(!showPassword);
+      setFocus('password');
+    };
+  
+    return (
+      <div className="mb-4 relative">
+        <label htmlFor="password" className="block text-gray-600">Senha</label>
+        <input
+          type={showPassword ? "text" : "password"}
+          id="password"
+          {...register('password', validatePassword)}
+          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 pr-10"
+          autoComplete="off"
+        />
+        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+        <button
+          type="button"
+          onClick={toggleShowPassword}
+          className="absolute inset-y-0 right-1 px-2 py-11 focus:outline-none flex items-center justify-center"
+        >
+        {showPassword ? <FaEyeSlash className='text-gray-300'/> : <FaEye className='text-gray-300' />}
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -133,7 +156,7 @@ const Login = () => {
       {/* Right: Login Form */}
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex justify-center">
         <div className=" w-96 ">
-          <h1 className="text-2xl font-semibold mb-4">Acessar</h1>
+          <h1 className="text-2xl font-semibold mb-4">Login</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
             <InputCPF />
             {/* Password Input */}
@@ -149,7 +172,7 @@ const Login = () => {
               className={`bg-blue-500  text-white font-semibold rounded-md py-2 px-4 w-full ${isPendingLogin ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
               disabled={isPendingLogin}
             >
-              {isPendingLogin ? <Spinner /> : 'Login'}
+              {isPendingLogin ? <Spinner /> : 'Acessar'}
             </button>
           </form>
           {/* Sign up Link */}

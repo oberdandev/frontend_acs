@@ -48,7 +48,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ToastContainer  autoClose={5000} />
-
       <AuthProvider> 
         <RouterProvider router={router}>
           

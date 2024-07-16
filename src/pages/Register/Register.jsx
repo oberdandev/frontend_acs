@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
 import { NavLink } from 'react-router-dom';
-import { baseUrl } from '../../context/api.js'
+import { baseUrl } from '../../services/api.js'
 import { useNavigate } from 'react-router-dom';
 
 
