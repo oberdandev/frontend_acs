@@ -1,12 +1,22 @@
 import {createContext, useState, useContext} from 'react';
+import { api } from '../services/api.js';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export function AuthProvider ({children}) {	
-  const [user, setUser] = useState(null);
+  const [auth, setAuth] = useState(false);
+  const [userContext, setUserContext] = useState(null);
   
-  const login = (username, password) => {
-    setUser({username})
+  const login = async (cpf, password) => {
+    const response = await api.post('/login', () => {
+      cpf,
+      password
+    })
+
+    const { token } = response.data;
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
+    setAuth(true);
   }
 
   const logout = () => {
@@ -14,7 +24,7 @@ export function AuthProvider ({children}) {
   }
 
   return (
-    <AuthContext.Provider value={{user, setUser}}>
+    <AuthContext.Provider value={{userContext, setUserContext, auth, setAuth}}>
       {children}
     </AuthContext.Provider>
   );

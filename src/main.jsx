@@ -10,15 +10,14 @@ import PageNotFound from './pages/Exception/PageNotFound.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthContext.jsx'
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import PageRegister from './pages/Register/Register.jsx'
-import { ToastProvider } from './context/ToastContext.jsx'
+
 
 const router = createBrowserRouter([
   { 
     path: '/', 
-    element: <App />
+    element: {}
   },
   { 
     path: '*', 
@@ -47,8 +46,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ToastContainer  autoClose={5000} />
-      <AuthProvider> 
+    <AuthProvider> 
+      <ToastContainer  autoClose={5000} />
         <RouterProvider router={router}>
           
         </RouterProvider>

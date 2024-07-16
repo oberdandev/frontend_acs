@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import axios from 'axios';
@@ -9,8 +9,8 @@ import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { api } from '../../services/api';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
- 
 const validatePassword = {
   required: 'O campo senha é obrigatório',
   minLength: { value: 6, message: 'A senha deve ter no mínimo 6 caracteres.' }
@@ -26,6 +26,9 @@ const validateCPF = {
 
 
 const Login = () => {
+
+  const {userContext, setUserContext, auth, setAuth} = useContext(AuthContext);
+ 
 
   const { register, handleSubmit, formState: { errors }, setValue, setFocus, watch } = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
@@ -48,18 +51,27 @@ const Login = () => {
         cpf: data.cpf.replace(/\D/g, '') // Remove os caracteres não numéricos do CPF.
       };
 
-      const response = await axios.post('/login', {
+      const response = await api.post('/login', {
           cpf: formattedData.cpf,
           password: formattedData.password
         });
+      
+      console.log(response.data)
 
-        if (response.status === 200) {
-          
-          const token = response.data.token
-          toast.success('Login efetuado com sucesso!');
-          
-          if(token) 
-            localStorage.setItem('token', token); 
+      if (response.status === 200) {
+        const token = response.data.token
+        if(token) 
+          localStorage.setItem('token', token); 
+        if(response.data.user)
+          setUserContext(response.data.user);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+
+        setAuth(true);
+
+        
+        toast.success('Login efetuado com sucesso!');
+        
+
         } 
 
         if(response.status === '404')
