@@ -78,6 +78,7 @@ export default function PageForm() {
 
   useEffect(() => {
     document.querySelector('#button-advance').textContent = "Avançar";
+    document.querySelector('body').classList.add("overflow-x-hidden");
     if (document.querySelector(`#${currentForm}`).nextSibling === null) {
       //Troca a label do botão de avançar no fim do formulário
       document.querySelector('#button-advance').textContent = "Enviar";
