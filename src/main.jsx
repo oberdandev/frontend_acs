@@ -13,11 +13,13 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import PageRegister from './pages/Register/Register.jsx'
 
-
 const router = createBrowserRouter([
   { 
     path: '/', 
-    element: {}
+    element: {
+      element: <App />,
+      errorElement: <PageException />
+    }
   },
   { 
     path: '*', 

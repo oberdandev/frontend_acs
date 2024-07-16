@@ -1,11 +1,11 @@
-
+import { api } from "../../services/api";
 
 const parserToApiPattern = (obj, microarea, localidade) => {
     return {
-        profissionalID: 1,
+        profissionalID: localStorage.getItem('userID'),
         resSemanalID: null,
-        micro_area: microarea || '',
-        sub_local: localidade || '',
+        micro_area: microarea,
+        sub_local: localidade,
         data: obj.dataAtividade,
         quadras_trabalhadas: obj.quarteiroes,
         imoveis_inspec: obj.inspecionados,
@@ -30,34 +30,60 @@ const parserToApiPattern = (obj, microarea, localidade) => {
 }
 
 export const sendForm = (microarea, sublocalidade) => {
-    console.log("Relatório enviado!");
+    try {
+        console.log("Relatório enviado!");
 
-    if (microarea.length === 0 || sublocalidade.length === 0) {
-        alert("Microárea ou Sublocalidade não foram preenchidos!");
+        if (microarea.length === 0 || sublocalidade.length === 0) {
+            alert("Microárea ou Sublocalidade não foram preenchidos!");
+            return false;
+        }
+    
+        console.log("microarea: " + microarea);
+        console.log("sublocalidade: " + sublocalidade);
+    
+        const segData = JSON.parse(localStorage.getItem("form-seg"));
+        const terData = JSON.parse(localStorage.getItem("form-ter"));
+        const quaData = JSON.parse(localStorage.getItem("form-qua"));
+        const quiData = JSON.parse(localStorage.getItem("form-qui"));
+        const sexData = JSON.parse(localStorage.getItem("form-sex"));
+    
+        const segParsed = parserToApiPattern(segData, microarea, sublocalidade);
+        const terParsed = parserToApiPattern(terData, microarea, sublocalidade);
+        const quaParsed = parserToApiPattern(quaData, microarea, sublocalidade);
+        const quiParsed = parserToApiPattern(quiData, microarea, sublocalidade);
+        const sexParsed = parserToApiPattern(sexData, microarea, sublocalidade);
+        
+        const semana = [segParsed, terParsed, quaParsed, quiParsed, sexParsed];
+
+        semana.forEach(async (diaParsed) => {
+            const response = await api.post('/resumodiario', diaParsed);
+            
+            if(response.status === 200) {
+                console.log("Relatório enviado com sucesso!");
+            }   
+
+            api.post('/resumodiario', diaParsed)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        })
+        
+    
+        console.log(segData);
+        console.log(terData);
+        console.log(quaData);
+        console.log(quiData);
+        console.log(sexData);
+        
+        return true;
+        
+    } catch (error) {
+        console.log(error);
         return false;
     }
+   
 
-    console.log("microarea: " + microarea);
-    console.log("sublocalidade: " + sublocalidade);
-
-    const segData = JSON.parse(localStorage.getItem("form-seg"));
-    const terData = JSON.parse(localStorage.getItem("form-ter"));
-    const quaData = JSON.parse(localStorage.getItem("form-qua"));
-    const quiData = JSON.parse(localStorage.getItem("form-qui"));
-    const sexData = JSON.parse(localStorage.getItem("form-sex"));
-
-    const segParsed = parserToApiPattern(segData, microarea, sublocalidade);
-    const terParsed = parserToApiPattern(terData, microarea, sublocalidade);
-    const quaParsed = parserToApiPattern(quaData, microarea, sublocalidade);
-    const quiParsed = parserToApiPattern(quiData, microarea, sublocalidade);
-    const sexParsed = parserToApiPattern(sexData, microarea, sublocalidade);
-    
-
-    console.log(segData);
-    console.log(terData);
-    console.log(quaData);
-    console.log(quiData);
-    console.log(sexData);
-
-    return true;
 }
