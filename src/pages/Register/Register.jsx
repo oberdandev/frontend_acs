@@ -1,12 +1,14 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
-import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
+import { baseUrl } from '../../context/api.js'
+import { useNavigate } from 'react-router-dom';
+
 
  
 const validatePassword = {
@@ -21,12 +23,20 @@ const validateCPF = {
       message: 'CPF inválido'
     }
 }
-const baseUrl = "http://localhost:2101/login";
 
-const Login = () => {
-  const toastId = useRef(null);
-  const passwordRef = useRef(null); 
-  const { register, handleSubmit, formState: { errors }, setValue, setFocus, watch } = useForm();
+const validateEmail = { 
+  required: 'Campo obrigatório', 
+  pattern: {
+    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+    message: 'Email inválido'
+} }
+
+const PageRegister = () => {
+  let navigate = useNavigate();
+  // Criar depois toastID e ref de password para não ter bug na validação.
+/*   const toastId = useRef(null);
+  const passwordRef = useRef(null);  */
+  const { register, handleSubmit, formState: { errors }, setValue, setFocus, reset } = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
 
   useEffect(() => {
@@ -44,34 +54,45 @@ const Login = () => {
         cpf: data.cpf.replace(/\D/g, '') // Remove os caracteres não numéricos do CPF.
       };
 
-      const response = await axios.post(baseUrl, {
+      const response = await axios.post(baseUrl + '/user', {
+          nome: formattedData.nome,
+          email: formattedData.email,
           cpf: formattedData.cpf,
-          password: formattedData.password
+          senha: formattedData.password
         });
 
-        if (response.status === 200) {
-          
-          const token = response.data.token
-          toast.success('Login efetuado com sucesso!');
-          
-          if(token) 
-            localStorage.setItem('token', token); 
-        } 
+        if (response.status === 201) {
+          setTimeout(() => {
+            toast.success('Usuário criado com sucesso! Tente efetuar login.', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }, 100);
+          navigate('/login');
+       
+        }
 
         if(response.status === '404')
           toast.error(response.data.message);
-      
+        
       } catch (e) {
         console.log(e.message)
 
-        const message = e.response?.data?.message || 'Erro ao efetuar login. Tente novamente.'
+        const message = e.response?.data?.message || 'Erro ao efetuar cadastro. Tente novamente.'
         toast.error(message) 
       } finally {
         setPendingLogin(false);
+        reset();
       }
   };
 
-  function ImageLeft (props) {
+  function ImageLeft () {
     return (
       <div className="w-2/3 h-screen hidden lg:block">
       <img
@@ -109,6 +130,42 @@ const Login = () => {
     )
   }
 
+  function InputEmail () {
+    return (
+      <>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-gray-600">Email</label>
+          <input
+            type="email"
+            id="email"
+            {...register('email', validateEmail)}
+            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+            autoComplete="off"
+          />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        </div>
+      </>
+    )
+  }
+
+  function InputNome () {
+    return (
+      <>
+        <div className="mb-4">
+          <label htmlFor="nome" className="block text-gray-600">Nome</label>
+          <input
+            type="text"
+            id="nome"
+            {...register('nome')}
+            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+            autoComplete="off"
+          />
+          {errors.nome && <p className="text-red-500 text-sm">{errors.nome.message}</p>}
+        </div>
+      </>
+    )
+  }
+
   function InputPassword () {
     return(
     <div className="mb-4">
@@ -133,29 +190,27 @@ const Login = () => {
       {/* Right: Login Form */}
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex justify-center">
         <div className=" w-96 ">
-          <h1 className="text-2xl font-semibold mb-4">Acessar</h1>
+          <h1 className="text-2xl font-semibold mb-4">Cadastrar Usuário</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
             <InputCPF />
             {/* Password Input */}
             <InputPassword />
-           
-            {/* Forgot Password Link */}
-            <div className="mb-6 text-blue-500">
-              <a href="#" className="hover:underline">Esqueceu a senha?</a>
-            </div>
+            <InputNome />
+            <InputEmail />
+
             {/* Login Button */}
             <button
               type="submit"
               className={`bg-blue-500  text-white font-semibold rounded-md py-2 px-4 w-full ${isPendingLogin ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
               disabled={isPendingLogin}
             >
-              {isPendingLogin ? <Spinner /> : 'Login'}
+              {isPendingLogin ? <Spinner /> : 'Cadastrar'}
             </button>
           </form>
           {/* Sign up Link */}
           <div className="mt-6 text-blue-500 text-center">
-            <NavLink  key={'register'} to={'/register'}>
-              <a href="#" className="hover:underline">Cadastre-se aqui!</a>
+            <NavLink key={'login'} to={'/login'}>
+              <a href="#" className="hover:underline">Já tem uma conta? <br/> Clique aqui para acessar o sistema.</a>
             </NavLink>
           </div>
         </div>
@@ -164,4 +219,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default PageRegister;

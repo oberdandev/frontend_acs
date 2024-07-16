@@ -1,4 +1,4 @@
-import axios from axios;
+import axios from 'axios';
 const API_URL = 'http://localhost:2101/';
 
 export const authService = {
@@ -32,7 +32,7 @@ export const authService = {
 
 }
 
-/* interceptador axios. pesquisar e fazser isso depois
+/* interceptador axios. pesquisar e fazer isso depois
 axios.interceptors.request.use(
   (config) => {
     const token = getToken();

@@ -15,7 +15,8 @@ const Sidebar = ({children}) => {
   
   const Logo = {
     title: "SISCV",
-    icon: <FaMosquito size={32} />
+    icon: <FaMosquito size={32} />,
+    href: "/"
   }
   
   const Menus = [
@@ -67,13 +68,17 @@ const Sidebar = ({children}) => {
           onClick={toggleSidebar}
         />
 
+<NavLink id={Logo.title} to={Logo.href}> 
          <div className='flex gap-x-4 items-center'>
+          
             <span className='text-zinc-50 cursor-pointer'>{Logo.icon}</span>
             <h1 
               className={`text-white origin-left text-2xl font-bold duration-300 ${!isOpen && "scale-0"}`}> 
               {Logo.title}
             </h1>
+           
           </div>
+          </NavLink>
       </>
     )
   }

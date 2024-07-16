@@ -172,7 +172,7 @@ export default function PageForm() {
   }
 
   return (
-    <div className='flex'>
+    <div className='flex '>
       <Sidebar />
       <Container className='space-y-2'>
         <div>
