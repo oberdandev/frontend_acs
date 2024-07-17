@@ -57,7 +57,7 @@ function InputPassword ({ register, errors }) {
             type='password' 
             className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
             {...register('password', validatePassword) }
-            placeholder="Senha">
+          >
           </input>
           <p className="text-red-500 text-sm">{errors.password?.message}</p>
     </div>
