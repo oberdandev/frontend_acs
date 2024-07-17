@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import axios from 'axios';
@@ -6,8 +6,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
 import { useQuery } from '@tanstack/react-query';
-
-let renders = 0;
  
 const validatePassword = {
   required: 'O campo senha é obrigatório',
@@ -68,6 +66,15 @@ const Login = () => {
   const toastId = useRef(null);
   const { register, handleSubmit, formState: { errors }} = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
+  const [focusPassword, setFocusPassword] = useState(false);
+
+  useEffect(() => {
+    if(focusPassword){
+      setFocus('password');
+    }
+  })
+
+
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -80,26 +87,37 @@ const Login = () => {
         cpf: data.cpf.replace(/\D/g, '') // Remove os caracteres não numéricos do CPF.
       };
 
-      const response = await axios.post(baseUrl, {
+      const response = await api.post('/login', {
           cpf: formattedData.cpf,
           password: formattedData.password
         });
+      
+      console.log(response.data)
 
-        if (response.status === 200) {
-          
-          const token = response.data.token
-          toast.success('Login efetuado com sucesso!');
-          
-          if(token) 
-            localStorage.setItem('token', token); 
+      if (response.status === 200) {
+        const token = response.data.token
+        if(token) 
+          localStorage.setItem('token', token); 
+        if(response.data.user)
+          setUserContext(response.data.user);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+
+        setAuth(true);
+
+        
+        toast.success('Login efetuado com sucesso!');
+        
+
         } 
 
         if(response.status === '404')
           toast.error(response.data.message);
       
       } catch (e) {
-        console.log(e.response.data)
-        toast.error(e.response.data.message || 'Erro ao efetuar login. Tente novamente.') 
+        console.log(e.message)
+
+        const message = e.response?.data?.message || 'Erro ao efetuar login. Tente novamente.'
+        toast.error(message) 
       } finally {
         setPendingLogin(false);
       }
@@ -142,12 +160,14 @@ const Login = () => {
               className={`bg-blue-500  text-white font-semibold rounded-md py-2 px-4 w-full ${isPendingLogin ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
               disabled={isPendingLogin}
             >
-              {isPendingLogin ? <Spinner /> : 'Login'}
+              {isPendingLogin ? <Spinner /> : 'Acessar'}
             </button>
           </form>
           {/* Sign up Link */}
           <div className="mt-6 text-blue-500 text-center">
-            <a href="#" className="hover:underline">Cadastre-se aqui!</a>
+            <NavLink  key={'register'} to={'/register'}>
+              <a href="#" className="hover:underline">Cadastre-se aqui!</a>
+            </NavLink>
           </div>
         </div>
       </div>

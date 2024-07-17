@@ -11,7 +11,7 @@ import ListItem from '../components/ListItem';
 
 export const PageAbout = () => {
   return (
-    <div className='flex'>
+    <div className='flex h-full w-full'>
       <Sidebar />
       <Container className='space-y-10'>
         <Section className='p-8 items-center border-2 rounded-xl border-slate-400 shadow-md flex justify-between pr-24'>
@@ -48,7 +48,7 @@ export const PageAbout = () => {
           </Section>
           <Section className='space-y-2 text-center lg:col-span-1'>
             <h2><b>Equipe de Saúde</b></h2>
-            <ul className='p-4 text-left min-h-72 border-2 border-slate-400 rounded-xl overflow-scroll text-left space-y-2'>
+            <ul className='p-4 min-h-72 border-2 border-slate-400 rounded-xl overflow-scroll text-left space-y-2'>
               <li>
                 <ProfileCard name="José Freitas" role="Agente de Campo" imgSrc="/img/templates/profile2.jpg" />
               </li>
