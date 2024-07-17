@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
-import { useQuery } from '@tanstack/react-query';
+import { NavLink } from 'react-router-dom';
+import { api } from '../../services/api';
  
 const validatePassword = {
   required: 'O campo senha é obrigatório',
@@ -143,7 +143,6 @@ const Login = () => {
       {/* Right: Login Form */}
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex justify-center">
         <div className=" w-96 ">
-          <p>renders: {renders++}</p>
           <h1 className="text-2xl font-semibold mb-4">Login</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
             <InputCPF register={register} errors={errors}/>
