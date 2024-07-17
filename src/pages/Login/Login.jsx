@@ -6,6 +6,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
 import { useQuery } from '@tanstack/react-query';
+
+let renders = 0;
  
 const validatePassword = {
   required: 'O campo senha é obrigatório',
@@ -19,14 +21,57 @@ const validateCPF = {
       message: 'CPF inválido'
     }
 }
+
 const baseUrl = "http://localhost:2101/login";
+
+function InputCPF ({ register, errors }) {
+  return (
+    <div className="mb-4">
+      <label htmlFor="cpf" className="block text-gray-600">CPF</label>
+      <InputMask
+        mask="999.999.999-99"
+        {...register('cpf', validateCPF)}
+      >
+        {(inputProps) => (
+          <input
+            type="text"
+            id="cpf"
+            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+            autoComplete="off"
+            {...inputProps}
+          />
+        )}
+      </InputMask>
+      {errors.cpf && <p className="text-red-500 text-sm">{errors.cpf.message}</p>}
+    </div>
+  )
+}
+
+function InputPassword ({ register, errors }) {
+
+  return(
+    <div className="mb-4">
+      <label htmlFor="password" className="block text-gray-600">Senha</label>
+          <input 
+            id="password"
+            type='password' 
+            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+            {...register('password', validatePassword) }
+            placeholder="Senha">
+          </input>
+          <p className="text-red-500 text-sm">{errors.password?.message}</p>
+    </div>
+  )
+}
 
 const Login = () => {
   const toastId = useRef(null);
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+  const { register, handleSubmit, formState: { errors }} = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
 
   const onSubmit = async (data) => {
+    console.log(data);
+
     try {
       setPendingLogin(true);
 
@@ -72,48 +117,6 @@ const Login = () => {
     )
   }
 
-  function InputCPF () {
-    return (
-      <>
-        <div className="mb-4">
-          <label htmlFor="cpf" className="block text-gray-600">CPF</label>
-          <InputMask
-            mask="999.999.999-99"
-            {...register('cpf', validateCPF)}
-            onChange={(e) => setValue('cpf', e.target.value)} // Ensure the value is set correctly
-        >
-            {(inputProps) => (
-              <input
-                type="text"
-                id="cpf"
-                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                autoComplete="off"
-                {...inputProps}
-              />
-            )}
-          </InputMask>
-          {errors.cpf && <p className="text-red-500 text-sm">{errors.cpf.message}</p>}
-        </div>
-      </>
-    )
-  }
-
-  function InputPassword () {
-    return(
-    <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-600">Password</label>
-              <input
-                type="password"
-                id="password"
-                {...register('password', validatePassword)}
-                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                autoComplete="off"
-              />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-    </div>
-    )
-  }
-
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
       <ToastContainer />
@@ -122,11 +125,12 @@ const Login = () => {
       {/* Right: Login Form */}
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex justify-center">
         <div className=" w-96 ">
+          <p>renders: {renders++}</p>
           <h1 className="text-2xl font-semibold mb-4">Login</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <InputCPF />
+            <InputCPF register={register} errors={errors}/>
             {/* Password Input */}
-            <InputPassword />
+            <InputPassword register={register} errors={errors}/>
            
             {/* Forgot Password Link */}
             <div className="mb-6 text-blue-500">

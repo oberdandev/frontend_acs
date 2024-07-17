@@ -11,11 +11,13 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import HomePage from './pages/Home.jsx'
+import FieldInput from './pages/test.tsx'
 
 const router = createBrowserRouter([
   { 
     path: '/', 
-    element: <App />
+    element: <HomePage />
   },
   { 
     path: '*', 
@@ -34,6 +36,11 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <PageLogin />,
+    errorElement: <PageException />
+  },
+  {
+    path: '/test',
+    element: <FieldInput />,
     errorElement: <PageException />
   }
 ])
