@@ -62,6 +62,18 @@ function InputPassword ({ register, errors }) {
   )
 }
 
+function ImageLeft (props) {
+  return (
+    <div className="w-2/3 h-screen hidden lg:block">
+    <img
+      src="/logo.png"
+      alt="Placeholder Image"
+      className="object-cover w-full h-full bg-sky-800"
+    />
+  </div>
+  )
+}
+
 const Login = () => {
   const toastId = useRef(null);
   const { register, handleSubmit, formState: { errors }} = useForm();
@@ -122,18 +134,6 @@ const Login = () => {
         setPendingLogin(false);
       }
   };
-
-  function ImageLeft (props) {
-    return (
-      <div className="w-2/3 h-screen hidden lg:block">
-      <img
-        src="/logo.png"
-        alt="Placeholder Image"
-        className="object-cover w-full h-full bg-sky-800"
-      />
-    </div>
-    )
-  }
 
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
