@@ -12,12 +12,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthContext.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import PageRegister from './pages/Register/Register.jsx'
-
+import HomePage from './pages/Home.jsx'
 
 const router = createBrowserRouter([
   { 
     path: '/', 
-    element: {}
+    element: <HomePage />
   },
   { 
     path: '*', 

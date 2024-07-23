@@ -1,16 +1,12 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
-import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { api } from '../../services/api';
-import {AuthContext} from '../../context/AuthContext.jsx';
-
+ 
 const validatePassword = {
   required: 'O campo senha é obrigatório',
   minLength: { value: 6, message: 'A senha deve ter no mínimo 6 caracteres.' }
@@ -24,13 +20,63 @@ const validateCPF = {
     }
 }
 
+const baseUrl = "http://localhost:2101/login";
+
+function InputCPF ({ register, errors }) {
+  return (
+    <div className="mb-4">
+      <label htmlFor="cpf" className="block text-gray-600">CPF</label>
+      <InputMask
+        mask="999.999.999-99"
+        {...register('cpf', validateCPF)}
+      >
+        {(inputProps) => (
+          <input
+            type="text"
+            id="cpf"
+            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+            autoComplete="off"
+            {...inputProps}
+          />
+        )}
+      </InputMask>
+      {errors.cpf && <p className="text-red-500 text-sm">{errors.cpf.message}</p>}
+    </div>
+  )
+}
+
+function InputPassword ({ register, errors }) {
+
+  return(
+    <div className="mb-4">
+      <label htmlFor="password" className="block text-gray-600">Senha</label>
+          <input 
+            id="password"
+            type='password' 
+            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+            {...register('password', validatePassword) }
+          >
+          </input>
+          <p className="text-red-500 text-sm">{errors.password?.message}</p>
+    </div>
+  )
+}
+
+function ImageLeft (props) {
+  return (
+    <div className="w-2/3 h-screen hidden lg:block">
+    <img
+      src="/logo.png"
+      alt="Placeholder Image"
+      className="object-cover w-full h-full bg-sky-800"
+    />
+  </div>
+  )
+}
 
 const Login = () => {
-
-  const {userContext, setUserContext, auth, setAuth} = useContext(AuthContext);
- 
-
-  const { register, handleSubmit, formState: { errors }, setValue, setFocus, watch } = useForm();
+  const toastId = useRef(null);
+  const { register, handleSubmit, formState: { errors }} = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
 
@@ -43,6 +89,8 @@ const Login = () => {
 
 
   const onSubmit = async (data) => {
+    console.log(data);
+
     try {
       setPendingLogin(true);
 
@@ -87,79 +135,6 @@ const Login = () => {
       }
   };
 
-  function ImageLeft (props) {
-    return (
-      <div className="w-2/3 h-screen hidden lg:block">
-      <img
-        src="/logo.png"
-        alt="Placeholder Image"
-        className="object-cover w-full h-full bg-sky-800"
-      />
-    </div>
-    )
-  }
-
-  function InputCPF () {
-    return (
-      <>
-        <div className="mb-4">
-          <label htmlFor="cpf" className="block text-gray-600">CPF</label>
-          <InputMask
-            mask="999.999.999-99"
-            {...register('cpf', validateCPF)}
-            onChange={(e) => {
-              
-              setValue('cpf', e.target.value)
-
-            }} // Ensure the value is set correctly
-        >
-            {(inputProps) => (
-              <input
-                type="text"
-                id="cpf"
-                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                autoComplete="off"
-                {...inputProps}
-              />
-            )}
-          </InputMask>
-          {errors.cpf && <p className="text-red-500 text-sm">{errors.cpf.message}</p>}
-        </div>
-      </>
-    )
-  }
-
-
-  function InputPassword() {
-    const [showPassword, setShowPassword] = useState(false);
-  
-    const toggleShowPassword = () => {
-      setShowPassword(!showPassword);
-      setFocus('password');
-    };
-  
-    return (
-      <div className="mb-4 relative">
-        <label htmlFor="password" className="block text-gray-600">Senha</label>
-        <input
-          type={showPassword ? "text" : "password"}
-          id="password"
-          {...register('password', validatePassword)}
-          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 pr-10"
-          autoComplete="off"
-        />
-        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-        <button
-          type="button"
-          onClick={toggleShowPassword}
-          className="absolute inset-y-0 right-1 px-2 py-11 focus:outline-none flex items-center justify-center"
-        >
-        {showPassword ? <FaEyeSlash className='text-gray-300'/> : <FaEye className='text-gray-300' />}
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
       <ToastContainer />
@@ -170,9 +145,9 @@ const Login = () => {
         <div className=" w-96 ">
           <h1 className="text-2xl font-semibold mb-4">Login</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <InputCPF />
+            <InputCPF register={register} errors={errors}/>
             {/* Password Input */}
-            <InputPassword />
+            <InputPassword register={register} errors={errors}/>
            
             {/* Forgot Password Link */}
             <div className="mb-6 text-blue-500">
