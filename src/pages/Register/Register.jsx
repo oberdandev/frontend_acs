@@ -36,19 +36,116 @@ const validateCNS = {
   maxLength: { value: 15, message: 'O Cartão SUS deve ter 15 caracteres.' }
 };
 
+const validateNome = {
+  required: 'Campo obrigatório'
+};
+
+/* COMPONENTS */
+function InputCPF({ register, errors }) {
+  return (
+    <div className="mb-4">
+      <label htmlFor="cpf" className="block text-gray-600">CPF</label>
+      <InputMask
+        mask="999.999.999-99"
+        {...register('cpf', validateCPF)}
+      >
+        {(inputProps) => (
+          <input
+            type="text"
+            id="cpf"
+            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+            autoComplete="off"
+            {...inputProps}
+          />
+        )}
+      </InputMask>
+      {errors.cpf && <p className="text-red-500 text-sm">{errors.cpf.message}</p>}
+    </div>
+  )
+}
+
+function InputEmail({ register, errors }) {
+  return (
+    <div className="mb-4">
+      <label htmlFor="email" className="block text-gray-600">Email</label>
+      <input
+        type="email"
+        id="email"
+        {...register('email', validateEmail)}
+        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+        autoComplete="off"
+      />
+      {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+    </div>
+  )
+}
+
+function InputNome({ register, errors }) {
+  return (
+    <div className="mb-4">
+      <label htmlFor="nome" className="block text-gray-600">Nome</label>
+      <input
+        type="text"
+        id="nome"
+        {...register('nome', validateNome)}
+        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+        autoComplete="off"
+      />
+      {errors.nome && <p className="text-red-500 text-sm">{errors.nome.message}</p>}
+    </div>
+  )
+}
+
+function InputPassword({ register, errors }) {
+  return(
+    <div className="mb-4">
+      <label htmlFor="password" className="block text-gray-600">Senha</label>
+      <input
+        type="password"
+        id="password"
+        {...register('password', validatePassword)}
+        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+        autoComplete="off"
+      />
+      {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+    </div>
+  )
+}
+
+function InputCNS({ register, errors }) {
+  return (
+    <div className="mb-4">
+      <label htmlFor="cns" className="block text-gray-600">Cartão SUS</label>
+      <input
+        type="text"
+        id="cns"
+        {...register('cns', validateCNS)}
+        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+        autoComplete="off"
+      />
+      {errors.cns && <p className="text-red-500 text-sm">{errors.cns.message}</p>}
+    </div>
+  )
+}
+
+function ImageLeft() {
+  return (
+    <div className="w-2/3 h-screen hidden lg:block">
+      <img
+        src="/logo.png"
+        alt="Placeholder Image"
+        className="object-cover w-full h-full bg-sky-800"
+      />
+    </div>
+  )
+}
+
+/* PAGE COMPONENT */
 const PageRegister = () => {
   let navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, setValue, setFocus, reset, watch } = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
   let watchCNS = watch('cns');
-
-  useEffect(() => {
-    if (errors.password) {
-      setFocus('password');
-    }
-  }, [errors.password, setFocus]);
-
-  
 
   const onSubmit = async (data) => {
     try {
@@ -97,106 +194,6 @@ const PageRegister = () => {
     }
   };
 
-  function ImageLeft() {
-    return (
-      <div className="w-2/3 h-screen hidden lg:block">
-        <img
-          src="/logo.png"
-          alt="Placeholder Image"
-          className="object-cover w-full h-full bg-sky-800"
-        />
-      </div>
-    )
-  }
-
-  function InputCPF() {
-    return (
-      <div className="mb-4">
-        <label htmlFor="cpf" className="block text-gray-600">CPF</label>
-        <InputMask
-          mask="999.999.999-99"
-          {...register('cpf', validateCPF)}
-          onChange={(e) => setValue('cpf', e.target.value)}
-        >
-          {(inputProps) => (
-            <input
-              type="text"
-              id="cpf"
-              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              autoComplete="off"
-              {...inputProps}
-            />
-          )}
-        </InputMask>
-        {errors.cpf && <p className="text-red-500 text-sm">{errors.cpf.message}</p>}
-      </div>
-    )
-  }
-
-  function InputEmail() {
-    return (
-      <div className="mb-4">
-        <label htmlFor="email" className="block text-gray-600">Email</label>
-        <input
-          type="email"
-          id="email"
-          {...register('email', validateEmail)}
-          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-          autoComplete="off"
-        />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-      </div>
-    )
-  }
-
-  function InputNome() {
-    return (
-      <div className="mb-4">
-        <label htmlFor="nome" className="block text-gray-600">Nome</label>
-        <input
-          type="text"
-          id="nome"
-          {...register('nome')}
-          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-          autoComplete="off"
-        />
-        {errors.nome && <p className="text-red-500 text-sm">{errors.nome.message}</p>}
-      </div>
-    )
-  }
-
-  function InputPassword() {
-    return(
-      <div className="mb-4">
-        <label htmlFor="password" className="block text-gray-600">Senha</label>
-        <input
-          type="password"
-          id="password"
-          {...register('password', validatePassword)}
-          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-          autoComplete="off"
-        />
-        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-      </div>
-    )
-  }
-
-  function InputCNS() {
-    return (
-      <div className="mb-4">
-        <label htmlFor="cns" className="block text-gray-600">Cartão SUS</label>
-        <input
-          type="text"
-          id="cns"
-          {...register('cns', validateCNS)}
-          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-          autoComplete="off"
-        />
-        {errors.cns && <p className="text-red-500 text-sm">{errors.cns.message}</p>}
-      </div>
-    )
-  }
-
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
       <ToastContainer />
@@ -205,11 +202,11 @@ const PageRegister = () => {
         <div className="w-96">
           <h1 className="text-2xl font-semibold mb-4">Cadastrar Usuário</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <InputCNS />
-            <InputCPF />
-            <InputPassword />
-            <InputNome />
-            <InputEmail />
+            <InputCNS register={register} errors={errors}/>
+            <InputCPF register={register} errors={errors}/>
+            <InputPassword register={register} errors={errors}/>
+            <InputNome register={register} errors={errors}/>
+            <InputEmail register={register} errors={errors}/>
           
             <button
               type="submit"
