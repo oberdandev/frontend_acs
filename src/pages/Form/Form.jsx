@@ -12,12 +12,12 @@ import ProgressBar from '../../components/ProgressBar/index.jsx'
 function DayForm( {id, className} ) {
   return (
     <Section id={id} className={`transition-all duration-500 space-y-4 ${className}`}>
-      <div className='shadow-md p-2 pb-0 border-t border-black lg:grid lg:grid-cols-2 lg:space-x-8 bg-slate-100'>
+      <div className='shadow-md p-2 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
         <InputField id="dataAtividade" type='date' label='Data da Atividade: ' inputOnChange={(e) => inserirValor(e.target.value, 'dataAtividade')}/>
         <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
       </div>
       <div className='space-y-4 lg:space-y-0 lg:grid lg:grid-cols-4 lg:space-x-4'>
-        <div className='shadow-md space-y-4 p-2 border-t border-black bg-slate-100'>
+        <div className='shadow-md space-y-4 p-2 border-2 rounded-xl border-white bg-white'>
           <p>Total de imóveis:</p>
           <div>
             <InputField id="inspecionados" type='text' label='Inspecionados: ' inputSize='sm' labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'inspecionados')}/>
@@ -25,7 +25,7 @@ function DayForm( {id, className} ) {
             <InputField id="positivos" type='text' label='Positivos: ' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'positivos')}/>
           </div>   
         </div>
-        <div className='shadow-md space-y-4 p-2 border-t border-black bg-slate-100'>
+        <div className='shadow-md space-y-4 p-2 border-2 rounded-xl border-white bg-white'>
           <div>
             <InputField id="checklists" type='text' label='Checklists implantados:' inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'checklists')}/>
           </div>
@@ -36,7 +36,7 @@ function DayForm( {id, className} ) {
             <InputField id="checkParcial" type='text' label='Parcial' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'checkParcial')}/>
           </div>
         </div>
-        <div className='shadow-md space-y-4 p-2 col-span-2 border-t border-black bg-slate-100'>
+        <div className='shadow-md space-y-4 p-2 col-span-2 border-2 rounded-xl border-white bg-white'>
           <p>Número de depósitos inspecionados por tipo:</p>
           <div className='block'>
             <div className='grid grid-cols-3'>
@@ -175,15 +175,15 @@ export default function PageForm() {
   return (
     <div className='flex '>
       <Sidebar />
-      <Container className='space-y-2'>
-        <div>
-          <Section className='lg:grid lg:grid-cols-2 lg:space-x-8'>
+      <Container className='space-y-2 mb-4 lg:mb-0'>
+        <div className='space-y-4'> 
+          <Section className='shadow-md p-2 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
             <InputField id="microarea" type='text' label='Microárea: ' inputSize='lg'/>
             <InputField id="sublocalidade" type='text' label='Sublocalidade: ' inputSize='lg'/>
           </Section>
 
           <div className='flex justify-center w-full'>
-            <ProgressBar progress={progress} steps={weekDays} className='mb-4 w-3/4' />
+            <ProgressBar progress={progress} steps={weekDays} className='bg-white mb-2 w-3/4' />
           </div>  
         </div>
 
@@ -195,7 +195,7 @@ export default function PageForm() {
           <DayForm id="form-sex" name="Sexta" className="day-form absolute h-0 opacity-0 invisible translate-x-32 w-full"/>
         </div>
 
-        <div className='flex space-x-4'>
+        <div className='flex mb-4 space-x-4 lg:mb-0'>
           <Button id="button-retract" color="gray" label="Voltar" onButtonClick={() => retractForm()} />
           <Button id="button-advance" label="Avançar" onButtonClick={() => advanceForm()} />
         </div>

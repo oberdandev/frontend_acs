@@ -26,9 +26,9 @@ const Sidebar = ({children}) => {
       href: '/about'
     },
     {
-      title: "Relatório",
+      title: "Relatórios",
       icon: <AiOutlineForm size={24}/>,
-      href: '/form'
+      href: '/form-manager'
     },
     {
       title: "Teste",

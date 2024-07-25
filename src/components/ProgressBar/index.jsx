@@ -24,7 +24,7 @@ export default function ProgressBar( { progress, steps, className } ) {
     })
 
     return (
-        <div className={`bg-slate-100 rounded-lg shadow-md p-2 pr-4 pl-4 ${className}`}>
+        <div className={`rounded-lg shadow-md p-2 pr-4 pl-4 ${className}`}>
             <div className="flex justify-around">
                 {stepsElements}
             </div>
