@@ -7,11 +7,11 @@ export default function PageFormManager() {
         <div className="flex">
             <Sidebar />
             <div className="w-full h-screen">
-                <Section className='h-48'>
-
+                <Section className='w-full bg-white min-h-28'>
+                    <h1>Sou um cabeçalho</h1>
                 </Section>
-                <Container className='h-full'>
-
+                <Container className='min-h-full'>
+                    <h1>Sou um container</h1>
                 </Container>
             </div>
         </div>
