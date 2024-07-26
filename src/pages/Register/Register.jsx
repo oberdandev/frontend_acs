@@ -40,6 +40,9 @@ const validateNome = {
   required: 'Campo obrigatório'
 };
 
+const validateConfirmPassword = (value, password) => 
+  value === password || 'As senhas não coincidem';
+
 /* COMPONENTS */
 function InputCPF({ register, errors }) {
   return (
@@ -112,6 +115,25 @@ function InputPassword({ register, errors }) {
   )
 }
 
+function InputConfirmPassword({ register, errors, password }) {
+  return (
+    <div className="mb-4">
+      <label htmlFor="confirmPassword" className="block text-gray-600">Confirme a Senha</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        {...register('confirmPassword', { 
+          required: 'Campo obrigatório',
+          validate: value => validateConfirmPassword(value, password)
+        })}
+        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+        autoComplete="off"
+      />
+      {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+    </div>
+  )
+}
+
 function InputCNS({ register, errors }) {
   return (
     <div className="mb-4">
@@ -146,6 +168,7 @@ const PageRegister = () => {
   const { register, handleSubmit, formState: { errors }, setValue, setFocus, reset, watch } = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
   let watchCNS = watch('cns');
+  let watchPassword = watch('password');
 
   const onSubmit = async (data) => {
     try {
@@ -201,13 +224,15 @@ const PageRegister = () => {
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex justify-center">
         <div className="w-96">
           <h1 className="text-2xl font-semibold mb-4">Cadastrar Usuário</h1>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-1 md:grid-cols-2 gap-5'>
             <InputCNS register={register} errors={errors}/>
             <InputCPF register={register} errors={errors}/>
-            <InputPassword register={register} errors={errors}/>
             <InputNome register={register} errors={errors}/>
             <InputEmail register={register} errors={errors}/>
+            <InputPassword register={register} errors={errors}/>
+            <InputConfirmPassword register={register} errors={errors} password={watchPassword}/>
           
+            <div className='col-span-2 flex justify-center'> 
             <button
               type="submit"
               className={`bg-blue-500 text-white font-semibold rounded-md py-2 px-4 w-full ${isPendingLogin ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
@@ -215,6 +240,7 @@ const PageRegister = () => {
             >
               {isPendingLogin ? <Spinner /> : 'Cadastrar'}
             </button>
+            </div>
           </form>
           <div className="mt-6 text-blue-500 text-center">
             <NavLink key={'login'} to={'/login'}>

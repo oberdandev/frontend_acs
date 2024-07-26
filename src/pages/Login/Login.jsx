@@ -4,9 +4,7 @@ import InputMask from 'react-input-mask';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
-import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { api } from '../../services/api';
  
 const validatePassword = {
@@ -77,11 +75,8 @@ function ImageLeft (props) {
 }
 
 const Login = () => {
-
-  const {userContext, setUserContext, auth, setAuth} = useContext(AuthContext);
- 
-
-  const { register, handleSubmit, formState: { errors }, setValue, setFocus, watch } = useForm();
+  const toastId = useRef(null);
+  const { register, handleSubmit, formState: { errors }} = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
 
@@ -113,29 +108,17 @@ const Login = () => {
 
       if (response.status === 200) {
         const token = response.data.token
-        if(token) {
-          localStorage.setItem('token', token);
-        }
-        if(response.data.user) {
+        if(token) 
+          localStorage.setItem('token', token); 
+        if(response.data.user)
           setUserContext(response.data.user);
-          localStorage.setItem('userID', response.data.user.id);
-          localStorage.setItem('user', JSON.stringify(response.data.user));
-        }
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+
         setAuth(true);
-       
-        setTimeout(() => {
-          toast.success('Login efetuado com sucesso!', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        }, 100);
-          navigate('/form')
+
+        
+        toast.success('Login efetuado com sucesso!');
+        
 
         } 
 
