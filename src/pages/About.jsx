@@ -14,7 +14,7 @@ export const PageAbout = () => {
     <div className='flex h-full w-full'>
       <Sidebar />
       <Container className='space-y-10'>
-        <Section className='p-8 items-center border-2 rounded-xl border-slate-400 shadow-md flex justify-between pr-24'>
+        <Section className='p-8 bg-white items-center border-2 rounded-xl border-white shadow-md flex justify-between pr-24'>
           <div className='flex items-center space-x-4'>
             <Avatar imgSrc="/img/templates/profile.jpg" size={128}/>
             <div className='space-y-4'>
@@ -36,9 +36,9 @@ export const PageAbout = () => {
           </ul>
         </Section>
         <div className='pb-8 grid h-fit lg:grid-cols-2 gap-10'>
-          <Section className='text-center space-y-2 col-span-2 lg:col-span-1'>
-            <h2><b>Unidade de Saúde</b></h2>
-            <div className='text-left min-h-72 p-4 border-2 rounded-xl border-slate-400 shadow-md space-y-2'>
+          <Section className='text-center bg-white border-2 border-white rounded-xl shadow-md space-y-2 col-span-2 lg:col-span-1'>
+            <h2 className='flex justify-center'><b className='border-b border-slate-600 w-48'>Unidade de Saúde</b></h2>
+            <div className='text-left bg-white min-h-72 p-4 border-2 rounded-xl border-slate-50 space-y-2'>
               <ListItem label="Nome: " value="SEC. MUN. DE SAÚDE DE MANAUS" />
               <ListItem label="CNES: " value="703208606963795" />
               <ListItem label="Endereço: " value="AVENIDA MARIO YPIRANGA, 1695 - ADRIANOPOLIS" />
@@ -46,9 +46,9 @@ export const PageAbout = () => {
               <ListItem label="Email: " value="GABINETE.SEMSA@PMM.AM.GOV.BR" />
             </div>
           </Section>
-          <Section className='space-y-2 text-center lg:col-span-1'>
-            <h2><b>Equipe de Saúde</b></h2>
-            <ul className='p-4 min-h-72 border-2 border-slate-400 rounded-xl overflow-scroll text-left space-y-2'>
+          <Section className='space-y-2 bg-white border-2 border-white rounded-xl shadow-md text-center lg:col-span-1'>
+            <h2 className='flex justify-center'><b className='border-b border-slate-600 w-48'>Equipe de Saúde</b></h2>
+            <ul className='p-4 min-h-72 overflow-scroll text-left space-y-2'>
               <li>
                 <ProfileCard name="José Freitas" role="Agente de Campo" imgSrc="/img/templates/profile2.jpg" />
               </li>

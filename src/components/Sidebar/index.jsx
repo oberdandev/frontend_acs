@@ -26,9 +26,9 @@ const Sidebar = ({children}) => {
       href: '/about'
     },
     {
-      title: "Relatório",
+      title: "Relatórios",
       icon: <AiOutlineForm size={24}/>,
-      href: '/form'
+      href: '/form-manager'
     },
     {
       title: "Teste",
@@ -84,7 +84,7 @@ const Sidebar = ({children}) => {
   }
 
   return (
-    <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 min-h-screen bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
+    <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 flex-1 bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
 
       <SidebarHeader />
       <SidebarMenus />
