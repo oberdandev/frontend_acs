@@ -168,7 +168,10 @@ const PageRegister = () => {
   const { register, handleSubmit, formState: { errors }, setValue, setFocus, reset, watch } = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
   let watchCNS = watch('cns');
+  let watchCPF = watch('cpf')
   let watchPassword = watch('password');
+
+
 
   const onSubmit = async (data) => {
     try {
@@ -222,7 +225,7 @@ const PageRegister = () => {
       <ToastContainer />
       <ImageLeft imgSrc='https://placehold.co/800x/667fff/ffffff.png?text=Your+Image&font=Montserrat'/>
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex justify-center">
-        <div className="w-96">
+        <div className="w-full">
           <h1 className="text-2xl font-semibold mb-4">Cadastrar Usuário</h1>
           <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-1 md:grid-cols-2 gap-5'>
             <InputCNS register={register} errors={errors}/>
@@ -235,7 +238,7 @@ const PageRegister = () => {
             <div className='col-span-2 flex justify-center'> 
             <button
               type="submit"
-              className={`bg-blue-500 text-white font-semibold rounded-md py-2 px-4 w-full ${isPendingLogin ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
+              className={`bg-blue-500 text-white font-semibold rounded-md py-2 px-4 w-full max-w-90  ${isPendingLogin ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
               disabled={isPendingLogin}
             >
               {isPendingLogin ? <Spinner /> : 'Cadastrar'}
