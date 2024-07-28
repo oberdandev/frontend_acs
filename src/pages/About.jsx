@@ -38,7 +38,7 @@ export const PageAbout = () => {
         <div className='pb-8 grid h-fit lg:grid-cols-2 gap-10'>
           <Section className='text-center bg-white border-2 border-white rounded-xl shadow-md space-y-2 col-span-2 lg:col-span-1'>
             <h2 className='flex justify-center'><b className='border-b border-slate-600 w-48'>Unidade de Saúde</b></h2>
-            <div className='text-left bg-white min-h-72 p-4 border-2 rounded-xl border-slate-50 shadow-md space-y-2'>
+            <div className='text-left bg-white min-h-72 p-4 border-2 rounded-xl border-slate-50 space-y-2'>
               <ListItem label="Nome: " value="SEC. MUN. DE SAÚDE DE MANAUS" />
               <ListItem label="CNES: " value="703208606963795" />
               <ListItem label="Endereço: " value="AVENIDA MARIO YPIRANGA, 1695 - ADRIANOPOLIS" />

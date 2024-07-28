@@ -5,24 +5,39 @@ import Sidebar from "../../components/Sidebar";
 import WeekItem from "../../components/weekItem";
 import Button from "../../components/Button";
 
-import * as ReactDOMServer from 'react-dom/server';
+import { useState } from "react";
 
 export default function PageFormManager() {
+    const initList = [
+        {
+            co_semanal: 52003,
+            semana_epidomologica: 0
+        },
+        {
+            co_semanal: 54002,
+            semana_epidomologica: 1
+        }
+    ]
+        
+
+    const [list, setList] = useState(initList);
+    const [semana, setSemana] = useState(2);
+
     function addWeek() {
-        const weekList = document.querySelector("#week-list");
-        const weekItem = ReactDOMServer.renderToStaticMarkup(<WeekItem />);
+        const newList = list.concat({co_semanal: 55555, semana_epidomologica: semana});
+        console.log(newList);
 
-        console.log(weekItem);
-
-        weekList.appendChild(
-            weekItem
-        );
+        setList(newList);   
+        setSemana(semana + 1);
     }
 
+    const weekListItems = list.map(item =>
+        <WeekItem key={item.co_semanal} semanaEpidemologica={item.semana_epidomologica}/>
+    );
     return (
-        <div className="flex">
+        <div className="flex min-h-full">
             <Sidebar />
-            <div className='grid w-full h-screen' style={{'gridTemplateRows': '7rem auto'}}>
+            <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
                 <Section className='p-4 shadow-xl relative'>    
                     <div className='px-8 flex space-x-8 items-center'>
                         <InputField className='w-auto' id="weekDate" type='date' label='Data da Atividade: '/>
@@ -30,7 +45,9 @@ export default function PageFormManager() {
                     </div>
                 </Section>
                 <Container id='week-list'>
-                    
+                    <ul className="space-y-2">
+                        {weekListItems}
+                    </ul>
                 </Container>
             </div>
         </div>
