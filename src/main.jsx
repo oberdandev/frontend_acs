@@ -18,26 +18,28 @@ import HomePage from './pages/Home.jsx'
 const router = createBrowserRouter([
   { 
     path: '/', 
-    element: {}
+    element: <App/>,
+    children: [
+      {
+        path: '/about', 
+        element: <PageAbout />,
+        errorElement: <PageException />
+      },
+      {
+        path: '/form-manager',
+        element: <PageFormManager />,
+        errorElement: <PageException />
+      },
+      {
+        path: '/form',
+        element: <PageForm />,
+        errorElement: <PageException />
+      },
+    ]
   },
   { 
     path: '*', 
     element: <PageNotFound />
-  },
-  {
-    path: '/about', 
-    element: <PageAbout />,
-    errorElement: <PageException />
-  },
-  {
-    path: '/form-manager',
-    element: <PageFormManager />,
-    errorElement: <PageException />
-  },
-  {
-    path: '/form',
-    element: <PageForm />,
-    errorElement: <PageException />
   },
   {
     path: '/login',

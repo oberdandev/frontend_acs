@@ -11,8 +11,6 @@ import ListItem from '../components/ListItem';
 
 export const PageAbout = () => {
   return (
-    <div className='flex h-full w-full'>
-      <Sidebar />
       <Container className='space-y-10'>
         <Section className='p-8 bg-white items-center border-2 rounded-xl border-white shadow-md flex justify-between pr-24'>
           <div className='flex items-center space-x-4'>
@@ -64,7 +62,6 @@ export const PageAbout = () => {
         </div>
         
       </Container>
-    </div>
   );
 };
 

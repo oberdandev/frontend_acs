@@ -35,8 +35,6 @@ export default function PageFormManager() {
         <WeekItem key={item.co_semanal} semanaEpidemologica={item.semana_epidomologica}/>
     );
     return (
-        <div className="flex min-h-full">
-            <Sidebar />
             <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
                 <Section className='p-4 shadow-xl relative'>    
                     <div className='px-8 flex space-x-8 items-center'>
@@ -50,6 +48,5 @@ export default function PageFormManager() {
                     </ul>
                 </Container>
             </div>
-        </div>
     );
 }
