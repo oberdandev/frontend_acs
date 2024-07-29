@@ -8,7 +8,7 @@ export default function SemanaTable({children}) {
                         <th className="p-1 pt-2 border-r border-slate-400">Data (Domingo)</th>
                         <th className="p-1 pt-2 border-r border-slate-400">Verificado</th>
                         <th className="p-1 pt-2 border-r border-slate-400">Enviado</th>
-                        <th className="p-1 pt-2 border-slate-400"></th>
+                        <th className="p-1 pt-2 border-slate-400">Ações</th>
                     </tr>
                 </thead>
                 <tbody className="w-full bg-slate-100">

@@ -6,20 +6,23 @@ import SemanaTable from "../../components/SemanaTable";
 import SemanaItem from "../../components/SemanaItem";
 import Button from "../../components/Button";
 
-import { FaSearch } from "react-icons/fa";
+import { FaPlus, FaSearch } from "react-icons/fa";
 
 import { useState } from "react";
+import Searchbox from "../../components/Searchbox";
 
 export default function PageFormManager() {
-    const initList = [
+    const initList = [ //Teste: Apague depois
         {
             co_semanal: 52003,
+            data_ano: 2024,
             semana_epidomologica: 0,
             verificado: false,
             enviado: false
         },
         {
             co_semanal: 54002,
+            data_ano: 2024,
             semana_epidomologica: 1,
             verificado: false,
             enviado: false
@@ -28,33 +31,36 @@ export default function PageFormManager() {
         
 
     const [list, setList] = useState(initList);
-    const [semana, setSemana] = useState(2);
+    const [semana, setSemana] = useState(2); //Teste: Apague depois
+    const [coSemanal, setCoSemanal] = useState(55555); //Teste: Apague depois
 
     function addWeek() {
-        const newList = list.concat({co_semanal: 55555, semana_epidomologica: semana});
+        const newList = list.concat({
+            co_semanal: coSemanal,
+            data_ano: 2024,
+            semana_epidomologica: semana,
+            verificado: false,
+            enviado: false
+        });
         console.log(newList);
 
-        setList(newList);   
-        setSemana(semana + 1);
+        setList(newList);    
+        setSemana(semana + 1); //Teste: Apague depois
+        setCoSemanal(coSemanal + 1); //Teste: Apague depois
     }
 
     const weekListItems = list.map(item =>
-            <SemanaItem key={item.co_semanal} semanaEpidemologica={item.semana_epidomologica} 
+            <SemanaItem key={item.co_semanal} semanaEpidemologica={item.semana_epidomologica} dataAno={item.data_ano} 
                 verificado={item.verificado} enviado={item.enviado}/>
         )
     return (
         <div className="flex min-h-screen h-full">
             <Sidebar />
             <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
-                <Section className='p-4 flex justify-between shadow-xl relative'>    
-                    <div className='pl-2 flex space-x-2 items-center rounded-md overflow-hidden border-sky-800 border-2'>
-                        <InputField className='w-auto mb-0' id="weekDate" type='date' label='Pesquisar por data:'/>
-                        <div className="px-4 flex items-center h-full bg-sky-800 border-l border-slate-800 cursor-pointer text-white hover:text-sky-400">
-                            <FaSearch size={28}/>
-                        </div>
-                    </div>
+                <Section className='p-4 flex justify-between shadow-xl relative items-center'>    
+                    <Searchbox />
                     <div className='px-8 flex space-x-8 items-center'>
-                        <Button className="h-12" id="btnAddWeek" label="Nova Semana" onButtonClick={() => addWeek()} />
+                        <Button icon={<FaPlus className="mr-2" />} className="h-12" id="btnAddWeek" label="Nova Semana" onButtonClick={() => addWeek()} />
                     </div>
                 </Section>
                 <Container id='week-list'>
