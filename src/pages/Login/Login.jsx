@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
 import { NavLink } from 'react-router-dom';
 import { api } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
  
 const validatePassword = {
   required: 'O campo senha é obrigatório',
@@ -76,55 +77,39 @@ function ImageLeft (props) {
 
 const Login = () => {
   const toastId = useRef(null);
-  const { register, handleSubmit, formState: { errors }} = useForm();
+  const { register, handleSubmit, setFocus, formState: { errors }} = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
-  const [focusPassword, setFocusPassword] = useState(false);
 
-  useEffect(() => {
-    if(focusPassword){
-      setFocus('password');
-    }
-  })
-
-
+  const auth = useAuth();
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     try {
       setPendingLogin(true);
-
       const formattedData = {
         ...data,
         cpf: data.cpf.replace(/\D/g, '') // Remove os caracteres não numéricos do CPF.
       };
+      console.log(formattedData)
+      const response = await auth.loginAction(formattedData);
 
-      const response = await api.post('/login', {
-          cpf: formattedData.cpf,
-          password: formattedData.password
-        });
-      
-      console.log(response.data)
 
+      //toast.success('Login efetuado com sucesso!');
+  
+      /* 
       if (response.status === 200) {
         const token = response.data.token
         if(token) 
           localStorage.setItem('token', token); 
         if(response.data.user)
-          setUserContext(response.data.user);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-
-        setAuth(true);
-
+        localStorage.setItem('user', JSON.stringify(response.data.user)); */
         
-        toast.success('Login efetuado com sucesso!');
         
 
-        } 
+        //} 
 
         if(response.status === '404')
           toast.error(response.data.message);
-      
+        
       } catch (e) {
         console.log(e.message)
 

@@ -1,5 +1,4 @@
 import Section from '../components/Section';
-import Sidebar from '../components/Sidebar';
 import Avatar from '../components/Avatar';
 import Container from '../components/Container';
 import svgJob from '../assets/job.svg';
@@ -58,7 +57,6 @@ export const PageAbout = () => {
             </ul>
           </Section>
         </div>
-        
       </Container>
   );
 };

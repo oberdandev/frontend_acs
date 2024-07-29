@@ -1,35 +1,63 @@
-import {createContext, useState, useContext} from 'react';
-import { api } from '../services/api.js';
+import { useContext, createContext, useState } from "react";
+import { api } from "../services/api";
+import { Navigate } from "react-router-dom";
 
-export const AuthContext = createContext();
 
-export function AuthProvider ({children}) {	
-  const [auth, setAuth] = useState(false);
-  const [userContext, setUserContext] = useState(null);
-  
-  const login = async (cpf, password) => {
-    const response = await api.post('/login', () => {
-      cpf,
-      password
-    })
+const AuthContext = createContext();
 
-    const { token } = response.data;
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(response.data.user));
-    setAuth(true);
-  }
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState({});
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
 
-  const logout = () => {
+  const loginAction = async (data) => {
+    try {
+      console.log('login action', data)
+      const response = await api.post("/login", data);
+      console.log('response.data', response.data)
+
+      if(response.status === 404) {
+        return {status: 404, data: response?.data}
+      }
+      
+      if(response) {
+        setUser(response.data.user);
+        setToken(response.token);
+        localStorage.setItem("token", response.data.token);
+        console.log("User", response.data.user);  
+        console.log('antes do navigaste');
+        console.log('depois do navigate')
+        console.log('usuario do estado', user);
+        return <Navigate to='/about'/>       
+      }
+ 
+      console.log('user', user)
+      console.log('token', localStorage.getItem("token"))
+     
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  };
+
+  const logOut = () => {
     setUser(null);
-  }
+    setToken("");
+    localStorage.removeItem("token");
+    return <Navigate to="/login" />;
+  };
 
   return (
-    <AuthContext.Provider value={{userContext, setUserContext, auth, setAuth}}>
+    <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
       {children}
     </AuthContext.Provider>
   );
-}
 
-export function UseAuth () {
+};
+
+export const useAuth = () => {
   return useContext(AuthContext);
-}
+};
+
+export default AuthProvider;
+
+

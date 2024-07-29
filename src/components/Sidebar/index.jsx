@@ -7,7 +7,10 @@ import { AiOutlineForm } from "react-icons/ai";
 import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
 import Avatar from '../Avatar';
 
-const Sidebar = ({children}) => {
+
+
+
+  const Sidebar = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -85,7 +88,7 @@ const Sidebar = ({children}) => {
   }
 
   return (
-    <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 flex-1 bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
+    <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
 
       <SidebarHeader />
       <SidebarMenus />
@@ -94,4 +97,4 @@ const Sidebar = ({children}) => {
   );
 };
 
-export default Sidebar;
+export default Sidebar; 
