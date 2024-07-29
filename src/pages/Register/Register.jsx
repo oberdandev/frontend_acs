@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
 import { NavLink } from 'react-router-dom';
-import { baseUrl } from '../../services/api.js'
+import { api, baseUrl } from '../../services/api.js'
 import { useNavigate } from 'react-router-dom';
 
 const validatePassword = {
@@ -17,7 +17,7 @@ const validatePassword = {
 const validateCPF = {
   required: 'Campo obrigatório', 
   pattern: { 
-    value: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
+    value: /^\d{11}$/ || /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
     message: 'CPF inválido'
   }
 };
@@ -171,7 +171,30 @@ const PageRegister = () => {
   let watchCPF = watch('cpf')
   let watchPassword = watch('password');
 
+  useEffect(() => {
+    let cpfParsed = watchCPF?.replace(/\D/g, '');
 
+    const fetchDataProfessional = async (CNSorCPF) => {
+      try {
+        console.log(CNSorCPF);
+        const response = await api.get(`/profissional/q/${CNSorCPF}`);
+
+        setValue('nome', response.data.nome);
+        setValue('cns', response.data.cns_prof);
+        setValue('cpf', response.data.cpf);
+        setFocus('email');
+      } catch (e) {
+        const message = e.response?.data?.message || 'Erro ao buscar profissional';
+        toast.error(message);
+        console.log(e.response.message);
+      }
+    };
+    
+    if(watchCNS && watchCNS.length === 15 || cpfParsed && cpfParsed.length === 11) {
+      fetchDataProfessional(cpfParsed || watchCNS);
+    }
+
+  }, [watchCNS, watchCPF, setValue, setFocus]);
 
   const onSubmit = async (data) => {
     try {
@@ -181,6 +204,8 @@ const PageRegister = () => {
         ...data,
         cpf: data.cpf.replace(/\D/g, '') // Remove os caracteres não numéricos do CPF.
       };
+
+      console.log(formattedData.cpf)
 
       const response = await axios.post(baseUrl + '/user', {
         nome: formattedData.nome,
@@ -228,8 +253,8 @@ const PageRegister = () => {
         <div className="w-full">
           <h1 className="text-2xl font-semibold mb-4">Cadastrar Usuário</h1>
           <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-            <InputCNS register={register} errors={errors}/>
             <InputCPF register={register} errors={errors}/>
+            <InputCNS register={register} errors={errors}/>
             <InputNome register={register} errors={errors}/>
             <InputEmail register={register} errors={errors}/>
             <InputPassword register={register} errors={errors}/>
