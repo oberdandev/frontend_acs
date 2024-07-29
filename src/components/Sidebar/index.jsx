@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { SquareChevronLeft } from 'lucide-react';
+import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { AiOutlineForm } from "react-icons/ai";
 import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
 import Avatar from '../Avatar';
@@ -27,7 +28,7 @@ const Sidebar = ({children}) => {
     },
     {
       title: "Relatórios",
-      icon: <AiOutlineForm size={24}/>,
+      icon: <HiOutlineClipboardDocumentList size={24}/>,
       href: '/form-manager'
     },
     {
