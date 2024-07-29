@@ -1,13 +1,12 @@
-import Sidebar from '../../components/Sidebar/index.jsx'
-import Container from '../../components/Container/index.jsx'
-import Section from '../../components/Section/index.jsx'
-import InputField from '../../components/InputField/index.jsx'
-import Button from '../../components/Button/index.jsx'
+import Sidebar from '../../components/Sidebar'
+import Container from '../../components/Container'
+import Section from '../../components/Section'
+import InputField from '../../components/InputField'
+import Button from '../../components/Button'
 import { useEffect, useState } from 'react';
-
 import { inserirValor, checkForm } from './utils.js';
 import { sendForm } from './sendForm.js'
-import ProgressBar from '../../components/ProgressBar/index.jsx'
+import ProgressBar from '../../components/ProgressBar'
 
 function DayForm( {id, className} ) {
   return (
