@@ -172,8 +172,6 @@ export default function PageForm() {
   }
 
   return (
-    <div className='flex '>
-      <Sidebar />
       <Container className='space-y-2 mb-4 lg:mb-0'>
         <div className='space-y-4'> 
           <Section className='shadow-md p-2 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
@@ -200,6 +198,5 @@ export default function PageForm() {
         </div>
         
       </Container>
-    </div>
   );
 }

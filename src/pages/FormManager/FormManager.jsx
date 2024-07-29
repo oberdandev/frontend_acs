@@ -43,8 +43,6 @@ export default function PageFormManager() {
                 verificado={item.verificado} enviado={item.enviado}/>
         )
     return (
-        <div className="flex min-h-screen h-full">
-            <Sidebar />
             <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
                 <Section className='p-4 flex justify-between shadow-xl relative'>    
                     <div className='pl-2 flex space-x-2 items-center rounded-md overflow-hidden border-sky-800 border-2'>
@@ -64,6 +62,5 @@ export default function PageFormManager() {
                     
                 </Container>
             </div>
-        </div>
     );
 }
