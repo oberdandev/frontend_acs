@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
 import { NavLink } from 'react-router-dom';
-import { baseUrl } from '../../services/api.js'
+import { api, baseUrl } from '../../services/api.js'
 import { useNavigate } from 'react-router-dom';
 
 const validatePassword = {
@@ -17,7 +17,7 @@ const validatePassword = {
 const validateCPF = {
   required: 'Campo obrigatório', 
   pattern: { 
-    value: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
+    value: /^\d{11}$/ || /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
     message: 'CPF inválido'
   }
 };
@@ -168,7 +168,33 @@ const PageRegister = () => {
   const { register, handleSubmit, formState: { errors }, setValue, setFocus, reset, watch } = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
   let watchCNS = watch('cns');
+  let watchCPF = watch('cpf')
   let watchPassword = watch('password');
+
+  useEffect(() => {
+    let cpfParsed = watchCPF?.replace(/\D/g, '');
+
+    const fetchDataProfessional = async (CNSorCPF) => {
+      try {
+        console.log(CNSorCPF);
+        const response = await api.get(`/profissional/q/${CNSorCPF}`);
+
+        setValue('nome', response.data.nome);
+        setValue('cns', response.data.cns_prof);
+        setValue('cpf', response.data.cpf);
+        setFocus('email');
+      } catch (e) {
+        const message = e.response?.data?.message || 'Erro ao buscar profissional';
+        toast.error(message);
+        console.log(e.response.message);
+      }
+    };
+    
+    if(watchCNS && watchCNS.length === 15 || cpfParsed && cpfParsed.length === 11) {
+      fetchDataProfessional(cpfParsed || watchCNS);
+    }
+
+  }, [watchCNS, watchCPF, setValue, setFocus]);
 
   const onSubmit = async (data) => {
     try {
@@ -178,6 +204,8 @@ const PageRegister = () => {
         ...data,
         cpf: data.cpf.replace(/\D/g, '') // Remove os caracteres não numéricos do CPF.
       };
+
+      console.log(formattedData.cpf)
 
       const response = await axios.post(baseUrl + '/user', {
         nome: formattedData.nome,
@@ -222,11 +250,11 @@ const PageRegister = () => {
       <ToastContainer />
       <ImageLeft imgSrc='https://placehold.co/800x/667fff/ffffff.png?text=Your+Image&font=Montserrat'/>
       <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex justify-center">
-        <div className="w-96">
+        <div className="w-full">
           <h1 className="text-2xl font-semibold mb-4">Cadastrar Usuário</h1>
           <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-            <InputCNS register={register} errors={errors}/>
             <InputCPF register={register} errors={errors}/>
+            <InputCNS register={register} errors={errors}/>
             <InputNome register={register} errors={errors}/>
             <InputEmail register={register} errors={errors}/>
             <InputPassword register={register} errors={errors}/>
@@ -235,7 +263,7 @@ const PageRegister = () => {
             <div className='col-span-2 flex justify-center'> 
             <button
               type="submit"
-              className={`bg-blue-500 text-white font-semibold rounded-md py-2 px-4 w-full ${isPendingLogin ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
+              className={`bg-blue-500 text-white font-semibold rounded-md py-2 px-4 w-full max-w-90  ${isPendingLogin ? 'cursor-not-allowed opacity-50' : 'hover:bg-blue-600'}`}
               disabled={isPendingLogin}
             >
               {isPendingLogin ? <Spinner /> : 'Cadastrar'}
