@@ -8,8 +8,10 @@ import Button from "../../components/Button";
 
 import { FaPlus, FaSearch } from "react-icons/fa";
 
-import { useState } from "react";
-import Searchbox from "../../components/Searchbox";
+import { useEffect, useState } from "react";
+import SearchDate from "../../components/SearchDate";
+
+import useStateWithCallback from 'use-state-with-callback';
 
 export default function PageFormManager() {
     const initList = [ //Teste: Apague depois
@@ -17,6 +19,8 @@ export default function PageFormManager() {
             co_semanal: 52003,
             data_ano: 2024,
             semana_epidomologica: 0,
+            data_inicio: Date.parse("2024-7-7"),
+            data_fim: Date.parse("2024-7-13"),
             verificado: false,
             enviado: false
         },
@@ -24,6 +28,8 @@ export default function PageFormManager() {
             co_semanal: 54002,
             data_ano: 2024,
             semana_epidomologica: 1,
+            data_inicio: Date.parse("2024-7-14"),
+            data_fim: Date.parse("2024-7-20"),
             verificado: false,
             enviado: false
         }
@@ -31,8 +37,26 @@ export default function PageFormManager() {
         
 
     const [list, setList] = useState(initList);
+    const [showList, setShowList] = useState(list);
+    const [dataSearchInicio, setDataSearchInicio] = useState(undefined);
+    const [dataSearchFim, setDataSearchFim] = useState(undefined);
     const [semana, setSemana] = useState(2); //Teste: Apague depois
     const [coSemanal, setCoSemanal] = useState(55555); //Teste: Apague depois
+
+    function searchData() {
+        console.log(dataSearchInicio, dataSearchFim)
+
+        if (dataSearchInicio === undefined || dataSearchFim === undefined)
+            return;
+
+        const newShowList = list.filter((semana) => {
+            const dataInicio = semana.data_inicio.toString();
+            const dataFim = semana.data_fim.toString();
+
+            return dataSearchInicio <= semana.data_inicio && dataSearchFim >= semana.data_fim;
+        })
+        setShowList(newShowList);
+    }
 
     function addWeek() {
         const newList = list.concat({
@@ -42,21 +66,26 @@ export default function PageFormManager() {
             verificado: false,
             enviado: false
         });
-        console.log(newList);
 
-        setList(newList);    
+        setList(newList);
+        if (dataSearch === undefined) setShowList(list);
         setSemana(semana + 1); //Teste: Apague depois
         setCoSemanal(coSemanal + 1); //Teste: Apague depois
     }
 
-    const weekListItems = list.map(item =>
+    console.log(dataSearchInicio)
+    
+    const weekListItems = showList.map(item =>
             <SemanaItem key={item.co_semanal} semanaEpidemologica={item.semana_epidomologica} dataAno={item.data_ano} 
                 verificado={item.verificado} enviado={item.enviado}/>
         )
     return (
             <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
                 <Section className='p-4 flex justify-between shadow-xl relative items-center'>    
-                    <Searchbox />
+                    <SearchDate 
+                        onChangeDataInicio={(e) => setDataSearchInicio(Date.parse(e.target.value), searchData)}
+                        onChangeDataFim={(e) => setDataSearchFim(Date.parse(e.target.value), searchData)}
+                        />
                     <div className='px-8 flex space-x-8 items-center'>
                         <Button icon={<FaPlus className="mr-2" />} className="h-12" id="btnAddWeek" label="Nova Semana" onButtonClick={() => addWeek()} />
                     </div>
