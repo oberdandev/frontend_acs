@@ -2,8 +2,6 @@ import Section from '../components/Section';
 import Sidebar from '../components/Sidebar';
 import Avatar from '../components/Avatar';
 import Container from '../components/Container';
-
-import svgBirthday from '../assets/birthday.svg';
 import svgJob from '../assets/job.svg';
 import svgPhone from '../assets/phone.svg';
 import ProfileCard from '../components/ProfileCard';
