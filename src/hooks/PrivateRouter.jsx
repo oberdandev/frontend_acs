@@ -3,8 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import PageAbout from "../pages/About";
 
 const PrivateRoute = (props) => {
-  const user = useAuth();
-  if (!user?.user) return <Navigate to="/login" />;
+  const auth = useAuth();
+  if (!auth.user) return <Navigate to="/login"/>;
   
   return <Outlet />;
 };

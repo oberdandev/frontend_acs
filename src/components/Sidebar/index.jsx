@@ -1,17 +1,25 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { SquareChevronLeft } from 'lucide-react';
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { AiOutlineForm } from "react-icons/ai";
 import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
 import Avatar from '../Avatar';
+import { useAuth } from '../../context/AuthContext';
 
 
 
 
   const Sidebar = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
+  const {logOut} = useAuth();
+  const navigate = useNavigate();
+
+  const logoutSystem = async () => {
+    await logOut();
+    navigate('/login', {replace: true});
+  }
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -35,9 +43,10 @@ import Avatar from '../Avatar';
       href: '/form-manager'
     },
     {
-      title: "Teste",
+      title: "Sair",
       icon: <SquareChevronLeft />,
-      href: '/'
+      href: '/',
+      func: logoutSystem
     }
   ]
 
@@ -50,7 +59,7 @@ import Avatar from '../Avatar';
                     key={index} 
                     className={`flex pt-6 text-gray-200 text-sm items-center gap-x-4 cursor-pointer hover:text-sky-500 font-bolds`}>
                     <NavLink key={menu.title} to={menu.href} className={({isActive}) => `flex gap-x-4 ${isActive ? 'text-sky-300 hover:text-sky-500' : ''}`}>
-                      <span>{menu.icon}</span>
+                      <button onClick={menu.func}>{menu.icon}</button>
                       <span className={`duration-300 origin-left font-bold text-lg ${!isOpen && 'scale-0'}`}>
                         {menu.title}
                       </span> 

@@ -22,12 +22,9 @@ const AppRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route
-            path="about"
-            element={
-              <PrivateRoute />
-            }
-            errorElement={<PageException />}>
+          <Route path="about"
+                element={ <PrivateRoute />  }
+                errorElement={<PageException />}>
             <Route index element={<PageAbout />} />
           </Route>
           <Route
@@ -98,10 +95,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-      <ToastContainer  autoClose={5000} />
-      <AuthProvider>     
-        <AppRoutes />
-      </AuthProvider>
-
+        <AuthProvider>     
+          <ToastContainer  autoClose={5000} />
+          <AppRoutes />
+        </AuthProvider>
   </React.StrictMode>
 )

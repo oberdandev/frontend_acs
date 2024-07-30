@@ -1,7 +1,6 @@
 import { useContext, createContext, useState } from "react";
 import { api } from "../services/api";
-import { Navigate } from "react-router-dom";
-
+import { Navigate, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -11,15 +10,10 @@ export const AuthProvider = ({ children }) => {
 
   const loginAction = async (data) => {
     try {
-      console.log('login action', data)
-      const response = await api.post("/login", data);
-      console.log('response.data', response.data)
+      const response = api.post("/login", data);
+      return response;
 
-      if(response.status === 404) {
-        return {status: 404, data: response?.data}
-      }
-      
-      if(response) {
+      /* if(response) {
         setUser(response.data.user);
         setToken(response.token);
         localStorage.setItem("token", response.data.token);
@@ -31,7 +25,7 @@ export const AuthProvider = ({ children }) => {
       }
  
       console.log('user', user)
-      console.log('token', localStorage.getItem("token"))
+      console.log('token', localStorage.getItem("token")) */
      
     } catch (err) {
       console.error(err);
@@ -43,11 +37,11 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setToken("");
     localStorage.removeItem("token");
-    return <Navigate to="/login" />;
+    return ;
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
+    <AuthContext.Provider value={{ token, user, loginAction, logOut, setUser }}>
       {children}
     </AuthContext.Provider>
   );

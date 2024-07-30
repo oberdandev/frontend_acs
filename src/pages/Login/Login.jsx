@@ -4,7 +4,7 @@ import InputMask from 'react-input-mask';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink, useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
  
@@ -79,33 +79,41 @@ const Login = () => {
   const toastId = useRef(null);
   const { register, handleSubmit, setFocus, formState: { errors }} = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
+  const navigate = useNavigate();
 
-  const auth = useAuth();
+  const {user, setToken, setUser, loginAction } = useAuth();
 
   const onSubmit = async (data) => {
     try {
+      
       setPendingLogin(true);
+      
       const formattedData = {
         ...data,
         cpf: data.cpf.replace(/\D/g, '') // Remove os caracteres não numéricos do CPF.
       };
-      console.log(formattedData)
-      const response = await auth.loginAction(formattedData);
+      
+      const response = await loginAction(formattedData);
 
-
-      //toast.success('Login efetuado com sucesso!');
+      console.log('login data:', response.data)
+      console.log('login response:', response);
+      console.log('login status:', response.status);   
+      
+      setUser(response.data.user)
   
-      /* 
+      
       if (response.status === 200) {
         const token = response.data.token
         if(token) 
           localStorage.setItem('token', token); 
         if(response.data.user)
-        localStorage.setItem('user', JSON.stringify(response.data.user)); */
-        
-        
-
-        //} 
+          localStorage.setItem('user', JSON.stringify(response.data.user)); 
+          setUser(response.data.user);
+          console.log('auth user: ', user)
+          
+          setTimeout(() => toast.success('Login efetuado com sucesso!'), 400)
+          return navigate('/about');
+      } 
 
         if(response.status === '404')
           toast.error(response.data.message);
