@@ -7,9 +7,6 @@ import { AiOutlineForm } from "react-icons/ai";
 import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
 import Avatar from '../Avatar';
 
-
-
-
   const Sidebar = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
 
