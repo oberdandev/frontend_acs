@@ -81,7 +81,7 @@ const Login = () => {
   const [isPendingLogin, setPendingLogin] = useState(false);
   const navigate = useNavigate();
 
-  const {user, setToken, setUser, loginAction } = useAuth();
+  const {user, setToken, setUser, loginAction, setProfissional } = useAuth();
 
   const onSubmit = async (data) => {
     try {
@@ -100,7 +100,7 @@ const Login = () => {
       console.log('login status:', response.status);   
       
       setUser(response.data.user)
-  
+      setProfissional(response.data.profissional);
       
       if (response.status === 200) {
         const token = response.data.token
@@ -109,6 +109,7 @@ const Login = () => {
         if(response.data.user)
           localStorage.setItem('user', JSON.stringify(response.data.user)); 
           setUser(response.data.user);
+          
           console.log('auth user: ', user)
           
           setTimeout(() => toast.success('Login efetuado com sucesso!'), 400)

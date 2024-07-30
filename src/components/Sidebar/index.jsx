@@ -1,19 +1,14 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaBars, FaTimes } from 'react-icons/fa';
 import { SquareChevronLeft } from 'lucide-react';
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
-import { AiOutlineForm } from "react-icons/ai";
 import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
-import Avatar from '../Avatar';
 import { useAuth } from '../../context/AuthContext';
-
-
-
+import { BsPersonCircle } from "react-icons/bs";
 
   const Sidebar = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const {logOut} = useAuth();
+  const {logOut, user} = useAuth();
   const navigate = useNavigate();
 
   const logoutSystem = async () => {
@@ -34,7 +29,7 @@ import { useAuth } from '../../context/AuthContext';
   const Menus = [
     {
       title: "Perfil",
-      icon: <Avatar imgSrc="/img/templates/profile.jpg" size={24} elemBorder='0px solid #000' />,
+      icon: < BsPersonCircle size={24}/>,
       href: '/about'
     },
     {
