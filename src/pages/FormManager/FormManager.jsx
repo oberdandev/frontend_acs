@@ -53,7 +53,7 @@ function SearchDate({onChangeDataInicio, onChangeDataFim}) {
 export default function PageFormManager() {
     const initList = [ //Teste: Apague depois
         {
-            co_semanal: 52003,
+            co_semanal: 202400,
             data_ano: 2024,
             semana_epidomologica: 0,
             data_inicio: Date.parse("2024-7-7"),
@@ -62,7 +62,7 @@ export default function PageFormManager() {
             enviado: false
         },
         {
-            co_semanal: 54002,
+            co_semanal: 202401,
             data_ano: 2024,
             semana_epidomologica: 1,
             data_inicio: Date.parse("2024-7-14"),
@@ -71,7 +71,7 @@ export default function PageFormManager() {
             enviado: false
         },
         {
-            co_semanal: 52004,
+            co_semanal: 202402,
             data_ano: 2024,
             semana_epidomologica: 2,
             data_inicio: Date.parse("2024-7-21"),
@@ -80,7 +80,7 @@ export default function PageFormManager() {
             enviado: false
         },
         {
-            co_semanal: 54005,
+            co_semanal: 202403,
             data_ano: 2024,
             semana_epidomologica: 3,
             data_inicio: Date.parse("2024-7-28"),
@@ -89,7 +89,7 @@ export default function PageFormManager() {
             enviado: false
         },
         {
-            co_semanal: 52006,
+            co_semanal: 202404,
             data_ano: 2024,
             semana_epidomologica: 4,
             data_inicio: Date.parse("2024-8-4"),
@@ -98,7 +98,7 @@ export default function PageFormManager() {
             enviado: false
         },
         {
-            co_semanal: 54007,
+            co_semanal: 202405,
             data_ano: 2024,
             semana_epidomologica: 5,
             data_inicio: Date.parse("2024-8-11"),
