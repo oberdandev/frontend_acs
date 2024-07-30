@@ -11,7 +11,7 @@ import { Tooltip } from "react-tooltip";
 function DeleteModal({children, isOpen}) {
     if (isOpen === true) {
         return (
-            <div className="absolute w-full h-full" style={{backgroundColor: "rgb(0,0,0,.5)"}}>
+            <div className="fixed w-full h-full" style={{backgroundColor: "rgb(0,0,0,.5)"}}>
                 <div className="p-8 space-y-4 absolute left-1/4 right-1/4 top-1/4 bg-white border border-slate-600 rounded-lg text-center">
                     {children}
                 </div>
@@ -115,10 +115,13 @@ export default function PageFormManager() {
     const [dataSearchFim, setDataSearchFim] = useState(undefined);
     const [isModalOpen, setIsModalOpen] = useState(undefined);
     const [semanaDelete, setSemanaDelete] = useState(null);
-    const [semana, setSemana] = useState(2); //Teste: Apague depois
-    const [coSemanal, setCoSemanal] = useState(55555); //Teste: Apague depois
+    const [semana, setSemana] = useState(6); //Teste: Apague depois
+    const [coSemanal, setCoSemanal] = useState(202406); //Teste: Apague depois
+    const [dataInicio, setDataInicio] = useState(Date.parse("2024-8-18")); //Teste: Apague depois
+    const [dataFim, setDataFim] = useState(Date.parse("2024-8-24")); //Teste: Apague depois
 
     useEffect(() => {
+        setShowList(list);
         if (dataSearchInicio !== undefined && dataSearchFim !== undefined) {
             searchData();
         }
@@ -131,9 +134,6 @@ export default function PageFormManager() {
         btnStopSearch.classList.remove("hidden");
 
         const newShowList = list.filter((semana) => {
-            const dataInicio = semana.data_inicio;
-            const dataFim = semana.data_fim;
-
             return dataSearchInicio <= semana.data_inicio && dataSearchFim >= semana.data_fim;
         })
         setShowList(newShowList);
@@ -159,24 +159,23 @@ export default function PageFormManager() {
             co_semanal: coSemanal,
             data_ano: 2024,
             semana_epidomologica: semana,
-            data_inicio: Date.parse("2024-8-18"),
-            data_fim: Date.parse("2024-8-24"),
+            data_inicio: dataInicio,
+            data_fim: dataFim,
             verificado: false,
             enviado: false
         });
 
         setList(newList);
-        setShowList(list);
         setSemana(semana + 1); //Teste: Apague depois
         setCoSemanal(coSemanal + 1); //Teste: Apague depois
+        setDataInicio(dataInicio + 604800000); //Teste: Apague depois
+        setDataFim(dataFim + 604800000); //Teste: Apague depois
     }
 
     function deleteSemana() {
         const newList = list.filter((semana => {
             return semana.co_semanal !== semanaDelete;
         }))
-
-        console.log(newList);
 
         setList(newList);
         setShowList(newList);
@@ -192,6 +191,7 @@ export default function PageFormManager() {
                 }}/>
         );
 
+    console.log(list, showList);
     return (
             <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
                 <Section className='p-4 px-12 flex justify-between shadow-xl relative items-center'>    

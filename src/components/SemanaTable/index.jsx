@@ -1,6 +1,6 @@
 export default function SemanaTable({children}) {
     return (
-        <div className="text-center relative bg-white rounded-xl border border-slate-400 shadow-lg overflow-hidden">
+        <div className="text-center relative bg-white rounded-xl border border-slate-400 shadow-lg overflow-hidden mb-4">
             <table className="w-full table-auto">
                 <thead className="relative border-b border-slate-400 shadow-lg">
                     <tr>
