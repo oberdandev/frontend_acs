@@ -1,5 +1,6 @@
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { AiOutlineForm } from "react-icons/ai";
+import { FaCheck, FaTrashAlt, FaEdit } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip'
 import Tag from "../Tag";
 
@@ -25,11 +26,15 @@ export default function SemanaItem( {semanaEpidemologica, dataAno, verificado, e
                 <Tag className={enviadoColor} text="Não"/>
             </td>
             <td className="flex justify-center p-1 py-2 pr-4 pl-4">
-                <AiOutlineForm id="editSemana" className="cursor-pointer hover:text-blue-700 mr-2" size={24} onClick={editSemana}/>
+                <FaCheck id="sendSemana" className="cursor-pointer hover:text-emerald-700 mr-4" size={24} onClick={editSemana}/>
+                <Tooltip anchorSelect="#sendSemana" place="top">
+                    Enviar
+                </Tooltip>
+                <FaEdit id="editSemana" className="cursor-pointer hover:text-blue-700 mr-4" size={24} onClick={editSemana}/>
                 <Tooltip anchorSelect="#editSemana" place="top">
                     Editar
                 </Tooltip>
-                <MdOutlineDeleteForever id="deleteSemana" className="cursor-pointer hover:text-red-700" size={24} onClick={deleteSemana}/>
+                <FaTrashAlt id="deleteSemana" className="cursor-pointer hover:text-red-700" size={24} onClick={deleteSemana}/>
                 <Tooltip anchorSelect="#deleteSemana">
                     Deletar
                 </Tooltip>
