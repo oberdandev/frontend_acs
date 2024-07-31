@@ -2,9 +2,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import { api } from "../../services/api";
 import { toast, ToastContainer } from 'react-toastify';
 import { FaRegEdit } from "react-icons/fa";
+import {Modal} from '../../components/Modal/Modal.jsx'
 
 export default function PageUsers() {
   const [listUserState, setListUserState] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
 
   useEffect(() => {
     async function fetchData() {
@@ -36,7 +42,6 @@ export default function PageUsers() {
     const role = refs.role.current.value;
     const status = refs.status.current.value;
     console.log(userID, nome, email, cns, role, status);
-
 
     try {
       const response = await api.patch(`/user/${userID}`, {
@@ -86,8 +91,8 @@ export default function PageUsers() {
         </td>
         <td className="p-3 px-5">
           <select name="status" defaultValue={user.status} className="bg-transparent" ref={statusRef}>
-            <option value="1">Ativo</option>
-            <option value="0">Inativo</option>
+            <option  value={1}>Ativo</option>
+            <option value={0}>Inativo</option>
           </select>
         </td>
         <td className="p-3 px-5 flex justify-end">
