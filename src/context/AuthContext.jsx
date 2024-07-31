@@ -5,7 +5,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [profissional, setProfissional] = useState({});
 
@@ -35,15 +35,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logOut = () => {
-    setUser(null);
-    setToken("");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    setUser(null);
+    setToken("");
     return ;
   };
 
+  const defineToken = async () => {
+    const token = localStorage.getItem("token");
+    if(token) {
+      setToken(token)
+  }
+}
+
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, logOut, setUser, profissional, setProfissional }}>
+    <AuthContext.Provider value={{ token, user, loginAction, logOut, setUser, profissional, setProfissional, defineToken }}>
       {children}
     </AuthContext.Provider>
   );
@@ -55,5 +62,3 @@ export const useAuth = () => {
 };
 
 export default AuthProvider;
-
-

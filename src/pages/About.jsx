@@ -9,9 +9,9 @@ import { useAuth } from '../context/AuthContext';
 
 export const PageAbout = () => {
 
-  const { user, profissional} = useAuth();
+  const { user } = useAuth();
   console.log(user)
-  console.log(profissional)
+  
 
   return (
       <Container className='space-y-10'>
@@ -28,7 +28,7 @@ export const PageAbout = () => {
           <ul className='space-y-2'>
             <li className='flex items-center space-x-2'>
                 <img src={svgJob} alt="Trabalho" style={{'height': '22px'}}/> 
-                <p className='text-lg'>{profissional.profissao.no_profissao}</p>
+                <p className='text-lg'>{user?.profissao?.no_profissao}</p>
               </li>
               <li className='flex items-center space-x-2'>
                 <img src={svgPhone} alt="Telefone" style={{'height': '22px'}}/> 
@@ -40,12 +40,12 @@ export const PageAbout = () => {
           <Section className='text-center bg-white border-2 border-white rounded-xl shadow-md space-y-2 col-span-2 lg:col-span-1'>
             <h2 className='flex justify-center'><b className='border-b border-slate-600 w-48'>Unidade de Saúde</b></h2>
             <div className='text-left bg-white min-h-72 p-4 border-2 rounded-xl border-slate-50 space-y-2'>
-              <ListItem label="Nome: " value={profissional.unidade.nome} />
-              <ListItem label="CNES: " value={profissional.unidade.cnes} />
-              <ListItem label="Endereço: " value={profissional.unidade.logradouro} />
-              <ListItem label="Telefone: " value={profissional.unidade.telefone} />
-              <ListItem label="Diretor: " value={profissional.unidade.diretor} />
-              <ListItem label="Email: " value={profissional.unidade.email} />
+              <ListItem label="Nome: " value={user?.unidade?.nome} />
+              <ListItem label="CNES: " value={user?.unidade?.cnes} />
+              <ListItem label="Endereço: " value={`${user?.unidade?.logradouro} | Bairro ${user.unidade.bairro}`} />
+              <ListItem label="Telefone: " value={user?.unidade?.telefone} />
+              <ListItem label="Diretor: " value={user?.unidade?.diretor} />
+              <ListItem label="Email: " value={user?.unidade?.email} />
             </div>
           </Section>
           <Section className='space-y-2 bg-white border-2 border-white rounded-xl shadow-md text-center lg:col-span-1'>
@@ -65,7 +65,7 @@ export const PageAbout = () => {
           </Section>
         </div>
       </Container>
-  );
+);
 };
 
 export default PageAbout;

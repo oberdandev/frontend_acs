@@ -5,6 +5,7 @@ import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
 import { useAuth } from '../../context/AuthContext';
 import { BsPersonCircle } from "react-icons/bs";
+import { LiaUsersCogSolid } from "react-icons/lia";
 
   const Sidebar = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,11 +39,16 @@ import { BsPersonCircle } from "react-icons/bs";
       href: '/form-manager'
     },
     {
+      title: "Gerenciar Usuários",
+      icon: <LiaUsersCogSolid size={24}/>,
+      href: '/users',
+    },
+    {
       title: "Sair",
       icon: <SquareChevronLeft />,
       href: '/',
       func: logoutSystem
-    }
+    },
   ]
 
   function SidebarMenus() {
