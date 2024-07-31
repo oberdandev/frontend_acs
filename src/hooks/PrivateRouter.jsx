@@ -1,10 +1,12 @@
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import PageAbout from "../pages/About";
 
 const PrivateRoute = (props) => {
   const auth = useAuth();
-  if (!auth.user) return <Navigate to="/login"/>;
+  console.log('PrivateRoute user:', auth.user)
+  console.log('privateRoute', auth.token)
+  if (!auth.token) 
+    return <Navigate to="/login"/>;
   
   return <Outlet />;
 };

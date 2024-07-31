@@ -15,7 +15,7 @@ import { createBrowserRouter, RouterProvider, BrowserRouter, Routes, Route, Link
 import PageRegister from './pages/Register/Register.jsx'
 import HomePage from './pages/Home.jsx'
 import PrivateRoute from './hooks/PrivateRouter.jsx'
-
+import PageUsers from './pages/Users/PageUsers.jsx'
 
 const AppRoutes = () => {
   return (
@@ -29,14 +29,21 @@ const AppRoutes = () => {
           </Route>
           <Route
             path="form-manager"
-            element={<PageFormManager />}
-            errorElement={<PageException />}
-          />
+            element={<PrivateRoute />}
+            errorElement={<PageException />}>
+            <Route index element={<PageFormManager />} />
+          </Route>
           <Route
             path="form"
             element={<PageForm />}
             errorElement={<PageException />}
           />
+          <Route
+            path="users"
+            element={<PrivateRoute/>}
+            errorElement={<PageException />}>
+              <Route index element={<PageUsers />} />
+          </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />
         <Route path="login" element={<PageLogin />} errorElement={<PageException />} />
