@@ -22,7 +22,7 @@
     "react-input-mask": "^2.0.4",
     "react-router-dom": "^6.23.1",
     "react-toastify": "^10.0.5",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
     "react-tooltip": "^5.27.1"
   },
   "devDependencies": {
