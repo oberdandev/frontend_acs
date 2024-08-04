@@ -81,7 +81,7 @@ const Login = () => {
   const [isPendingLogin, setPendingLogin] = useState(false);
   const navigate = useNavigate();
 
-  const {user, setToken, setUser, loginAction, setProfissional, defineToken } = useAuth();
+  const {setUser, loginAction, setProfissional, defineToken } = useAuth();
 
   const onSubmit = async (data) => {
     try {
@@ -113,9 +113,10 @@ const Login = () => {
           await defineToken()
         if(response.data.user)
           localStorage.setItem('user', JSON.stringify(response.data.user)); 
-          setUser(userPlace);
-          
-          setTimeout(() => toast.success('Login efetuado com sucesso!'), 400)
+          setUser(userPlace);     
+          setTimeout(() => toast.success('Login efetuado com sucesso!', {
+            autoClose: 3000
+          }), 100)
           return navigate('/about');
       } 
 
@@ -134,7 +135,6 @@ const Login = () => {
 
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
-      <ToastContainer />
       {/* Left: Image */}
       <ImageLeft imgSrc='https://placehold.co/800x/667fff/ffffff.png?text=Your+Image&font=Montserrat'/>
       {/* Right: Login Form */}

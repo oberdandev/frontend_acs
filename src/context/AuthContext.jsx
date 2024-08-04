@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 import { api } from "../services/api";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -8,26 +8,20 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [profissional, setProfissional] = useState({});
+  document.cookie = `Bearer Authorization ${token}`;
+  document.headers = `Bearer Authorization ${token}`;
+
+  useEffect(() => {
+     
+  }, [])
+
+  console.log('token:', token , 'AuthContext line 12')
 
   const loginAction = async (data) => {
     try {
       const response = api.post("/login", data);
       return response;
 
-      /* if(response) {
-        setUser(response.data.user);
-        setToken(response.token);
-        localStorage.setItem("token", response.data.token);
-        console.log("User", response.data.user);  
-        console.log('antes do navigaste');
-        console.log('depois do navigate')
-        console.log('usuario do estado', user);
-        return <Navigate to='/about'/>       
-      }
- 
-      console.log('user', user)
-      console.log('token', localStorage.getItem("token")) */
-     
     } catch (err) {
       console.error(err);
       return false;
