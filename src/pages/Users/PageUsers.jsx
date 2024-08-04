@@ -1,39 +1,39 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { api } from "../../services/api";
 import { toast, ToastContainer } from 'react-toastify';
-import { FaRegEdit } from "react-icons/fa";
-import {Modal} from '../../components/Modal/Modal.jsx'
+import Container from '../../components/Container/index.jsx';
+import { Table, Button, Select, Navbar } from 'flowbite-react';
+
 
 export default function PageUsers() {
   const [listUserState, setListUserState] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api.get('/user')
-      setListUserState(response.data)
+      const response = await api.get('/user');
+      setListUserState(response.data);
     }
-    fetchData()
+    fetchData();
   }, []);
+
+  const getUserStatus = (status) => {
+    return status === 1 ? 'Ativo' : 'Inativo';
+  }
 
   const updateUserList = async () => {
     const response = await api.get('/user');
     setListUserState(response.data);
-  }
+  };
 
   const deleteUser = async (userID) => {
     try {
-      await api.delete(`/user/${userID}`)
-      toast.success('Usuário deletado com sucesso')
+      await api.delete(`/user/${userID}`);
+      toast.success('Usuário deletado com sucesso');
       updateUserList();
     } catch (err) {
-      toast.error('Erro ao deletar usuário')
+      toast.error('Erro ao deletar usuário');
     }
-  }
+  };
 
   const onSubmitSave = async (userID, refs) => {
     const nome = refs.nome.current.value;
@@ -41,7 +41,6 @@ export default function PageUsers() {
     const cns = refs.cns.current.value;
     const role = refs.role.current.value;
     const status = refs.status.current.value;
-    console.log(userID, nome, email, cns, role, status);
 
     try {
       const response = await api.patch(`/user/${userID}`, {
@@ -51,12 +50,101 @@ export default function PageUsers() {
         role,
         status
       });
-      toast.success('Usuário atualizado com sucesso')
+      toast.success('Usuário atualizado com sucesso');
       updateUserList();
     } catch (err) {
-      toast.error('Erro ao atualizar usuário')
-      console.log(err)
-    } 
+      toast.error('Erro ao atualizar usuário');
+      console.log(err);
+    }
+  };
+
+  const TitleHeaderComponent = () => {
+    return (
+      <Navbar fluid rounded>
+      <Navbar.Brand>
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Gerenciar Usuários</span>
+      </Navbar.Brand>
+    </Navbar>
+    )
+  }
+
+  const TableHeaderFlowbite = () => {
+    return (
+      <Table.Head>
+        <Table.HeadCell>ID</Table.HeadCell>
+        <Table.HeadCell>CPF</Table.HeadCell>
+        <Table.HeadCell>NOME</Table.HeadCell>
+        <Table.HeadCell>EMAIL</Table.HeadCell>
+        <Table.HeadCell>CNS</Table.HeadCell>
+        <Table.HeadCell>Role</Table.HeadCell>
+        <Table.HeadCell>Status</Table.HeadCell>
+        <Table.HeadCell>Ações</Table.HeadCell>
+      </Table.Head>
+    );
+  }
+  
+  const TableCellFlowbite = ({user}) => {
+    const nomeRef = useRef();
+    const cpfRef = useRef();
+    const emailRef = useRef();
+    const cnsRef = useRef();
+    const roleRef = useRef();
+    const statusRef = useRef();
+    const idRef = useRef();
+  
+    const refs = {
+      nome: nomeRef,
+      email: emailRef,
+      cns: cnsRef,
+      role: roleRef,
+      status: statusRef,
+    };
+  
+   return (
+    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+      <Table.Cell ref={idRef}>      {user.id}</Table.Cell>  
+      <Table.Cell ref={cpfRef}>     {user.cpf}</Table.Cell>
+      <Table.Cell ref={nomeRef}>    {user.nome}</Table.Cell>
+      <Table.Cell ref={emailRef}>   {user.email}</Table.Cell>
+      <Table.Cell ref={cnsRef}>     {user.cns}</Table.Cell>
+      <Table.Cell ref={roleRef}>    {user.role}</Table.Cell>
+      <Table.Cell ref={statusRef}>  {getUserStatus(user.status)}</Table.Cell>            
+      <Table.Cell className='flex'>
+        <Button size="sm" 
+          color="blue" 
+          className="mr-2" 
+          onClick={() => onSubmitSave(user.id, refs)}>
+          +
+        </Button>
+        <Button 
+          size="sm" 
+          color="yellow" 
+          className="mr-2">
+          -
+        </Button>
+        <Button 
+          size="sm" 
+          color="red" 
+          onClick={() => deleteUser(user.id)}>
+          x
+        </Button>
+      </Table.Cell>
+    </Table.Row>
+   )
+  }
+  
+  const TableFlowbite = () => {
+    return (
+      <div className="overflow-x-auto">
+        <Table striped>
+            <TableHeaderFlowbite />
+          <Table.Body className='divide-y'>
+            {listUserState.map((user) => <TableCellFlowbite key={user.id} user={user} />
+            )}
+          </Table.Body>      
+        </Table>
+      </div>
+    )
   }
 
   const UserRow = ({ user }) => {
@@ -75,68 +163,102 @@ export default function PageUsers() {
     };
 
     return (
-      <tr className="border-b hover:bg-orange-100 bg-gray-100">
-        <td className="p-3 px-5">{user.id}</td>
-        <td className="p-3 bg-transparent focus:outline-none border:none"><input id="cpf" name="cpf" type="text" defaultValue={user.cpf} className="bg-transparent" readOnly /></td>
-        <td className="p-3 px-5"><input id="nome" name="nome" type="text" defaultValue={user.nome} className="bg-transparent" ref={nomeRef} /></td>
-        <td className="p-3 px-5"><input id="email" name="email" defaultValue={user.email} className="bg-transparent" ref={emailRef} /></td>
-        <td className="p-3 px-5"><input id="cns" name="cns" type="text" defaultValue={user.cns} className="bg-transparent" ref={cnsRef} /></td>
-        <td className="p-3 px-5">
-          <select name="role" defaultValue={user.role} className="bg-transparent" ref={roleRef}>
+      <Table.Row className="hover:bg-orange-100 bg-gray-100">
+        <Table.Cell className="p-3 px-5">{user.id}</Table.Cell>
+        <Table.Cell className="p-3 px-5">
+          <input
+            id="cpf"
+            name="cpf"
+            type="text"
+            defaultValue={user.cpf}
+            className="bg-transparent"
+            readOnly
+          />
+        </Table.Cell>
+        <Table.Cell className="p-3 px-5">
+          <input
+            id="nome"
+            name="nome"
+            type="text"
+            defaultValue={user.nome}
+            className="bg-transparent"
+            ref={nomeRef}
+          />
+        </Table.Cell>
+        <Table.Cell className="p-3 px-5">
+          <input
+            id="email"
+            name="email"
+            defaultValue={user.email}
+            className="bg-transparent"
+            ref={emailRef}
+          />
+        </Table.Cell>
+        <Table.Cell className="p-3 px-5">
+          <input
+            id="cns"
+            name="cns"
+            type="text"
+            defaultValue={user.cns}
+            className="bg-transparent"
+            ref={cnsRef}
+          />
+        </Table.Cell>
+        <Table.Cell className="p-3 px-5">
+          <Select name="role" defaultValue={user.role} ref={roleRef} className="bg-transparent">
             <option value="USER">user</option>
             <option value="ADMIN">admin</option>
             <option value="PROFISSIONAL">profissional</option>
             <option value="COORDENADOR">coordenador</option>
-          </select>
-        </td>
-        <td className="p-3 px-5">
-          <select name="status" defaultValue={user.status} className="bg-transparent" ref={statusRef}>
-            <option  value={1}>Ativo</option>
+          </Select>
+        </Table.Cell>
+        <Table.Cell className="p-3 px-5">
+          <Select name="status" defaultValue={user.status} ref={statusRef} className="bg-transparent">
+            <option value={1}>Ativo</option>
             <option value={0}>Inativo</option>
-          </select>
-        </td>
-        <td className="p-3 px-5 flex justify-end">
-          <button type="button" className="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline" onClick={() => onSubmitSave(user.id, refs)}>Salvar</button>
-          <button type="button" className="mr-3 text-sm bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Resetar Senha</button>
-          <button type="button" onClick={() => deleteUser(user.id)} className="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Deletar</button>
-        </td>
-      </tr>
+          </Select>
+        </Table.Cell>
+        <Table.Cell className="p-3 px-5 flex justify-end">
+          <Button size="sm" color="blue" className="mr-2" onClick={() => onSubmitSave(user.id, refs)}>+</Button>
+          <Button size="sm" color="yellow" className="mr-2">-</Button>
+          <Button size="sm" color="red" onClick={() => deleteUser(user.id)}>x</Button>
+        </Table.Cell>
+      </Table.Row>
     );
-  }
+  };
 
   const UserTable = () => (
-    <div className="text-gray-900 bg-gray-200 max-h-screen max-w-screen container">
-      <div className="p-4 flex">
+    <div className="text-gray-900 bg-gray-200 max-h-screen max-w-screen container mx-auto p-4">
+      <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl">Usuários</h1>
       </div>
-      <div className="px-3 py-4 flex justify-center w-full">
-        <table className="w-full text-md bg-white shadow-md rounded mb-4">
-          <thead>
-            <tr className="border-b">
-              <th className="text-left p-3 px-5">ID</th>
-              <th className="text-left p-3 px-5">CPF</th>
-              <th className="text-left p-3 px-5">Nome</th>
-              <th className="text-left p-3 px-5">Email</th>
-              <th className="text-left p-3 px-5">CNS</th>
-              <th className="text-left p-3 px-5">Role</th>
-              <th className="text-left p-3 px-5">Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {listUserState.map(user => (
-              <UserRow key={user.id} user={user} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Table className="w-full text-md bg-white shadow-md rounded mb-4">
+        <Table.Head>
+          <Table.HeadCell>ID</Table.HeadCell>
+          <Table.HeadCell>CPF</Table.HeadCell>
+          <Table.HeadCell>Nome</Table.HeadCell>
+          <Table.HeadCell>Email</Table.HeadCell>
+          <Table.HeadCell>CNS</Table.HeadCell>
+          <Table.HeadCell>Role</Table.HeadCell>
+          <Table.HeadCell>Status</Table.HeadCell>
+          <Table.HeadCell>Ações</Table.HeadCell>
+        </Table.Head>
+        <Table.Body>
+          {listUserState.map(user => (
+            <UserRow key={user.id} user={user} />
+          ))}
+        </Table.Body>
+      </Table>
     </div>
   );
 
   return (
-    <>
-      <ToastContainer />
-      {listUserState.length > 0 ? <UserTable /> : <p>Loading...</p>}
-    </>
+    <div className="w-full min-h-screen h-full">
+      <TitleHeaderComponent className='m-2'/>
+        <Container className='w-full min-h-screen h-full'>
+          {listUserState.length > 0 ? <TableFlowbite /> : <h1>Carregando...</h1>}
+        </Container>
+        <ToastContainer />
+    </div>
   );
 }
