@@ -7,6 +7,7 @@ import Spinner from '../../components/Spinner';
 import { Navigate, NavLink, useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
+import { Eye, EyeOff } from 'lucide-react';
  
 const validatePassword = {
   required: 'O campo senha é obrigatório',
@@ -47,18 +48,31 @@ function InputCPF ({ register, errors }) {
 }
 
 function InputPassword ({ register, errors }) {
+  const [showPassword, setShowPassword] = useState(false);
 
-  return(
+  return (
     <div className="mb-4">
       <label htmlFor="password" className="block text-gray-600">Senha</label>
-          <input 
-            id="password"
-            type='password' 
-            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-            {...register('password', validatePassword) }
-          >
-          </input>
-          <p className="text-red-500 text-sm">{errors.password?.message}</p>
+      <div className="relative">
+        <input 
+          id="password"
+          type={showPassword ? 'text' : 'password'}
+          className="w-full border border-gray-300 rounded-md py-2 px-3 pr-10 focus:outline-none focus:border-blue-500"
+          {...register('password', validatePassword)}
+        />
+        <button
+          type="button"
+          className="absolute inset-y-0 right-0 pr-3 flex items-center"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? (
+            <EyeOff className="h-5 w-5 text-gray-400" />
+          ) : (
+            <Eye className="h-5 w-5 text-gray-400" />
+          )}
+        </button>
+      </div>
+      {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
     </div>
   )
 }
