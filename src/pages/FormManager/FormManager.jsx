@@ -3,6 +3,7 @@ import Section from "../../components/Section";
 import SemanaTable from "../../components/SemanaTable";
 import SemanaItem from "../../components/SemanaItem";
 import Button from "../../components/Button";
+import { api } from "../../services/api";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { FaX } from "react-icons/fa6";
@@ -51,65 +52,7 @@ function SearchDate({onChangeDataInicio, onChangeDataFim}) {
 }
 
 export default function PageFormManager() {
-    const initList = [ //Teste: Apague depois
-        {
-            co_semanal: 202400,
-            data_ano: 2024,
-            semana_epidomologica: 0,
-            data_inicio: Date.parse("2024-7-7"),
-            data_fim: Date.parse("2024-7-13"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202401,
-            data_ano: 2024,
-            semana_epidomologica: 1,
-            data_inicio: Date.parse("2024-7-14"),
-            data_fim: Date.parse("2024-7-20"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202402,
-            data_ano: 2024,
-            semana_epidomologica: 2,
-            data_inicio: Date.parse("2024-7-21"),
-            data_fim: Date.parse("2024-7-27"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202403,
-            data_ano: 2024,
-            semana_epidomologica: 3,
-            data_inicio: Date.parse("2024-7-28"),
-            data_fim: Date.parse("2024-8-3"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202404,
-            data_ano: 2024,
-            semana_epidomologica: 4,
-            data_inicio: Date.parse("2024-8-4"),
-            data_fim: Date.parse("2024-8-10"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202405,
-            data_ano: 2024,
-            semana_epidomologica: 5,
-            data_inicio: Date.parse("2024-8-11"),
-            data_fim: Date.parse("2024-8-17"),
-            verificado: false,
-            enviado: false
-        }
-    ]
-        
-
-    const [list, setList] = useState(initList);
+    const [list, setList] = useState([]);
     const [showList, setShowList] = useState(list);
     const [dataSearchInicio, setDataSearchInicio] = useState(undefined);
     const [dataSearchFim, setDataSearchFim] = useState(undefined);
@@ -119,6 +62,14 @@ export default function PageFormManager() {
     const [coSemanal, setCoSemanal] = useState(202406); //Teste: Apague depois
     const [dataInicio, setDataInicio] = useState(Date.parse("2024-8-18")); //Teste: Apague depois
     const [dataFim, setDataFim] = useState(Date.parse("2024-8-24")); //Teste: Apague depois
+
+    useEffect(() => {
+        async function fetchData() {
+            const response = await api.get('/resumo_semanal');
+            setList(response.data)
+        }
+        fetchData();
+    }, []);
 
     useEffect(() => {
         setShowList(list);
