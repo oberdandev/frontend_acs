@@ -281,7 +281,7 @@ const PageRegister = () => {
     <div className="bg-gray-100 flex justify-center items-center h-screen">
       <ToastContainer />
       <ImageLeft imgSrc='https://placehold.co/800x/667fff/ffffff.png?text=Your+Image&font=Montserrat'/>
-      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex justify-center">
+      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-2/3 flex justify-center">
         <div className="w-full">
           <h1 className="text-2xl font-semibold mb-4">Cadastrar Usuário</h1>
           <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-1 md:grid-cols-2 gap-5'>
