@@ -40,11 +40,6 @@ import { FaCheck } from 'react-icons/fa';
       href: '/form-manager'
     },
     {
-      title: "Form",
-      icon: <FaCheck size={24}/>,
-      href: '/form'
-    },
-    {
       title: "Gerenciar Usuários",
       icon: <LiaUsersCogSolid size={24}/>,
       href: '/users',

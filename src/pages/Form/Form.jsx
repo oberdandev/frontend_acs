@@ -7,10 +7,15 @@ import { useEffect, useState } from 'react';
 import { inserirValor, checkForm } from './utils.js';
 import { sendForm } from './sendForm.js'
 import ProgressBar from '../../components/ProgressBar'
+import { toast } from 'react-toastify'
 
 function DayForm( {id, className} ) {
   return (
     <Section id={id} className={`transition-all duration-500 space-y-4 ${className}`}>
+      <div className='shadow-md p-2 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
+        <InputField id="microarea" type='text' label='Microárea: ' inputSize='lg'/>
+        <InputField id="sublocalidade" type='text' label='Sublocalidade: ' inputSize='lg'/>
+      </div>
       <div className='shadow-md p-2 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
         <InputField id="dataAtividade" type='date' label='Data da Atividade: ' inputOnChange={(e) => inserirValor(e.target.value, 'dataAtividade')}/>
         <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
@@ -102,7 +107,9 @@ export default function PageForm() {
     }
 
     if (checkForm( currentForm ) === false) {
-      alert("O formulário não foi preenchido corretamente!");
+      toast.error("O formulário não foi preenchido corretamente", {
+        autoClose: 2500
+      });
       return;
     }
 
@@ -174,11 +181,6 @@ export default function PageForm() {
   return (
       <Container className='space-y-2 mb-4 lg:mb-0'>
         <div className='space-y-4'> 
-          <Section className='shadow-md p-2 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
-            <InputField id="microarea" type='text' label='Microárea: ' inputSize='lg'/>
-            <InputField id="sublocalidade" type='text' label='Sublocalidade: ' inputSize='lg'/>
-          </Section>
-
           <div className='flex justify-center w-full'>
             <ProgressBar progress={progress} steps={weekDays} className='bg-white mb-2 w-3/4' />
           </div>  

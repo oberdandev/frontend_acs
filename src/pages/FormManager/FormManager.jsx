@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Label, Select } from "flowbite-react";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function YearOptionForWeekResume() {
     // IMPORTANTE
@@ -78,6 +79,7 @@ function SearchDate({onChangeDataInicio, onChangeDataFim}) {
 
 export default function PageFormManager() {
     const { user } = useAuth();
+    let navigate = useNavigate();
 
     const [list, setList] = useState([]);
     const [showList, setShowList] = useState(list);
@@ -92,8 +94,9 @@ export default function PageFormManager() {
     useEffect(() => {
         // Inicializa lista de semanas
         async function fetchData() {
-            const response = await api.get('/resumo_semanal');
-            setList(response.data)
+            const response = await api.get('/resumosemanal');
+            setList(response.data);
+            console.log(response);
         }
         fetchData();
     }, []);
@@ -133,44 +136,56 @@ export default function PageFormManager() {
         btnStopSearch.classList.add("hidden");
     }
 
-    function deleteSemana() {
-        const newList = list.filter((semana => {
-            return semana.co_semanal !== semanaDelete;
-        }))
+    async function deleteSemana() {
+        try {
+            const response = await api.delete(`/resumosemanal/${semanaDelete}`);
+            console.log(response);
+            toast.success('Semana deletada com sucesso');
 
-        setList(newList);
-        setShowList(newList);
+            const newList = list.filter((semana => {
+                return semana.id !== semanaDelete;
+            }))
+            setList(newList);
+            setShowList(newList);
+
+        } catch (e) {
+            console.log(e.message);
+
+            const message = e.response?.data?.message || 'Erro ao deletar semana. Tente novamente.';
+            toast.error(message);
+        }
     }
-    
-    const weekListItems = showList.map(item =>
-            <SemanaItem key={item.co_semanal} semanaEpidemologica={item.semana_epidomologica} dataAno={item.data_ano} 
-                dataInicio={item.data_inicio} dataFim={item.data_fim}
-                verificado={item.verificado} enviado={item.enviado}
-                deleteSemana={() => {
-                    setIsDeleteModalOpen(true);
-                    setSemanaDelete(item.co_semanal);
-                }}/>
-        );
 
-    const onSubmit = async (data) => {
+    async function addSemana(data) {
         const semanaEpidemologica = data.ano + ("0" + data.semana).slice(-2);
+        let semanaID = 0
 
         try {
             const response = await axios.post(baseUrl + '/resumosemanal', {
                 semana_epidemiologica: semanaEpidemologica,
                 profissionalID: user.profissional.id
             })
-
+            localStorage.setItem("editWeek", response.data.id);
             console.log(response);
+            navigate("/form");
         } catch(e) {
             console.log(e.message);
 
             const message = e.response?.data?.message || 'Erro ao adicionar semana. Tente novamente.';
             toast.error(message);
-        } finally {
-
         }
     }
+
+    // Integrar com semana epidemiologica para obter as datas
+    const weekListItems = showList.map(item =>
+        <SemanaItem key={item.id} id={item.id} semanaEpidemologica={item.semana_epidemiologica} 
+            dataInicio={item.created_at} dataFim={item.updated_at}
+            verificado={item.verificado} enviado={item.enviado}
+            deleteSemana={() => {
+                setIsDeleteModalOpen(true);
+                setSemanaDelete(item.id);
+            }}/>
+    );
 
     return (
             <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
@@ -204,7 +219,7 @@ export default function PageFormManager() {
                 </Modal>
                 <Modal isOpen={isAddModalOpen}>
                     <h1 className="text-xl border-b border-slate-400 mb-4">Adicionando Semana</h1>
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex justify-center">
+                    <form onSubmit={handleSubmit(addSemana)} className="flex justify-center">
                         <div className="w-1/2 space-y-4 mb-4">
                             <div className="align-center mb-2 grid grid-cols-8">
                                 <Label className="content-center col-span-2 font-bold" htmlFor="sel-ano" value="Ano" />
