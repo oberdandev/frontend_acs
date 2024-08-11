@@ -10,6 +10,7 @@ import { FaX } from "react-icons/fa6";
 import { Tooltip } from "react-tooltip";
 import { useForm } from 'react-hook-form';
 import axios from "axios";
+import { GiConsoleController } from "react-icons/gi";
 
 const validateAno = {
     required: 'Campo obrigatório',
@@ -22,7 +23,7 @@ const validateAno = {
 const validateSemana = {
     required: 'Campo obrigatório',
     pattern: { 
-        value: /^\d{2}$/,
+        value: /^\d{2}$/ || /^\d{1}$/,
         message: 'Semana inválida'
     }
 };
@@ -175,11 +176,16 @@ export default function PageFormManager() {
         );
 
     const onSubmit = async (data) => {
+        const semanaEpidemologica = data.ano + "-" + data.semana;
+
+        console.log(semanaEpidemologica);
+
         try {
             const response = await axios.post(baseUrl + '/resumo_semanal', {
-                {
-                    
-                }
+                semana_epidemiologica: string,
+                profissionalID: number,
+                validacao: boolean,
+                transmitido: boolean
             })
         } catch(e) {
             console.log(e.message);
