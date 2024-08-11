@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect, useContext } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
-import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Eye, EyeOff } from 'lucide-react';
  
 const validatePassword = {
   required: 'O campo senha é obrigatório',
