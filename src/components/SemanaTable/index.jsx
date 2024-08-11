@@ -4,6 +4,7 @@ export default function SemanaTable({children}) {
             <table className="w-full table-auto">
                 <thead className="relative border-b border-slate-400 shadow-lg">
                     <tr>
+                        <th className="p-1 pt-2 border-r border-slate-400">ID</th>
                         <th className="p-1 pt-2 border-r border-slate-400">SE</th>
                         <th className="p-1 pt-2 border-r border-slate-400">Data</th>
                         <th className="p-1 pt-2 border-r border-slate-400">Verificado</th>

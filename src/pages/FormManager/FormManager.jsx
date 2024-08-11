@@ -3,12 +3,39 @@ import Section from "../../components/Section";
 import SemanaTable from "../../components/SemanaTable";
 import SemanaItem from "../../components/SemanaItem";
 import Button from "../../components/Button";
+import { api, baseUrl } from "../../services/api";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Tooltip } from "react-tooltip";
+import { useForm } from 'react-hook-form';
+import { toast } from "react-toastify";
+import axios from "axios";
+import { Label, Select } from "flowbite-react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-function DeleteModal({children, isOpen}) {
+function YearOptionForWeekResume() {
+    // IMPORTANTE
+    return (
+        <option value={2024}>2024</option>
+    )
+}
+
+function WeekOptionForWeekResume() {
+    // IMPORTANTE
+    const semanas = [];
+
+    for (let i = 1; i <= 52; i++) {
+        semanas.push(i);
+    }
+
+    return semanas.map((semana) =>
+        <option key={semana} value={semana}>{semana}</option>
+    )
+}
+
+function Modal({children, isOpen}) {
     if (isOpen === true) {
         return (
             <div className="fixed w-full h-full" style={{backgroundColor: "rgb(0,0,0,.5)"}}>
@@ -51,76 +78,31 @@ function SearchDate({onChangeDataInicio, onChangeDataFim}) {
 }
 
 export default function PageFormManager() {
-    const initList = [ //Teste: Apague depois
-        {
-            co_semanal: 202400,
-            data_ano: 2024,
-            semana_epidomologica: 0,
-            data_inicio: Date.parse("2024-7-7"),
-            data_fim: Date.parse("2024-7-13"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202401,
-            data_ano: 2024,
-            semana_epidomologica: 1,
-            data_inicio: Date.parse("2024-7-14"),
-            data_fim: Date.parse("2024-7-20"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202402,
-            data_ano: 2024,
-            semana_epidomologica: 2,
-            data_inicio: Date.parse("2024-7-21"),
-            data_fim: Date.parse("2024-7-27"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202403,
-            data_ano: 2024,
-            semana_epidomologica: 3,
-            data_inicio: Date.parse("2024-7-28"),
-            data_fim: Date.parse("2024-8-3"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202404,
-            data_ano: 2024,
-            semana_epidomologica: 4,
-            data_inicio: Date.parse("2024-8-4"),
-            data_fim: Date.parse("2024-8-10"),
-            verificado: false,
-            enviado: false
-        },
-        {
-            co_semanal: 202405,
-            data_ano: 2024,
-            semana_epidomologica: 5,
-            data_inicio: Date.parse("2024-8-11"),
-            data_fim: Date.parse("2024-8-17"),
-            verificado: false,
-            enviado: false
-        }
-    ]
-        
+    const { user } = useAuth();
+    let navigate = useNavigate();
 
-    const [list, setList] = useState(initList);
+    const [list, setList] = useState([]);
     const [showList, setShowList] = useState(list);
     const [dataSearchInicio, setDataSearchInicio] = useState(undefined);
     const [dataSearchFim, setDataSearchFim] = useState(undefined);
-    const [isModalOpen, setIsModalOpen] = useState(undefined);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(undefined);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(undefined);
     const [semanaDelete, setSemanaDelete] = useState(null);
-    const [semana, setSemana] = useState(6); //Teste: Apague depois
-    const [coSemanal, setCoSemanal] = useState(202406); //Teste: Apague depois
-    const [dataInicio, setDataInicio] = useState(Date.parse("2024-8-18")); //Teste: Apague depois
-    const [dataFim, setDataFim] = useState(Date.parse("2024-8-24")); //Teste: Apague depois
+
+    const { register, handleSubmit, formState: { errors }} = useForm();
 
     useEffect(() => {
+        // Inicializa lista de semanas
+        async function fetchData() {
+            const response = await api.get('/resumosemanal');
+            setList(response.data);
+            console.log(response);
+        }
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        // Atualiza lista de semanas para exibição
         setShowList(list);
         if (dataSearchInicio !== undefined && dataSearchFim !== undefined) {
             searchData();
@@ -154,44 +136,57 @@ export default function PageFormManager() {
         btnStopSearch.classList.add("hidden");
     }
 
-    function addWeek() {
-        const newList = list.concat({
-            co_semanal: coSemanal,
-            data_ano: 2024,
-            semana_epidomologica: semana,
-            data_inicio: dataInicio,
-            data_fim: dataFim,
-            verificado: false,
-            enviado: false
-        });
+    async function deleteSemana() {
+        try {
+            const response = await api.delete(`/resumosemanal/${semanaDelete}`);
+            console.log(response);
+            toast.success('Semana deletada com sucesso');
 
-        setList(newList);
-        setSemana(semana + 1); //Teste: Apague depois
-        setCoSemanal(coSemanal + 1); //Teste: Apague depois
-        setDataInicio(dataInicio + 604800000); //Teste: Apague depois
-        setDataFim(dataFim + 604800000); //Teste: Apague depois
+            const newList = list.filter((semana => {
+                return semana.id !== semanaDelete;
+            }))
+            setList(newList);
+            setShowList(newList);
+
+        } catch (e) {
+            console.log(e.message);
+
+            const message = e.response?.data?.message || 'Erro ao deletar semana. Tente novamente.';
+            toast.error(message);
+        }
     }
 
-    function deleteSemana() {
-        const newList = list.filter((semana => {
-            return semana.co_semanal !== semanaDelete;
-        }))
+    async function addSemana(data) {
+        const semanaEpidemologica = data.ano + ("0" + data.semana).slice(-2);
+        let semanaID = 0
 
-        setList(newList);
-        setShowList(newList);
+        try {
+            const response = await axios.post(baseUrl + '/resumosemanal', {
+                semana_epidemiologica: semanaEpidemologica,
+                profissionalID: user.profissional.id
+            })
+            localStorage.setItem("editWeek", response.data.id);
+            console.log(response);
+            navigate("/form");
+        } catch(e) {
+            console.log(e.message);
+
+            const message = e.response?.data?.message || 'Erro ao adicionar semana. Tente novamente.';
+            toast.error(message);
+        }
     }
-    
+
+    // Integrar com semana epidemiologica para obter as datas
     const weekListItems = showList.map(item =>
-            <SemanaItem key={item.co_semanal} semanaEpidemologica={item.semana_epidomologica} dataAno={item.data_ano} 
-                dataInicio={item.data_inicio} dataFim={item.data_fim}
-                verificado={item.verificado} enviado={item.enviado}
-                deleteSemana={() => {
-                    setIsModalOpen(true);
-                    setSemanaDelete(item.co_semanal);
-                }}/>
-        );
+        <SemanaItem key={item.id} id={item.id} semanaEpidemologica={item.semana_epidemiologica} 
+            dataInicio={item.created_at} dataFim={item.updated_at}
+            verificado={item.verificado} enviado={item.enviado}
+            deleteSemana={() => {
+                setIsDeleteModalOpen(true);
+                setSemanaDelete(item.id);
+            }}/>
+    );
 
-    console.log(list, showList);
     return (
             <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
                 <Section className='p-4 px-12 flex justify-between shadow-xl relative items-center'>    
@@ -204,7 +199,8 @@ export default function PageFormManager() {
                         <Tooltip anchorSelect="#btn-stop-search">Limpar Pesquisa</Tooltip>
                     </div>
                     <div className='px-8 flex space-x-8 items-center'>
-                        <Button icon={<FaPlus className="mr-2" />} className="h-12" id="btnAddWeek" label="Nova Semana" onButtonClick={() => addWeek()} />
+                        <Button icon={<FaPlus className="mr-2" />} className="h-12" id="btnAddWeek" label="Nova Semana" 
+                            onButtonClick={() => setIsAddModalOpen(true)} />
                     </div>
                 </Section>
                 <Container id='week-list'>
@@ -213,14 +209,39 @@ export default function PageFormManager() {
                     </SemanaTable>
                     
                 </Container>
-                <DeleteModal isOpen={isModalOpen}>
+                <Modal isOpen={isDeleteModalOpen}>
                     <h1 className="text-xl border-b border-slate-400 mb-4">Deletar Semana?</h1>
                     <b>Atenção: Uma semana deletada não poderá ser recuperada!</b>
                     <div className="flex justify-center space-x-4">
-                        <Button onButtonClick={() => {setIsModalOpen(false); setSemanaDelete(null)}} label='Cancelar'/>
-                        <Button onButtonClick={() => {setIsModalOpen(false); deleteSemana()}} label='Deletar'/>
+                        <Button onButtonClick={() => {setIsDeleteModalOpen(false); setSemanaDelete(null)}} label='Cancelar'/>
+                        <Button onButtonClick={() => {setIsDeleteModalOpen(false); deleteSemana()}} label='Deletar'/>
                     </div>     
-                </DeleteModal>
+                </Modal>
+                <Modal isOpen={isAddModalOpen}>
+                    <h1 className="text-xl border-b border-slate-400 mb-4">Adicionando Semana</h1>
+                    <form onSubmit={handleSubmit(addSemana)} className="flex justify-center">
+                        <div className="w-1/2 space-y-4 mb-4">
+                            <div className="align-center mb-2 grid grid-cols-8">
+                                <Label className="content-center col-span-2 font-bold" htmlFor="sel-ano" value="Ano" />
+                                <Select {...register('ano')} className="col-span-6" id="ano" name="ano">
+                                    <YearOptionForWeekResume />
+                                </Select>
+                            </div>
+                            
+                            <div className="align-center mb-2 grid grid-cols-8">
+                                <Label className="content-center col-span-2 font-bold" htmlFor="sel-semana" value="Semana" />
+                                <Select {...register('semana')} className="col-span-6" id="semana" name="semana">
+                                    <WeekOptionForWeekResume />
+                                </Select>
+                            </div>
+
+                            <div className="flex justify-center space-x-4">
+                                <Button onButtonClick={() => {setIsAddModalOpen(false); }} label='Cancelar'/>
+                                <Button type={"submit"} label='Preencher'/>
+                            </div>
+                        </div>
+                    </form>     
+                </Modal>
             </div>
     );
 }

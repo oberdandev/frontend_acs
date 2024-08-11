@@ -19,7 +19,7 @@ export default function InputField( {className, id, type, label, inputSize, labe
             <div className={`rounded w-full ${labelPos === "side" && 'flex justify-between w-3/4'}`}>
                 <label className='block'>{label}</label>
                 <input id={finalID} name={finalID} 
-                    className={`pl-1 pr-1 text-left border rounded-md border-slate-400 ${inputSizeClasses} ${inputSize === "sm" && 'text-center'}`} 
+                    className={`pl-1 pr-1 text-left h-8 border rounded-md border-slate-400 ${inputSizeClasses} ${inputSize === "sm" && 'text-center'}`} 
                     type={type}
                     onChange={inputOnChange}/>
             </div>         

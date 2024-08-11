@@ -6,6 +6,7 @@ import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
 import { useAuth } from '../../context/AuthContext';
 import { BsPersonCircle } from "react-icons/bs";
 import { LiaUsersCogSolid } from "react-icons/lia";
+import { FaCheck } from 'react-icons/fa';
 
   const Sidebar = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
