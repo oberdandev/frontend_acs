@@ -2,9 +2,11 @@ import { useEffect, useState, useRef } from 'react';
 import { api } from "../../services/api";
 import { toast, ToastContainer } from 'react-toastify';
 import Container from '../../components/Container/index.jsx';
-import { Table, Button, Select, Navbar, Badge, Modal } from 'flowbite-react';
+import { Table, Button, Select, Navbar, Badge, Modal, Tooltip, Label} from 'flowbite-react';
 import { FiEdit } from "react-icons/fi";
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { HiOutlineExclamationCircle, HiOutlineKey, HiOutlineX  } from 'react-icons/hi';
+import EditUserModal from './EditModal.jsx';
+import { ResetPasswordModal } from './ResetModal.jsx';
 
 export default function PageUsers() {
   const [listUserState, setListUserState] = useState([]);
@@ -13,6 +15,8 @@ export default function PageUsers() {
   const [openModal, setOpenModal] = useState(false); 
   const [modalDelete, setModalDelete] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [resetPassModal, setResetPassModal] = useState(false);
+  const [userAction, setUserAction] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -28,38 +32,64 @@ export default function PageUsers() {
       : <Badge color="danger">Inativo</Badge>;
   };
 
-  function handleModalForDeleteUser(userID, userName){
-    setModalDelete(true);
-
-    return(
-      <Modal show={modalDelete}  size="md" onClose={() => setModalDelete(false)} popup>
+  function ModalDeleteComponent () {
+    return (
+      <Modal show={modalDelete} dismissible  size="md" onClose={() => setModalDelete(false)} popup>
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
-            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-600 dark:text-gray-200" />
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Você tem certeza que deseja excluir este usuário? {userName}
+              Você tem certeza que deseja excluir este usuário? <br/><b>{userToDelete.userName}</b>
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={() => deleteUser(userID)}>
+              <Button color="failure" onClick={() => {
+                setModalDelete(false);
+                deleteUser(userToDelete.userID)
+              }}>
                 {"Sim, tenho certeza"}
               </Button>
-              <Button color="gray" onClick={() => setModalDelete(false)}>
+              <Button color="gray" 
+                onClick={() => {
+                  setModalDelete(false)
+                  setUserToDelete(null)
+                  } }>
                 Não, cancelar.
               </Button>
+            
             </div>
           </div>
         </Modal.Body>
       </Modal>
-    )
+      )
   }
 
-  function modalForEditUser () {
-    return (
-      <>
-      <h1>a</h1>
-      </>
-    )
+  function handleModalForDeleteUser(userID, userName){
+    setUserToDelete({userID, userName})
+    setModalDelete(true);
+  }
+
+  function handleModalForResetPassword(user){
+    setUserAction(user);
+    setResetPassModal(true); 
+  }
+
+  function ModalShowNewResetedPassword(password){
+      
+  }
+
+
+  async function onSubmitResetPassword(password, id){
+    try{
+      const response = await api.patch(`/user/${id}`, {
+        body: {senha: password}
+      })
+      toast.success('Senha resetada com sucesso')
+    }catch(e){
+      console.log(e)
+      console.log.log(e.message)
+      toast.error(e?.message || 'Erro ao resetar senha')
+    }
   }
 
   const updateUserList = async () => {
@@ -120,7 +150,7 @@ export default function PageUsers() {
         <Table.HeadCell>NOME</Table.HeadCell>
         <Table.HeadCell>EMAIL</Table.HeadCell>
         <Table.HeadCell>CNS</Table.HeadCell>
-        <Table.HeadCell>Role</Table.HeadCell>
+        <Table.HeadCell>Cargo</Table.HeadCell>
         <Table.HeadCell>Status</Table.HeadCell>
         <Table.HeadCell>Ações</Table.HeadCell>
       </Table.Head>
@@ -154,19 +184,25 @@ export default function PageUsers() {
         <Table.Cell ref={roleRef}>{user.role}</Table.Cell>
         <Table.Cell ref={statusRef}>{getUserStatus(user.status)}</Table.Cell>
         <Table.Cell className="flex">
+        <Tooltip content="Editar Usuário" animation='duration-500'>
           <Button
             size="sm"
             color="blue"
             className="mr-2"
-            onClick={() => onSubmitSave(user.id, refs)}
+            onClick={() => setOpenModal(true)}
           >
-            <FiEdit size={16} className='my-1'/>
-          </Button>
-          <Button size="sm" color="yellow" className="mr-2">
-            -
-          </Button>
-          <Button size="sm" color="red" onClick={() => handleModalForDeleteUser(user.id, user.nome)}>
-            x
+              <FiEdit size={16} className='my-1'/>
+            </Button>
+          </Tooltip>
+          
+          <Tooltip content="Resetar Senha" animation="duration-500">
+            <Button size="sm" color="warning" className="mr-2" onClick={()=> {handleModalForResetPassword(user)}}>
+              <HiOutlineKey  size={16} className='my-1' />
+            </Button>
+          </Tooltip>
+          
+          <Button size="sm" color="failure" onClick={() => handleModalForDeleteUser(user.id, user.nome)}>
+            <HiOutlineX size={16} className='my-1'/>
           </Button>
         </Table.Cell>
       </Table.Row>
@@ -238,6 +274,19 @@ export default function PageUsers() {
           <>
             <PaginationComponent />
             <TableFlowbite />
+            {modalDelete ? <ModalDeleteComponent  /> : null}
+            {openModal ? <EditUserModal 
+                          isOpen={openModal} 
+                          onClose={() => {setOpenModal(false)}} 
+                          /> : null}
+            {resetPassModal ? 
+                          <ResetPasswordModal 
+                          isOpen={resetPassModal} 
+                          onClose={()=> setResetPassModal(false)}
+                          onSubmit={()=> console.log('reset')}
+                          userAction={userAction} 
+
+                          /> : null}
           </>
         ) : (
           <h1>Carregando...</h1>
