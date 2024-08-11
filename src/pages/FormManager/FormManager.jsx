@@ -9,57 +9,30 @@ import { useEffect, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Tooltip } from "react-tooltip";
 import { useForm } from 'react-hook-form';
+import { toast } from "react-toastify";
 import axios from "axios";
-import { GiConsoleController } from "react-icons/gi";
+import { Label, Select } from "flowbite-react";
+import { useAuth } from "../../context/AuthContext";
 
-const validateAno = {
-    required: 'Campo obrigatório',
-    pattern: {
-        value: /^\d{4}$/,
-        message: 'Ano inválido'
-    }
-};
-  
-const validateSemana = {
-    required: 'Campo obrigatório',
-    pattern: { 
-        value: /^\d{2}$/ || /^\d{1}$/,
-        message: 'Semana inválida'
-    }
-};
-
-function InputAno({ register, errors }) {
+function YearOptionForWeekResume() {
+    // IMPORTANTE
     return (
-      <div className="mb-4">
-        <label htmlFor="ano" className="block text-gray-600">Ano</label>
-        <input
-          type="text"
-          id="ano"
-          {...register('ano', validateAno)}
-          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-          autoComplete="off"
-        />
-        {errors.ano && <p className="text-red-500 text-sm">{errors.ano.message}</p>}
-      </div>
+        <option value={2024}>2024</option>
     )
 }
 
-function InputSemana({ register, errors }) {
-    return (
-      <div className="mb-4">
-        <label htmlFor="semana" className="block text-gray-600">Semana Epidemológica</label>
-        <input
-          type="text"
-          id="semana"
-          {...register('semana', validateSemana)}
-          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-          autoComplete="off"
-        />
-        {errors.semana && <p className="text-red-500 text-sm">{errors.semana.message}</p>}
-      </div>
-    )
-  }
+function WeekOptionForWeekResume() {
+    // IMPORTANTE
+    const semanas = [];
 
+    for (let i = 1; i <= 52; i++) {
+        semanas.push(i);
+    }
+
+    return semanas.map((semana) =>
+        <option key={semana} value={semana}>{semana}</option>
+    )
+}
 
 function Modal({children, isOpen}) {
     if (isOpen === true) {
@@ -104,6 +77,8 @@ function SearchDate({onChangeDataInicio, onChangeDataFim}) {
 }
 
 export default function PageFormManager() {
+    const { user } = useAuth();
+
     const [list, setList] = useState([]);
     const [showList, setShowList] = useState(list);
     const [dataSearchInicio, setDataSearchInicio] = useState(undefined);
@@ -115,6 +90,7 @@ export default function PageFormManager() {
     const { register, handleSubmit, formState: { errors }} = useForm();
 
     useEffect(() => {
+        // Inicializa lista de semanas
         async function fetchData() {
             const response = await api.get('/resumo_semanal');
             setList(response.data)
@@ -123,6 +99,7 @@ export default function PageFormManager() {
     }, []);
 
     useEffect(() => {
+        // Atualiza lista de semanas para exibição
         setShowList(list);
         if (dataSearchInicio !== undefined && dataSearchFim !== undefined) {
             searchData();
@@ -176,17 +153,15 @@ export default function PageFormManager() {
         );
 
     const onSubmit = async (data) => {
-        const semanaEpidemologica = data.ano + "-" + data.semana;
-
-        console.log(semanaEpidemologica);
+        const semanaEpidemologica = data.ano + ("0" + data.semana).slice(-2);
 
         try {
-            const response = await axios.post(baseUrl + '/resumo_semanal', {
-                semana_epidemiologica: string,
-                profissionalID: number,
-                validacao: boolean,
-                transmitido: boolean
+            const response = await axios.post(baseUrl + '/resumosemanal', {
+                semana_epidemiologica: semanaEpidemologica,
+                profissionalID: user.profissional.id
             })
+
+            console.log(response);
         } catch(e) {
             console.log(e.message);
 
@@ -197,7 +172,6 @@ export default function PageFormManager() {
         }
     }
 
-    console.log(list, showList);
     return (
             <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
                 <Section className='p-4 px-12 flex justify-between shadow-xl relative items-center'>    
@@ -230,13 +204,26 @@ export default function PageFormManager() {
                 </Modal>
                 <Modal isOpen={isAddModalOpen}>
                     <h1 className="text-xl border-b border-slate-400 mb-4">Adicionando Semana</h1>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <InputAno register={register} errors={errors}/>
-                        <InputSemana register={register} errors={errors}/>
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex justify-center">
+                        <div className="w-1/2 space-y-4 mb-4">
+                            <div className="align-center mb-2 grid grid-cols-8">
+                                <Label className="content-center col-span-2 font-bold" htmlFor="sel-ano" value="Ano" />
+                                <Select {...register('ano')} className="col-span-6" id="ano" name="ano">
+                                    <YearOptionForWeekResume />
+                                </Select>
+                            </div>
+                            
+                            <div className="align-center mb-2 grid grid-cols-8">
+                                <Label className="content-center col-span-2 font-bold" htmlFor="sel-semana" value="Semana" />
+                                <Select {...register('semana')} className="col-span-6" id="semana" name="semana">
+                                    <WeekOptionForWeekResume />
+                                </Select>
+                            </div>
 
-                        <div className="flex justify-center space-x-4">
-                            <Button onButtonClick={() => {setIsAddModalOpen(false); }} label='Cancelar'/>
-                            <Button type={"submit"} label='Preencher'/>
+                            <div className="flex justify-center space-x-4">
+                                <Button onButtonClick={() => {setIsAddModalOpen(false); }} label='Cancelar'/>
+                                <Button type={"submit"} label='Preencher'/>
+                            </div>
                         </div>
                     </form>     
                 </Modal>
