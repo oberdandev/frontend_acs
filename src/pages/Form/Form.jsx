@@ -186,10 +186,10 @@ export default function PageForm() {
 
         <div id="multi-form" className='flex'>
           <DayForm id="form-seg" name="Segunda" className='day-form w-full'/>
-          <DayForm id="form-ter" name="Terça" className="day-form absolute h-0 opacity-0 invisible translate-x-32 w-full"/>
-          <DayForm id="form-qua" name="Quarta" className="day-form absolute h-0 opacity-0 invisible translate-x-32 w-full"/>
-          <DayForm id="form-qui" name="Quinta" className="day-form absolute h-0 opacity-0 invisible translate-x-32 w-full"/>
-          <DayForm id="form-sex" name="Sexta" className="day-form absolute h-0 opacity-0 invisible translate-x-32 w-full"/>
+          <DayForm id="form-ter" name="Terça" className="day-form absolute opacity-0 invisible translate-x-32 w-full"/>
+          <DayForm id="form-qua" name="Quarta" className="day-form absolute opacity-0 invisible translate-x-32 w-full"/>
+          <DayForm id="form-qui" name="Quinta" className="day-form absolute opacity-0 invisible translate-x-32 w-full"/>
+          <DayForm id="form-sex" name="Sexta" className="day-form absolute opacity-0 invisible translate-x-32 w-full"/>
         </div>
 
         <div className='flex mb-4 space-x-4 lg:mb-0'>

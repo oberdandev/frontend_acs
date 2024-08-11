@@ -121,19 +121,6 @@ export default function PageUsers() {
   }
 
   const WeekRow = ({ week }) => {
-    const nomeRef = useRef();
-    const emailRef = useRef();
-    const cnsRef = useRef();
-    const roleRef = useRef();
-    const statusRef = useRef();
-
-    const refs = {
-      nome: nomeRef,
-      email: emailRef,
-      cns: cnsRef,
-      role: roleRef,
-      status: statusRef,
-    };
 
     return (
       <Table.Row className="hover:bg-orange-100 bg-gray-100">

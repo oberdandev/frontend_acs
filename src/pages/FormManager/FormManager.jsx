@@ -3,13 +3,64 @@ import Section from "../../components/Section";
 import SemanaTable from "../../components/SemanaTable";
 import SemanaItem from "../../components/SemanaItem";
 import Button from "../../components/Button";
-import { api } from "../../services/api";
+import { api, baseUrl } from "../../services/api";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Tooltip } from "react-tooltip";
+import { useForm } from 'react-hook-form';
+import axios from "axios";
 
-function DeleteModal({children, isOpen}) {
+const validateAno = {
+    required: 'Campo obrigatório',
+    pattern: {
+        value: /^\d{4}$/,
+        message: 'Ano inválido'
+    }
+};
+  
+const validateSemana = {
+    required: 'Campo obrigatório',
+    pattern: { 
+        value: /^\d{2}$/,
+        message: 'Semana inválida'
+    }
+};
+
+function InputAno({ register, errors }) {
+    return (
+      <div className="mb-4">
+        <label htmlFor="ano" className="block text-gray-600">Ano</label>
+        <input
+          type="text"
+          id="ano"
+          {...register('ano', validateAno)}
+          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+          autoComplete="off"
+        />
+        {errors.ano && <p className="text-red-500 text-sm">{errors.ano.message}</p>}
+      </div>
+    )
+}
+
+function InputSemana({ register, errors }) {
+    return (
+      <div className="mb-4">
+        <label htmlFor="semana" className="block text-gray-600">Semana Epidemológica</label>
+        <input
+          type="text"
+          id="semana"
+          {...register('semana', validateSemana)}
+          className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+          autoComplete="off"
+        />
+        {errors.semana && <p className="text-red-500 text-sm">{errors.semana.message}</p>}
+      </div>
+    )
+  }
+
+
+function Modal({children, isOpen}) {
     if (isOpen === true) {
         return (
             <div className="fixed w-full h-full" style={{backgroundColor: "rgb(0,0,0,.5)"}}>
@@ -56,12 +107,11 @@ export default function PageFormManager() {
     const [showList, setShowList] = useState(list);
     const [dataSearchInicio, setDataSearchInicio] = useState(undefined);
     const [dataSearchFim, setDataSearchFim] = useState(undefined);
-    const [isModalOpen, setIsModalOpen] = useState(undefined);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(undefined);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(undefined);
     const [semanaDelete, setSemanaDelete] = useState(null);
-    const [semana, setSemana] = useState(6); //Teste: Apague depois
-    const [coSemanal, setCoSemanal] = useState(202406); //Teste: Apague depois
-    const [dataInicio, setDataInicio] = useState(Date.parse("2024-8-18")); //Teste: Apague depois
-    const [dataFim, setDataFim] = useState(Date.parse("2024-8-24")); //Teste: Apague depois
+
+    const { register, handleSubmit, formState: { errors }} = useForm();
 
     useEffect(() => {
         async function fetchData() {
@@ -105,24 +155,6 @@ export default function PageFormManager() {
         btnStopSearch.classList.add("hidden");
     }
 
-    function addWeek() {
-        const newList = list.concat({
-            co_semanal: coSemanal,
-            data_ano: 2024,
-            semana_epidomologica: semana,
-            data_inicio: dataInicio,
-            data_fim: dataFim,
-            verificado: false,
-            enviado: false
-        });
-
-        setList(newList);
-        setSemana(semana + 1); //Teste: Apague depois
-        setCoSemanal(coSemanal + 1); //Teste: Apague depois
-        setDataInicio(dataInicio + 604800000); //Teste: Apague depois
-        setDataFim(dataFim + 604800000); //Teste: Apague depois
-    }
-
     function deleteSemana() {
         const newList = list.filter((semana => {
             return semana.co_semanal !== semanaDelete;
@@ -137,10 +169,27 @@ export default function PageFormManager() {
                 dataInicio={item.data_inicio} dataFim={item.data_fim}
                 verificado={item.verificado} enviado={item.enviado}
                 deleteSemana={() => {
-                    setIsModalOpen(true);
+                    setIsDeleteModalOpen(true);
                     setSemanaDelete(item.co_semanal);
                 }}/>
         );
+
+    const onSubmit = async (data) => {
+        try {
+            const response = await axios.post(baseUrl + '/resumo_semanal', {
+                {
+                    
+                }
+            })
+        } catch(e) {
+            console.log(e.message);
+
+            const message = e.response?.data?.message || 'Erro ao adicionar semana. Tente novamente.';
+            toast.error(message);
+        } finally {
+
+        }
+    }
 
     console.log(list, showList);
     return (
@@ -155,7 +204,8 @@ export default function PageFormManager() {
                         <Tooltip anchorSelect="#btn-stop-search">Limpar Pesquisa</Tooltip>
                     </div>
                     <div className='px-8 flex space-x-8 items-center'>
-                        <Button icon={<FaPlus className="mr-2" />} className="h-12" id="btnAddWeek" label="Nova Semana" onButtonClick={() => addWeek()} />
+                        <Button icon={<FaPlus className="mr-2" />} className="h-12" id="btnAddWeek" label="Nova Semana" 
+                            onButtonClick={() => setIsAddModalOpen(true)} />
                     </div>
                 </Section>
                 <Container id='week-list'>
@@ -164,14 +214,26 @@ export default function PageFormManager() {
                     </SemanaTable>
                     
                 </Container>
-                <DeleteModal isOpen={isModalOpen}>
+                <Modal isOpen={isDeleteModalOpen}>
                     <h1 className="text-xl border-b border-slate-400 mb-4">Deletar Semana?</h1>
                     <b>Atenção: Uma semana deletada não poderá ser recuperada!</b>
                     <div className="flex justify-center space-x-4">
-                        <Button onButtonClick={() => {setIsModalOpen(false); setSemanaDelete(null)}} label='Cancelar'/>
-                        <Button onButtonClick={() => {setIsModalOpen(false); deleteSemana()}} label='Deletar'/>
+                        <Button onButtonClick={() => {setIsDeleteModalOpen(false); setSemanaDelete(null)}} label='Cancelar'/>
+                        <Button onButtonClick={() => {setIsDeleteModalOpen(false); deleteSemana()}} label='Deletar'/>
                     </div>     
-                </DeleteModal>
+                </Modal>
+                <Modal isOpen={isAddModalOpen}>
+                    <h1 className="text-xl border-b border-slate-400 mb-4">Adicionando Semana</h1>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <InputAno register={register} errors={errors}/>
+                        <InputSemana register={register} errors={errors}/>
+
+                        <div className="flex justify-center space-x-4">
+                            <Button onButtonClick={() => {setIsAddModalOpen(false); }} label='Cancelar'/>
+                            <Button type={"submit"} label='Preencher'/>
+                        </div>
+                    </form>     
+                </Modal>
             </div>
     );
 }
