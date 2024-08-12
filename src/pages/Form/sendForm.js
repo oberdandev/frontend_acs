@@ -29,9 +29,11 @@ const parserToApiPattern = (obj, profissionalID) => {
    
 }
 
-export const sendForm = (profissionalID) => {
+export const sendForm = async (profissionalID) => {
+    let returnValue = true;
+
     try {
-        console.log("Relatório enviado!");
+        console.log("Enviando relatório...");
     
         const segData = JSON.parse(localStorage.getItem("form-seg"));
         const terData = JSON.parse(localStorage.getItem("form-ter"));
@@ -54,8 +56,8 @@ export const sendForm = (profissionalID) => {
                     console.log("Relatório enviado com sucesso!");
                 }   
             } catch (e) {
-                console.log(e);
-                return false;
+                console.log("Relatório não pôde ser enviado!");
+                returnValue = false;
             }
 
             /*api.post('/resumodiario', diaParsed)
@@ -66,13 +68,20 @@ export const sendForm = (profissionalID) => {
                 console.log(error);
                 toast.error(error);
             })*/
-        })
-        
-        return true;
+        }).then(
+            () => {
+                console.log(returnValue)
+            if (returnValue !== true)  {
+                console.log("trpw")
+                throw Error("Could not send form")
+            }
+            }
+        )
+
         
     } catch (error) {
-        console.log(error);
-        return false;
+        console.log("enviando erro")
+        throw Error(error);
     }
    
 

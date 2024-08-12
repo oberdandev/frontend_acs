@@ -124,39 +124,43 @@ export default function PageForm() {
       const microareaElement = document.querySelector("#microarea");
       const sublocalidadeElement = document.querySelector("#sublocalidade");
 
-      if (sendForm (user.profissional.id)) {
+      try {
+        sendForm(user.profissional.id)
+
         toast.success("O relatório foi enviado!");
         const buttonAdvance = document.querySelector('#button-advance');
         const buttonRetract = document.querySelector('#button-retract');
 
-        buttonAdvance.setAttribute("disabled", "");
+        /*buttonAdvance.setAttribute("disabled", "");
         buttonRetract.setAttribute("disabled", "");
 
         buttonAdvance.classList.add("disabled");
-        buttonRetract.classList.add("disabled");
-      } else {
+        buttonRetract.classList.add("disabled");*/
+
+      } catch(e) {
+        console.log(e)
         toast.error("Relatório não pôde ser enviado!");
         return;
       }
         
-    }
+    } else {
+      currentFormElement.classList.add("invisible");
+      currentFormElement.classList.add("absolute");
+      currentFormElement.classList.add("opacity-0");
+      currentFormElement.classList.add("-translate-x-32");
 
-    currentFormElement.classList.add("invisible");
-    currentFormElement.classList.add("absolute");
-    currentFormElement.classList.add("opacity-0");
-    currentFormElement.classList.add("-translate-x-32");
+      const evt = new Event("checkForm", { formID: currentForm });
+      document.dispatchEvent(evt);
 
-    const evt = new Event("checkForm", { formID: currentForm });
-    document.dispatchEvent(evt);
+      if (currentFormSibling !== null) {
+        currentFormSibling.classList.remove("absolute");
+        currentFormSibling.classList.remove("invisible");
+        currentFormSibling.classList.remove("opacity-0");
+        currentFormSibling.classList.remove("translate-x-32");
 
-    if (currentFormSibling !== null) {
-      currentFormSibling.classList.remove("absolute");
-      currentFormSibling.classList.remove("invisible");
-      currentFormSibling.classList.remove("opacity-0");
-      currentFormSibling.classList.remove("translate-x-32");
-
-      setCurrentForm(currentFormSibling.getAttribute("id"));
-      setProgress(progress + 1);
+        setCurrentForm(currentFormSibling.getAttribute("id"));
+        setProgress(progress + 1);
+      }
     }
   }
 
