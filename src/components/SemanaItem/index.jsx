@@ -4,9 +4,12 @@ import { FaCheck, FaTrashAlt, FaEdit } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip'
 import Tag from "../Tag";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function SemanaItem( {semanaEpidemologica, dataAno, dataInicio, dataFim, verificado, 
-        enviado, sendSemana, deleteSemana } ) {
+export default function SemanaItem( {id, semanaEpidemologica, dataInicio, dataFim, verificado, 
+        enviado, sendSemana, deleteSemana } ) { 
+    let navigate = useNavigate();
+
     const verificadoColor = (() => {
         if (verificado === true) return "bg-red-700 text-green-700"
         else return "bg-red-300 text-red-700"
@@ -20,9 +23,15 @@ export default function SemanaItem( {semanaEpidemologica, dataAno, dataInicio, d
     const displayDataInicio = new Date(dataInicio).toLocaleDateString();
     const displayDataFim = new Date(dataFim).toLocaleDateString();
 
+    function editSemana() {
+        localStorage.setItem("editWeek", id);
+        navigate('/form');
+    }
+
     return (
         <tr className='min-w-full border-b border-slate-400'>
-            <td className="p-1 pt-y border-r border-slate-400">{dataAno}-{semanaEpidemologica}</td>
+            <td className="p-1 pt-y border-r border-slate-400">{id}</td>
+            <td className="p-1 pt-y border-r border-slate-400">{semanaEpidemologica}</td>
             <td className="p-1 pt-y border-r border-slate-400">{displayDataInicio} - {displayDataFim}</td>
             <td className="p-1 pt-y border-r border-slate-400">
                 <Tag className={verificadoColor} text="Não"/>
@@ -35,9 +44,7 @@ export default function SemanaItem( {semanaEpidemologica, dataAno, dataInicio, d
                 <Tooltip anchorSelect="#sendSemana" place="top">
                     Enviar
                 </Tooltip>
-                <Link to='/form'>
-                    <FaEdit id="editSemana" className="cursor-pointer hover:text-blue-700 mr-4" size={24}/>
-                </Link>
+                <FaEdit id="editSemana" className="cursor-pointer hover:text-blue-700 mr-4" size={24} onClick={editSemana}/>
                 <Tooltip anchorSelect="#editSemana" place="top">
                     Editar
                 </Tooltip>

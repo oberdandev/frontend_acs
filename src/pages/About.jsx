@@ -10,7 +10,7 @@ import { useAuth } from '../context/AuthContext';
 export const PageAbout = () => {
   
   const { user } = useAuth();
-  console.log(user)
+  //console.log(user)
 
   return (
       <Container className='space-y-10'>
@@ -26,7 +26,7 @@ export const PageAbout = () => {
           </div>
           <ul className='space-y-2'>
             <li className='flex items-center space-x-2'>
-                <img src={svgJob} alt="Trabalho" style={{'height': '22px'}}/> 
+                <img src={svgJob} alt="Trabalho" style={{'height': '22px'}}/>
                 <p className='text-lg'>{user?.profissao?.no_profissao}</p>
               </li>
               <li className='flex items-center space-x-2'>
