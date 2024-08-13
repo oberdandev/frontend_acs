@@ -1,3 +1,6 @@
+let microarea = '';
+let sublocalidade = '';
+
 let dataAtividade = '';
 let quarteiroes = '';
 
@@ -25,6 +28,12 @@ let depTratamento = '';
 
 export const inserirValor = (value, dataField) => {
     switch (dataField) {
+        case 'microarea':
+            microarea = value
+            break;
+        case 'sublocalidade':
+            sublocalidade = value
+            break;
         case 'dataAtividade':
             dataAtividade = value
             break;
@@ -88,7 +97,9 @@ export const inserirValor = (value, dataField) => {
 export const checkForm = ( diaSemana ) => {
     //@TODO Exibir mensagens de erro mais significativas
 
-    if (dataAtividade.trim().length !== 0 && 
+    if (microarea.trim().length !== 0 && 
+        sublocalidade.trim().length !== 0 && 
+        dataAtividade.trim().length !== 0 && 
         quarteiroes.trim().length !== 0 && !isNaN(quarteiroes) &&
         inspecionados.trim().length !== 0 && !isNaN(inspecionados) &&
         fechados.trim().length !== 0 && !isNaN(fechados) &&
@@ -109,6 +120,8 @@ export const checkForm = ( diaSemana ) => {
         depTratamento.trim().length !== 0 && !isNaN(depTratamento)
     ) {
         const formDia = {
+            microarea: microarea,
+            sublocalidade: sublocalidade,
             dataAtividade: dataAtividade,
             quarteiroes: quarteiroes,
             inspecionados: inspecionados,
@@ -130,6 +143,8 @@ export const checkForm = ( diaSemana ) => {
             depTratamento: depTratamento,
         }
 
+        microarea = "";
+        sublocalidade = "";
         dataAtividade = "";
         quarteiroes = "";
         inspecionados = "";

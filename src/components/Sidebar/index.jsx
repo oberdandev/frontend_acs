@@ -11,9 +11,24 @@ import Avatar from '../Avatar';
 
 
 
+import { NavLink, useNavigate } from 'react-router-dom';
+import { SquareChevronLeft } from 'lucide-react';
+import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
+import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
+import { useAuth } from '../../context/AuthContext';
+import { BsPersonCircle } from "react-icons/bs";
+import { LiaUsersCogSolid } from "react-icons/lia";
+import { FaCheck } from 'react-icons/fa';
 
   const Sidebar = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
+  const {logOut, user} = useAuth();
+  const navigate = useNavigate();
+
+  const logoutSystem = async () => {
+    await logOut();
+    navigate('/login', {replace: true});
+  }
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -23,12 +38,15 @@ import Avatar from '../Avatar';
     title: "SISCV",
     icon: <FaMosquito size={32} />,
     href: "/"
+    title: "SISCV",
+    icon: <FaMosquito size={32} />,
+    href: "/"
   }
   
   const Menus = [
     {
       title: "Perfil",
-      icon: <Avatar imgSrc="/img/templates/profile.jpg" size={24} elemBorder='0px solid #000' />,
+      icon: < BsPersonCircle size={24}/>,
       href: '/about'
     },
     {
@@ -42,10 +60,16 @@ import Avatar from '../Avatar';
       href: '/dasboard'
     },
     {
-      title: "Teste",
+      title: "Gerenciar Usuários",
+      icon: <LiaUsersCogSolid size={24}/>,
+      href: '/users',
+    },
+    {
+      title: "Sair",
       icon: <SquareChevronLeft />,
-      href: '/'
-    }
+      href: '/',
+      func: logoutSystem
+    },
   ]
 
   function SidebarMenus() {
@@ -57,7 +81,7 @@ import Avatar from '../Avatar';
                     key={index} 
                     className={`flex pt-6 text-gray-200 text-sm items-center gap-x-4 cursor-pointer hover:text-sky-500 font-bolds`}>
                     <NavLink key={menu.title} to={menu.href} className={({isActive}) => `flex gap-x-4 ${isActive ? 'text-sky-300 hover:text-sky-500' : ''}`}>
-                      <span>{menu.icon}</span>
+                      <button onClick={menu.func}>{menu.icon}</button>
                       <span className={`duration-300 origin-left font-bold text-lg ${!isOpen && 'scale-0'}`}>
                         {menu.title}
                       </span> 
@@ -80,7 +104,9 @@ import Avatar from '../Avatar';
         />
 
 <NavLink id={Logo.title} to={Logo.href}> 
+<NavLink id={Logo.title} to={Logo.href}> 
          <div className='flex gap-x-4 items-center'>
+          
           
             <span className='text-zinc-50 cursor-pointer'>{Logo.icon}</span>
             <h1 
@@ -88,13 +114,16 @@ import Avatar from '../Avatar';
               {Logo.title}
             </h1>
            
+           
           </div>
+          </NavLink>
           </NavLink>
       </>
     )
   }
 
   return (
+    <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
     <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
 
       <SidebarHeader />

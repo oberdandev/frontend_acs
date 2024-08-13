@@ -16,27 +16,25 @@ import { createBrowserRouter, RouterProvider, BrowserRouter, Routes, Route, Link
 import PageRegister from './pages/Register/Register.jsx'
 import HomePage from './pages/Home.jsx'
 import PrivateRoute from './hooks/PrivateRouter.jsx'
-
+import PageUsers from './pages/Users/PageUsers.jsx'
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route
-            path="about"
-            element={
-              <PrivateRoute />
-            }
-            errorElement={<PageException />}>
+          <Route path="about"
+                element={ <PrivateRoute />  }
+                errorElement={<PageException />}>
             <Route index element={<PageAbout />} />
           </Route>
           <Route
             path="form-manager"
-            element={<PageFormManager />}
-            errorElement={<PageException />}
-          />
-           <Route
+            element={<PrivateRoute />}
+            errorElement={<PageException />}>
+            <Route index element={<PageFormManager />} />
+          </Route>
+          <Route
             path="dasboard"
             element={<PageDaboard />}
             errorElement={<PageException />}
@@ -46,6 +44,12 @@ const AppRoutes = () => {
             element={<PageForm />}
             errorElement={<PageException />}
           />
+          <Route
+            path="users"
+            element={<PrivateRoute/>}
+            errorElement={<PageException />}>
+              <Route index element={<PageUsers />} />
+          </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />
         <Route path="login" element={<PageLogin />} errorElement={<PageException />} />
@@ -104,10 +108,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-      <ToastContainer  autoClose={5000} />
-      <AuthProvider>     
-        <AppRoutes />
-      </AuthProvider>
-
+        <AuthProvider>     
+          <ToastContainer  autoClose={5000} />
+          <AppRoutes />
+        </AuthProvider>
   </React.StrictMode>
 )

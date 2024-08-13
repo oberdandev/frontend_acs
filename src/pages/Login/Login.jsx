@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect, useContext } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
-import { toast, ToastContainer } from 'react-toastify';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../../components/Spinner';
-import { NavLink } from 'react-router-dom';
-import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
  
 const validatePassword = {
@@ -47,18 +47,31 @@ function InputCPF ({ register, errors }) {
 }
 
 function InputPassword ({ register, errors }) {
+  const [showPassword, setShowPassword] = useState(false);
 
-  return(
+  return (
     <div className="mb-4">
       <label htmlFor="password" className="block text-gray-600">Senha</label>
-          <input 
-            id="password"
-            type='password' 
-            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-            {...register('password', validatePassword) }
-          >
-          </input>
-          <p className="text-red-500 text-sm">{errors.password?.message}</p>
+      <div className="relative">
+        <input 
+          id="password"
+          type={showPassword ? 'text' : 'password'}
+          className="w-full border border-gray-300 rounded-md py-2 px-3 pr-10 focus:outline-none focus:border-blue-500"
+          {...register('password', validatePassword)}
+        />
+        <button
+          type="button"
+          className="absolute inset-y-0 right-0 pr-3 flex items-center"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? (
+            <EyeOff className="h-5 w-5 text-gray-400" />
+          ) : (
+            <Eye className="h-5 w-5 text-gray-400" />
+          )}
+        </button>
+      </div>
+      {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
     </div>
   )
 }
@@ -79,33 +92,46 @@ const Login = () => {
   const toastId = useRef(null);
   const { register, handleSubmit, setFocus, formState: { errors }} = useForm();
   const [isPendingLogin, setPendingLogin] = useState(false);
+  const navigate = useNavigate();
 
-  const auth = useAuth();
+  const {setUser, loginAction, setProfissional, defineToken } = useAuth();
 
   const onSubmit = async (data) => {
     try {
+      
       setPendingLogin(true);
+      
       const formattedData = {
         ...data,
         cpf: data.cpf.replace(/\D/g, '') // Remove os caracteres não numéricos do CPF.
       };
-      console.log(formattedData)
-      const response = await auth.loginAction(formattedData);
+      
+      const response = await loginAction(formattedData);
 
-
-      //toast.success('Login efetuado com sucesso!');
-  
-      /* 
+      const userPlace = {
+        ...response.data.user,
+        profissional: response.data.profissional,
+        equipe: response.data.profissional.equipe,
+        unidade: response.data.profissional.unidade,
+        profissao: response.data.profissional.profissao
+      }
+      
+      setUser(userPlace);
+      setProfissional(response.data.profissional);
+      
       if (response.status === 200) {
         const token = response.data.token
         if(token) 
           localStorage.setItem('token', token); 
+          await defineToken()
         if(response.data.user)
-        localStorage.setItem('user', JSON.stringify(response.data.user)); */
-        
-        
-
-        //} 
+          localStorage.setItem('user', JSON.stringify(response.data.user)); 
+          setUser(userPlace);     
+          setTimeout(() => toast.success('Login efetuado com sucesso!', {
+            autoClose: 3000
+          }), 100)
+          return navigate('/about');
+      } 
 
         if(response.status === '404')
           toast.error(response.data.message);
@@ -122,7 +148,6 @@ const Login = () => {
 
   return (
     <div className="bg-gray-100 flex justify-center items-center h-screen">
-      <ToastContainer />
       {/* Left: Image */}
       <ImageLeft imgSrc='https://placehold.co/800x/667fff/ffffff.png?text=Your+Image&font=Montserrat'/>
       {/* Right: Login Form */}

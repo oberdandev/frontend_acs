@@ -8,6 +8,7 @@ import Spinner from '../../components/Spinner';
 import { NavLink } from 'react-router-dom';
 import { api, baseUrl } from '../../services/api.js'
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 
 const validatePassword = {
   required: 'O campo senha é obrigatório',
@@ -100,38 +101,68 @@ function InputNome({ register, errors }) {
 }
 
 function InputPassword({ register, errors }) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return(
     <div className="mb-4">
       <label htmlFor="password" className="block text-gray-600">Senha</label>
-      <input
-        type="password"
-        id="password"
-        {...register('password', validatePassword)}
-        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-        autoComplete="off"
-      />
+      <div className="relative">
+        <input
+          type={showPassword ? "text" : "password"}
+          id="password"
+          {...register('password', validatePassword)}
+          className="w-full border border-gray-300 rounded-md py-2 px-3 pr-10 focus:outline-none focus:border-blue-500"
+          autoComplete="off"
+        />
+        <button
+          type="button"
+          className="absolute inset-y-0 right-0 pr-3 flex items-center"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? (
+            <EyeOff className="h-5 w-5 text-gray-400" />
+          ) : (
+            <Eye className="h-5 w-5 text-gray-400" />
+          )}
+        </button>
+      </div>
       {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
     </div>
   )
 }
 
 function InputConfirmPassword({ register, errors, password }) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="mb-4">
       <label htmlFor="confirmPassword" className="block text-gray-600">Confirme a Senha</label>
-      <input
-        type="password"
-        id="confirmPassword"
-        {...register('confirmPassword', { 
-          required: 'Campo obrigatório',
-          validate: value => validateConfirmPassword(value, password)
-        })}
-        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-        autoComplete="off"
-      />
+      <div className="relative">
+        <input
+          type={showPassword ? "text" : "password"}
+          id="confirmPassword"
+          {...register('confirmPassword', { 
+            required: 'Campo obrigatório',
+            validate: value => validateConfirmPassword(value, password)
+          })}
+          className="w-full border border-gray-300 rounded-md py-2 px-3 pr-10 focus:outline-none focus:border-blue-500"
+          autoComplete="off"
+        />
+        <button
+          type="button"
+          className="absolute inset-y-0 right-0 pr-3 flex items-center"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? (
+            <EyeOff className="h-5 w-5 text-gray-400" />
+          ) : (
+            <Eye className="h-5 w-5 text-gray-400" />
+          )}
+        </button>
+      </div>
       {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
     </div>
-  )
+    )
 }
 
 function InputCNS({ register, errors }) {
@@ -249,7 +280,7 @@ const PageRegister = () => {
     <div className="bg-gray-100 flex justify-center items-center h-screen">
       <ToastContainer />
       <ImageLeft imgSrc='https://placehold.co/800x/667fff/ffffff.png?text=Your+Image&font=Montserrat'/>
-      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex justify-center">
+      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-2/3 flex justify-center">
         <div className="w-full">
           <h1 className="text-2xl font-semibold mb-4">Cadastrar Usuário</h1>
           <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-1 md:grid-cols-2 gap-5'>
