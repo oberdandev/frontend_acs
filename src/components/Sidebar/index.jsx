@@ -4,6 +4,7 @@ import { TbChartInfographic } from 'react-icons/tb';
 import { SquareChevronLeft } from 'lucide-react';
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
+import { IoTodayOutline } from "react-icons/io5"; 
 import { useAuth } from '../../context/AuthContext';
 import { BsPersonCircle } from "react-icons/bs";
 import { LiaUsersCogSolid } from "react-icons/lia";
@@ -39,6 +40,11 @@ const Sidebar = ({children}) => {
       title: "Relatórios",
       icon: <HiOutlineClipboardDocumentList size={24}/>,
       href: '/form-manager'
+    },
+    {
+      title: "Diários",
+      icon: <IoTodayOutline size={24}/>,
+      href: '/dailies'
     },
     {
       title: "Dasboard",
