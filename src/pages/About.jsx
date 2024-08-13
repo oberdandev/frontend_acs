@@ -26,7 +26,7 @@ export const PageAbout = () => {
           </div>
           <ul className='space-y-2'>
             <li className='flex items-center space-x-2'>
-                <img src={svgJob} alt="Trabalho" style={{'height': '22px'}}/> 
+                <img src={svgJob} alt="Trabalho" style={{'height': '22px'}}/>
                 <p className='text-lg'>{user?.profissao?.no_profissao}</p>
               </li>
               <li className='flex items-center space-x-2'>
