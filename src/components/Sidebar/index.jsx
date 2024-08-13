@@ -1,26 +1,15 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaBars, FaTimes,FaScroll } from 'react-icons/fa';
 import { TbChartInfographic } from 'react-icons/tb';
-import { SquareChevronLeft } from 'lucide-react';
-
-import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
-import { AiOutlineForm } from "react-icons/ai";
-import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
-import Avatar from '../Avatar';
-
-
-
-import { NavLink, useNavigate } from 'react-router-dom';
 import { SquareChevronLeft } from 'lucide-react';
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
 import { useAuth } from '../../context/AuthContext';
 import { BsPersonCircle } from "react-icons/bs";
 import { LiaUsersCogSolid } from "react-icons/lia";
-import { FaCheck } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-  const Sidebar = ({children}) => {
+const Sidebar = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
   const {logOut, user} = useAuth();
   const navigate = useNavigate();
@@ -35,9 +24,6 @@ import { FaCheck } from 'react-icons/fa';
   };
   
   const Logo = {
-    title: "SISCV",
-    icon: <FaMosquito size={32} />,
-    href: "/"
     title: "SISCV",
     icon: <FaMosquito size={32} />,
     href: "/"
@@ -102,33 +88,23 @@ import { FaCheck } from 'react-icons/fa';
           className={`absolute -right-4 top-20 w-12 h-8  cursor-pointer fill-gray-200 ${!isOpen && 'rotate-180' }`}
           onClick={toggleSidebar}
         />
-
-<NavLink id={Logo.title} to={Logo.href}> 
-<NavLink id={Logo.title} to={Logo.href}> 
+      <NavLink id={Logo.title} to={Logo.href}> 
          <div className='flex gap-x-4 items-center'>
-          
-          
             <span className='text-zinc-50 cursor-pointer'>{Logo.icon}</span>
             <h1 
               className={`text-white origin-left text-2xl font-bold duration-300 ${!isOpen && "scale-0"}`}> 
               {Logo.title}
             </h1>
-           
-           
           </div>
-          </NavLink>
-          </NavLink>
+        </NavLink>
       </>
     )
   }
 
   return (
     <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
-    <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
-
       <SidebarHeader />
       <SidebarMenus />
-      
     </div>
   );
 };
