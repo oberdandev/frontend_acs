@@ -1,25 +1,12 @@
-import { useNavigate, useLocation } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import PageAbout from "../pages/About";
 
-/* const PrivateRoute = ({ user, children, redirect }) => {
-  const navigate = useNavigate();
-
-  const authenticate = localStorage.getItem('token') ? true : false;
-  const location = useLocation();
-  return authenticate ? (
-    children
-  ) : (
-    navigate('/login', { state: { from: location.pathname } }, { replace: true })
-  );
+const PrivateRoute = (props) => {
+  const user = useAuth();
+  if (!user?.user) return <Navigate to="/login" />;
+  
+  return <Outlet />;
 };
- */
 
-export function PrivateRouter({children}) {
-  return (
-    <div>
-       
-    </div>
-  );
-} 
-
-export default PrivateRouter;
+export default PrivateRoute;

@@ -1,5 +1,3 @@
-import styles from "./Avatar.module.css"
-
 export default function Avatar( {imgSrc, size, elemBorder} ) {
     let border = '4px solid #d9d9d9';
 
@@ -16,6 +14,6 @@ export default function Avatar( {imgSrc, size, elemBorder} ) {
     }
 
     return (
-        <img src={imgSrc} className={styles.avatar} alt="Avatar" style={styleSize}></img>
+        <img src={imgSrc} alt="Avatar" style={styleSize}></img>
     );
 }

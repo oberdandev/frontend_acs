@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaBars, FaTimes } from 'react-icons/fa';
-import { SquareChevronLeft, Brain } from 'lucide-react';
-import { FaCircleArrowLeft, FaCircleArrowRight  } from "react-icons/fa6";
+import { FaBars, FaTimes,FaScroll } from 'react-icons/fa';
+import { TbChartInfographic } from 'react-icons/tb';
+import { SquareChevronLeft } from 'lucide-react';
+
+import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
+import { AiOutlineForm } from "react-icons/ai";
+import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
 import Avatar from '../Avatar';
 
-const Sidebar = ({children}) => {
+
+
+
+  const Sidebar = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -13,8 +20,9 @@ const Sidebar = ({children}) => {
   };
   
   const Logo = {
-    title: "Texto",
-    icon: <Brain />
+    title: "SISCV",
+    icon: <FaMosquito size={32} />,
+    href: "/"
   }
   
   const Menus = [
@@ -24,9 +32,14 @@ const Sidebar = ({children}) => {
       href: '/about'
     },
     {
-      title: "Relatório",
-      icon: <Brain />,
-      href: '/form'
+      title: "Relatórios",
+      icon: <HiOutlineClipboardDocumentList size={24}/>,
+      href: '/form-manager'
+    },
+    {
+      title: "Dasboard",
+      icon: <TbChartInfographic  size={24}/>,
+      href: '/dasboard'
     },
     {
       title: "Teste",
@@ -66,19 +79,23 @@ const Sidebar = ({children}) => {
           onClick={toggleSidebar}
         />
 
+<NavLink id={Logo.title} to={Logo.href}> 
          <div className='flex gap-x-4 items-center'>
+          
             <span className='text-zinc-50 cursor-pointer'>{Logo.icon}</span>
             <h1 
               className={`text-white origin-left text-2xl font-bold duration-300 ${!isOpen && "scale-0"}`}> 
               {Logo.title}
             </h1>
+           
           </div>
+          </NavLink>
       </>
     )
   }
 
   return (
-    <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 min-h-screen bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
+    <div className={`${isOpen ? 'w-60' : 'w-20'} duration-300 bg-sky-900 relative p-5 pt-8 shadow-md shadow-slate-800`}>
 
       <SidebarHeader />
       <SidebarMenus />
@@ -87,4 +104,4 @@ const Sidebar = ({children}) => {
   );
 };
 
-export default Sidebar;
+export default Sidebar; 

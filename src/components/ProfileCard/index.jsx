@@ -2,13 +2,13 @@ import styles from "./ProfileCard.module.css"
 
 import Avatar from "../Avatar";
 
-export default function ProfileCard(profileID) {
+export default function ProfileCard( {name, role, imgSrc} ) {
     return (
         <div className={`${styles.profileCard} flex space-x-2 items-center`}>
-            <Avatar imgSrc="img/templates/profile2.jpg" size={48}/>
+            <Avatar imgSrc={imgSrc} size={64}/>
             <div>
-                <b>José Freitas</b>
-                <p>Recepcionista</p>
+                <b>{name}</b>
+                <p>{role}</p>
             </div>
         </div>
     );
