@@ -8,7 +8,7 @@ import ListItem from '../components/ListItem';
 import { useAuth } from '../context/AuthContext';
 
 export const PageAbout = () => {
-
+  
   const { user } = useAuth();
   //console.log(user)
 

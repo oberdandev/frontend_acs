@@ -72,7 +72,7 @@ const Sidebar = ({children}) => {
                   <li 
                     key={index} 
                     className={`flex pt-6 text-gray-200 text-sm items-center gap-x-4 cursor-pointer hover:text-sky-500 font-bolds`}>
-                    <NavLink key={menu.title} to={menu.href} className={({isActive}) => `flex gap-x-4 ${isActive ? 'text-sky-300 hover:text-sky-500' : ''}`}>
+                    <NavLink key={menu.title} to={menu.href} className={({isActive}) => `flex gap-x-2 ${isActive ? 'text-sky-300 hover:text-sky-500' : ''}`}>
                       <button onClick={menu.func}>{menu.icon}</button>
                       <span className={`duration-300 origin-left font-bold text-lg ${!isOpen && 'scale-0'}`}>
                         {menu.title}

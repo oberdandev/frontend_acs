@@ -19,6 +19,7 @@ import HomePage from './pages/Home.jsx'
 import PrivateRoute from './hooks/PrivateRouter.jsx'
 import PageUsers from './pages/Users/PageUsers.jsx'
 
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
