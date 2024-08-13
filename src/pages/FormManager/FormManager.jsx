@@ -96,7 +96,6 @@ export default function PageFormManager() {
         async function fetchData() {
             const response = await api.get('/resumosemanal');
             setList(response.data);
-            console.log(response);
         }
         fetchData();
     }, []);
@@ -139,7 +138,6 @@ export default function PageFormManager() {
     async function deleteSemana() {
         try {
             const response = await api.delete(`/resumosemanal/${semanaDelete}`);
-            console.log(response);
             toast.success('Semana deletada com sucesso');
 
             const newList = list.filter((semana => {
@@ -166,7 +164,6 @@ export default function PageFormManager() {
                 profissionalID: user.profissional.id
             })
             localStorage.setItem("editWeek", response.data.id);
-            console.log(response);
             navigate("/form");
         } catch(e) {
             console.log(e.message);

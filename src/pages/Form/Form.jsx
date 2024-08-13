@@ -8,6 +8,7 @@ import { sendForm } from './sendForm.js'
 import ProgressBar from '../../components/ProgressBar'
 import { toast } from 'react-toastify'
 import { useAuth } from '../../context/AuthContext.jsx'
+import { useNavigate } from 'react-router-dom';
 
 function DayForm( {id, className} ) {
   return (
@@ -77,7 +78,7 @@ function DayForm( {id, className} ) {
 
 export default function PageForm() {
   const { user } = useAuth();
-
+  const navigate = useNavigate();
   const [currentForm, setCurrentForm] = useState('form-seg');
   const [progress, setProgress] = useState(0);
   const weekDays = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
@@ -101,7 +102,7 @@ export default function PageForm() {
     }
   });
 
-  function advanceForm() {
+  async function advanceForm() {
     const dayForm = document.querySelector(`#${currentForm}`);
 
     for (const input of dayForm.querySelectorAll('input')) {
@@ -120,25 +121,31 @@ export default function PageForm() {
 
     if(currentFormSibling === null) {
       //Envio de formulário
+      const buttonAdvance = document.querySelector('#button-advance');
+      const buttonRetract = document.querySelector('#button-retract');
 
-      const microareaElement = document.querySelector("#microarea");
-      const sublocalidadeElement = document.querySelector("#sublocalidade");
-
-      if (sendForm (user.profissional.id)) {
-        toast.success("O relatório foi enviado!");
-        /*const buttonAdvance = document.querySelector('#button-advance');
-        const buttonRetract = document.querySelector('#button-retract');
-
+      try {
         buttonAdvance.setAttribute("disabled", "");
         buttonRetract.setAttribute("disabled", "");
 
         buttonAdvance.classList.add("disabled");
-        buttonRetract.classList.add("disabled");*/
-      } else {
-        toast.error("Relatório não pôde ser enviado!");
-        return;
+        buttonRetract.classList.add("disabled");
+
+        const response = await sendForm(user.profissional.id);
+        toast.success("O relatório foi enviado!");
+
+        navigate("/form-manager");
+      } catch (e) {
+        console.log(e);
+        toast.error("O relatório não pôde ser enviado!");
+
+        buttonAdvance.removeAttribute("disabled", "");
+        buttonRetract.removeAttribute("disabled", "");
+
+        buttonAdvance.classList.remove("disabled");
+        buttonRetract.classList.remove("disabled");
       }
-        
+  
     } else {
       currentFormElement.classList.add("invisible");
       currentFormElement.classList.add("absolute");

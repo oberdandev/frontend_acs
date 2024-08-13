@@ -28,9 +28,9 @@ const parserToApiPattern = (obj, profissionalID) => {
     }
 }
 
-export const sendForm = (profissionalID) => {
+export const sendForm = async (profissionalID) => {
     try {
-        console.log("Relatório enviado!");
+        console.log("Enviando relatório!");
     
         const segData = JSON.parse(localStorage.getItem("form-seg"));
         const terData = JSON.parse(localStorage.getItem("form-ter"));
@@ -46,31 +46,32 @@ export const sendForm = (profissionalID) => {
         
         const semana = [segParsed, terParsed, quaParsed, quiParsed, sexParsed];
 
-        semana.forEach(async (diaParsed) => {
-            try {
-                const response = await api.post('/resumodiario', diaParsed);
-                if(response.status === 200) {
-                    console.log("Relatório enviado com sucesso!");
-                }   
-            } catch (e) {
-                console.log(e);
-                return false;
-            }
+        const verify = await api.get(`/resumodiario/${localStorage.getItem('editWeek')}`);
+        console.log("sendForm.js - line 50:", verify);
 
-            /*api.post('/resumodiario', diaParsed)
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-                toast.error(error);
-            })*/
-        })
-        return true;
+        if (verify.data.length !== 0) {
+            // Resumos diários encontrados, ativando modo de atualização
+            let i = 0;
+            for (const oldDia of verify.data) {
+                const response = await api.patch(`/resumodiario/${oldDia.id}`, semana[i]);
+                console.log(response)
+                if (response.status >= 500 && response.status < 599) {
+                    throw Error(response.toString())
+                }
+                i++;
+            }
+        } else {
+            for (const diaParsed of semana) {
+                const response = await api.post('/resumodiario', diaParsed);
+                console.log(response)
+                if (response.status !== 201) {
+                    throw Error(response.toString())
+                }
+            }
+        }
         
-    } catch (error) {
-        console.log(error);
-        return false;
+    } catch (e) {
+        throw Error(e);
     }
    
 
