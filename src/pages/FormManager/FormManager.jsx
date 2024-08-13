@@ -94,9 +94,13 @@ export default function PageFormManager() {
     useEffect(() => {
         // Inicializa lista de semanas
         async function fetchData() {
-            const response = await api.get('/resumosemanal');
-            setList(response.data);
-            console.log(response);
+            try {
+                const response = await api.get('/resumosemanal');
+                setList(response.data);
+            } catch (e) {
+                console.log(e);
+                toast.error("Falha na exibição de formulários. Tente novamente mais tarde.")
+            }
         }
         fetchData();
     }, []);
@@ -116,7 +120,8 @@ export default function PageFormManager() {
         btnStopSearch.classList.remove("hidden");
 
         const newShowList = list.filter((semana) => {
-            return dataSearchInicio <= semana.data_inicio && dataSearchFim >= semana.data_fim;
+            return dataSearchInicio <= Date.parse(semana.created_at) 
+                && dataSearchFim >= Date.parse(semana.updated_at);
         })
         setShowList(newShowList);
     }
@@ -138,8 +143,11 @@ export default function PageFormManager() {
 
     async function deleteSemana() {
         try {
-            const response = await api.delete(`/resumosemanal/${semanaDelete}`);
-            console.log(response);
+            console.log("A")
+            const responseDia = await api.delete(`/resumodiario/${semanaDelete}`);
+            console.log(responseDia);
+            const responseSemana = await api.delete(`/resumosemanal/${semanaDelete}`);
+            console.log(responseSemana);
             toast.success('Semana deletada com sucesso');
 
             const newList = list.filter((semana => {
@@ -166,7 +174,6 @@ export default function PageFormManager() {
                 profissionalID: user.profissional.id
             })
             localStorage.setItem("editWeek", response.data.id);
-            console.log(response);
             navigate("/form");
         } catch(e) {
             console.log(e.message);

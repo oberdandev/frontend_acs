@@ -6,6 +6,8 @@ import PageAbout from './pages/About.jsx'
 import PageLogin from './pages/Login/Login.jsx'
 import PageForm from './pages/Form/Form.jsx'
 import PageFormManager from './pages/FormManager/FormManager.jsx'
+import PageDailies from './pages/ResumosDiarios/PageDailies.jsx'
+import PageDaboard from './pages/Dasboard/Dashboard.jsx'
 import PageException from './pages/Exception/Exception.jsx'
 import PageNotFound from './pages/Exception/PageNotFound.jsx'
 import { ToastContainer } from 'react-toastify';
@@ -34,6 +36,17 @@ const AppRoutes = () => {
             <Route index element={<PageFormManager />} />
           </Route>
           <Route
+            path="dailies"
+            element={<PrivateRoute />}
+            errorElement={<PageException />}>
+            <Route index element={<PageDailies />} />
+          </Route>
+          <Route
+            path="dasboard"
+            element={<PageDaboard />}
+            errorElement={<PageException />}
+          />
+          <Route
             path="form"
             element={<PageForm />}
             errorElement={<PageException />}
@@ -52,53 +65,6 @@ const AppRoutes = () => {
     </BrowserRouter>
   )
 }
-
-
-
-const router = createBrowserRouter([
-  { 
-    path: '/', 
-    element: <App/>,
-    children: [
-      {
-        path: '/about', 
-        element: <PrivateRoute/>,
-        children: [
-          {
-            index: true,
-            element: <PageAbout/>
-          }
-        ],
-        errorElement: <PageException />
-      },
-    {
-        path: '/form-manager',
-        element: 
-          <PageFormManager />
-        ,
-        errorElement: <PageException />
-      },
-      {
-        path: '/form',
-        element: <PageForm />,
-        errorElement: <PageException />
-      },
-    ]
-  },
-  { 
-    path: '*', 
-    element: <PageNotFound />
-  },
-  {
-    path: '/login',
-    element: <PageLogin />,
-    errorElement: <PageException />
-  },
-  {
-    path: '/register',
-    element: <PageRegister />,
-  }
-])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

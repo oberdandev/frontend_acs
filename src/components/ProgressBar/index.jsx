@@ -6,10 +6,6 @@ export default function ProgressBar( { progress, steps, className } ) {
     let i = 0;
     const stepsElements = steps.map((step) => {
         let classList = "duration-500 font-bold text-slate-600";
-
-        console.log(progress >= i);
-        console.log(i);
-
         if (progress > i) {
             classList = classList.concat(" text-sky-800").replace("text-slate-600", "");
         }

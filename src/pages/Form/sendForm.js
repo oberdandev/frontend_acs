@@ -1,11 +1,11 @@
 import { api } from "../../services/api";
 
-const parserToApiPattern = (obj, microarea, localidade) => {
+const parserToApiPattern = (obj, profissionalID) => {
     return {
-        profissionalID: localStorage.getItem('userID'),
-        resSemanalID: null,
-        micro_area: microarea,
-        sub_local: localidade,
+        profissionalID: profissionalID,
+        resSemanalID: localStorage.getItem('editWeek'),
+        micro_area: obj.microarea,
+        sub_local: obj.sublocalidade,
         data: obj.dataAtividade,
         quadras_trabalhadas: obj.quarteiroes,
         imoveis_inspec: obj.inspecionados,
@@ -24,22 +24,13 @@ const parserToApiPattern = (obj, microarea, localidade) => {
         nu_dep_inspec_E:  obj.depE,
         nu_dep_eliminados: obj.depEliminados,
         nu_dep_positivo:  obj.depPositivos,
-        nu_encaminhados: obj.depTratamento,
+        nu_encaminhados: obj.depTratamento
     }
-   
 }
 
-export const sendForm = (microarea, sublocalidade) => {
+export const sendForm = async (profissionalID) => {
     try {
-        console.log("Relatório enviado!");
-
-        if (microarea.length === 0 || sublocalidade.length === 0) {
-            alert("Microárea ou Sublocalidade não foram preenchidos!");
-            return false;
-        }
-    
-        console.log("microarea: " + microarea);
-        console.log("sublocalidade: " + sublocalidade);
+        console.log("Enviando relatório!");
     
         const segData = JSON.parse(localStorage.getItem("form-seg"));
         const terData = JSON.parse(localStorage.getItem("form-ter"));
@@ -47,42 +38,40 @@ export const sendForm = (microarea, sublocalidade) => {
         const quiData = JSON.parse(localStorage.getItem("form-qui"));
         const sexData = JSON.parse(localStorage.getItem("form-sex"));
     
-        const segParsed = parserToApiPattern(segData, microarea, sublocalidade);
-        const terParsed = parserToApiPattern(terData, microarea, sublocalidade);
-        const quaParsed = parserToApiPattern(quaData, microarea, sublocalidade);
-        const quiParsed = parserToApiPattern(quiData, microarea, sublocalidade);
-        const sexParsed = parserToApiPattern(sexData, microarea, sublocalidade);
+        const segParsed = parserToApiPattern(segData, profissionalID);
+        const terParsed = parserToApiPattern(terData, profissionalID);
+        const quaParsed = parserToApiPattern(quaData, profissionalID);
+        const quiParsed = parserToApiPattern(quiData, profissionalID);
+        const sexParsed = parserToApiPattern(sexData, profissionalID);
         
         const semana = [segParsed, terParsed, quaParsed, quiParsed, sexParsed];
 
-        semana.forEach(async (diaParsed) => {
-            const response = await api.post('/resumodiario', diaParsed);
-            
-            if(response.status === 200) {
-                console.log("Relatório enviado com sucesso!");
-            }   
+        const verify = await api.get(`/resumodiario/${localStorage.getItem('editWeek')}`);
+        console.log("sendForm.js - line 50:", verify);
 
-            api.post('/resumodiario', diaParsed)
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-        })
+        if (verify.data.length !== 0) {
+            // Resumos diários encontrados, ativando modo de atualização
+            let i = 0;
+            for (const oldDia of verify.data) {
+                const response = await api.patch(`/resumodiario/${oldDia.id}`, semana[i]);
+                console.log(response)
+                if (response.status >= 500 && response.status < 599) {
+                    throw Error(response.toString())
+                }
+                i++;
+            }
+        } else {
+            for (const diaParsed of semana) {
+                const response = await api.post('/resumodiario', diaParsed);
+                console.log(response)
+                if (response.status !== 201) {
+                    throw Error(response.toString())
+                }
+            }
+        }
         
-    
-        console.log(segData);
-        console.log(terData);
-        console.log(quaData);
-        console.log(quiData);
-        console.log(sexData);
-        
-        return true;
-        
-    } catch (error) {
-        console.log(error);
-        return false;
+    } catch (e) {
+        throw Error(e);
     }
    
 

@@ -1,4 +1,3 @@
-import Sidebar from '../../components/Sidebar'
 import Container from '../../components/Container'
 import Section from '../../components/Section'
 import InputField from '../../components/InputField'
@@ -8,20 +7,22 @@ import { inserirValor, checkForm } from './utils.js';
 import { sendForm } from './sendForm.js'
 import ProgressBar from '../../components/ProgressBar'
 import { toast } from 'react-toastify'
+import { useAuth } from '../../context/AuthContext.jsx'
+import { useNavigate } from 'react-router-dom';
 
 function DayForm( {id, className} ) {
   return (
     <Section id={id} className={`transition-all duration-500 space-y-4 ${className}`}>
-      <div className='shadow-md p-2 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
-        <InputField id="microarea" type='text' label='Microárea: ' inputSize='lg'/>
-        <InputField id="sublocalidade" type='text' label='Sublocalidade: ' inputSize='lg'/>
+      <div className='shadow-md p-2 py-1 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
+        <InputField id="microarea" type='text' label='Microárea: ' inputSize='lg' inputOnChange={(e) => inserirValor(e.target.value, 'microarea')}/>
+        <InputField id="sublocalidade" type='text' label='Sublocalidade: ' inputSize='lg' inputOnChange={(e) => inserirValor(e.target.value, 'sublocalidade')}/>
       </div>
-      <div className='shadow-md p-2 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
+      <div className='shadow-md p-2 py-1 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
         <InputField id="dataAtividade" type='date' label='Data da Atividade: ' inputOnChange={(e) => inserirValor(e.target.value, 'dataAtividade')}/>
         <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
       </div>
       <div className='space-y-4 lg:space-y-0 lg:grid lg:grid-cols-4 lg:space-x-4'>
-        <div className='shadow-md space-y-4 p-2 border-2 rounded-xl border-white bg-white'>
+        <div className='shadow-md space-y-2 p-2 py-1 border-2 rounded-xl border-white bg-white'>
           <p>Total de imóveis:</p>
           <div>
             <InputField id="inspecionados" type='text' label='Inspecionados: ' inputSize='sm' labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'inspecionados')}/>
@@ -29,7 +30,7 @@ function DayForm( {id, className} ) {
             <InputField id="positivos" type='text' label='Positivos: ' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'positivos')}/>
           </div>   
         </div>
-        <div className='shadow-md space-y-4 p-2 border-2 rounded-xl border-white bg-white'>
+        <div className='shadow-md space-y-2 p-2 border-2 rounded-xl border-white bg-white'>
           <div>
             <InputField id="checklists" type='text' label='Checklists implantados:' inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'checklists')}/>
           </div>
@@ -40,7 +41,7 @@ function DayForm( {id, className} ) {
             <InputField id="checkParcial" type='text' label='Parcial' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'checkParcial')}/>
           </div>
         </div>
-        <div className='shadow-md space-y-4 p-2 col-span-2 border-2 rounded-xl border-white bg-white'>
+        <div className='shadow-md space-y-2 p-2 col-span-2 border-2 rounded-xl border-white bg-white'>
           <p>Número de depósitos inspecionados por tipo:</p>
           <div className='block'>
             <div className='grid grid-cols-3'>
@@ -76,6 +77,8 @@ function DayForm( {id, className} ) {
 }
 
 export default function PageForm() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [currentForm, setCurrentForm] = useState('form-seg');
   const [progress, setProgress] = useState(0);
   const weekDays = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
@@ -99,7 +102,7 @@ export default function PageForm() {
     }
   });
 
-  function advanceForm() {
+  async function advanceForm() {
     const dayForm = document.querySelector(`#${currentForm}`);
 
     for (const input of dayForm.querySelectorAll('input')) {
@@ -118,39 +121,49 @@ export default function PageForm() {
 
     if(currentFormSibling === null) {
       //Envio de formulário
+      const buttonAdvance = document.querySelector('#button-advance');
+      const buttonRetract = document.querySelector('#button-retract');
 
-      const microareaElement = document.querySelector("#microarea");
-      const sublocalidadeElement = document.querySelector("#sublocalidade");
-
-      if (sendForm (microareaElement.value, sublocalidadeElement.value)) {
-        const buttonAdvance = document.querySelector('#button-advance');
-        const buttonRetract = document.querySelector('#button-retract');
-
+      try {
         buttonAdvance.setAttribute("disabled", "");
         buttonRetract.setAttribute("disabled", "");
 
         buttonAdvance.classList.add("disabled");
         buttonRetract.classList.add("disabled");
-      } else 
-        return;
-    }
 
-    currentFormElement.classList.add("invisible");
-    currentFormElement.classList.add("absolute");
-    currentFormElement.classList.add("opacity-0");
-    currentFormElement.classList.add("-translate-x-32");
+        const response = await sendForm(user.profissional.id);
+        toast.success("O relatório foi enviado!");
 
-    const evt = new Event("checkForm", { formID: currentForm });
-    document.dispatchEvent(evt);
+        navigate("/form-manager");
+      } catch (e) {
+        console.log(e);
+        toast.error("O relatório não pôde ser enviado!");
 
-    if (currentFormSibling !== null) {
-      currentFormSibling.classList.remove("absolute");
-      currentFormSibling.classList.remove("invisible");
-      currentFormSibling.classList.remove("opacity-0");
-      currentFormSibling.classList.remove("translate-x-32");
+        buttonAdvance.removeAttribute("disabled", "");
+        buttonRetract.removeAttribute("disabled", "");
 
-      setCurrentForm(currentFormSibling.getAttribute("id"));
-      setProgress(progress + 1);
+        buttonAdvance.classList.remove("disabled");
+        buttonRetract.classList.remove("disabled");
+      }
+  
+    } else {
+      currentFormElement.classList.add("invisible");
+      currentFormElement.classList.add("absolute");
+      currentFormElement.classList.add("opacity-0");
+      currentFormElement.classList.add("-translate-x-32");
+
+      const evt = new Event("checkForm", { formID: currentForm });
+      document.dispatchEvent(evt);
+
+      if (currentFormSibling !== null) {
+        currentFormSibling.classList.remove("absolute");
+        currentFormSibling.classList.remove("invisible");
+        currentFormSibling.classList.remove("opacity-0");
+        currentFormSibling.classList.remove("translate-x-32");
+
+        setCurrentForm(currentFormSibling.getAttribute("id"));
+        setProgress(progress + 1);
+      }
     }
   }
 
@@ -180,13 +193,7 @@ export default function PageForm() {
 
   return (
       <Container className='space-y-2 mb-4 lg:mb-0'>
-        <div className='space-y-4'> 
-          <div className='flex justify-center w-full'>
-            <ProgressBar progress={progress} steps={weekDays} className='bg-white mb-2 w-3/4' />
-          </div>  
-        </div>
-
-        <div id="multi-form" className='flex'>
+        <div id="multi-form" className='flex mt-24'>
           <DayForm id="form-seg" name="Segunda" className='day-form w-full'/>
           <DayForm id="form-ter" name="Terça" className="day-form absolute opacity-0 invisible translate-x-32 w-full"/>
           <DayForm id="form-qua" name="Quarta" className="day-form absolute opacity-0 invisible translate-x-32 w-full"/>
@@ -194,7 +201,11 @@ export default function PageForm() {
           <DayForm id="form-sex" name="Sexta" className="day-form absolute opacity-0 invisible translate-x-32 w-full"/>
         </div>
 
-        <div className='flex mb-4 space-x-4 lg:mb-0'>
+        <div className='flex justify-center w-full fixed left-5 top-5'>
+          <ProgressBar progress={progress} steps={weekDays} className='bg-white mb-2 w-3/4' />
+        </div>  
+
+        <div className='flex space-x-4 mt-2 lg:mb-0 lg:relative lg:left-8 lg:bottom-24'>
           <Button id="button-retract" color="gray" label="Voltar" onButtonClick={() => retractForm()} />
           <Button id="button-advance" label="Avançar" onButtonClick={() => advanceForm()} />
         </div>

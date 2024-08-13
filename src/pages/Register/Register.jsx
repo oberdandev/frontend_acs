@@ -10,7 +10,6 @@ import { api, baseUrl } from '../../services/api.js'
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 
-
 const validatePassword = {
   required: 'O campo senha é obrigatório',
   minLength: { value: 6, message: 'A senha deve ter no mínimo 6 caracteres.' }
