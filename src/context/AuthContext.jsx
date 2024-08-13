@@ -1,11 +1,23 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 import { api } from "../services/api";
-import { Navigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState();
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [profissional, setProfissional] = useState({});
+ // const isAuthenticated = false;   
+
+
+  // document.cookie = `Bearer Authorization ${token}`;
+  // document.headers = `Bearer Authorization ${token}`;
+
+  // useEffect(() => {
+     
+  // }, [])
+
   console.log('token:', token , 'AuthContext line 12')
 
   const loginAction = async (data) => {
@@ -47,4 +59,3 @@ export const useAuth = () => {
 };
 
 export default AuthProvider;
-
