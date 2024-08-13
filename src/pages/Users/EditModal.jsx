@@ -1,13 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { Modal, Button } from 'flowbite-react';
 import { useEffect } from 'react';
+import {validateCNS, validateEmail} from '../../utils/validations.js';
 
-const EditUserModal = ({ isOpen, onClose, onSubmit, defaultValues }) => {
-  const { register, handleSubmit, setFocus} = useForm({
-    defaultValues,
-  });
-
-  setFocus('name');
+const EditUserModal = ({ isOpen, onClose, onSubmit, user }) => {
+  const { register, handleSubmit, setFocus, formState: { errors }} = useForm();
 
   return (
     <Modal show={isOpen} onClose={onClose} dismissible>
@@ -21,11 +18,13 @@ const EditUserModal = ({ isOpen, onClose, onSubmit, defaultValues }) => {
              text-gray-900 dark:text-white">
               Nome
             </label>
-            <input
-              id="name"
-              {...register('name')}
+            <input hidden type="number" id="id" value={user.id} {...register('id')}/>
+            <input 
+              id="nome"
+              {...register('nome')}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm 
               rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              defaultValue={user.nome}
               required
             />
           </div>
@@ -35,26 +34,30 @@ const EditUserModal = ({ isOpen, onClose, onSubmit, defaultValues }) => {
               Email
             </label>
             <input
+              defaultValue={user.email}
               id="email"
               type="email"
-              {...register('email')}
+              {...register('email', validateEmail)}
               className="bg-gray-50 border border-gray-300 text-gray-900 
               text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500
                block w-full p-2.5"
               required
             />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
           <div>
             <label htmlFor="cns" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               CNS (Cartão SUS)
             </label>
             <input
+              defaultValue={user.cns}
               id="cns"
-              {...register('cns')}
+              {...register('cns', validateCNS)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
               focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               required
             />
+            {errors.cns && <p className="text-red-500 text-sm">{errors.cns.message}</p>}
           </div>
           <div>
             <label htmlFor="role" className="block mb-2 text-sm font-medium
@@ -62,6 +65,7 @@ const EditUserModal = ({ isOpen, onClose, onSubmit, defaultValues }) => {
               Role
             </label>
             <select
+              defaultValue={user.role}
               id="role"
               {...register('role')}
               className="bg-gray-50 border border-gray-300 text-gray-900 
@@ -91,7 +95,7 @@ const EditUserModal = ({ isOpen, onClose, onSubmit, defaultValues }) => {
               <option value={0}>Inativo</option>
             </select>
           </div>
-          <Button type="submit">
+          <Button type='submit'>
             Salvar
           </Button>
         </form>

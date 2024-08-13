@@ -11,9 +11,8 @@ function randomPassword () {
   return senha;
 }
 
-export function ShowResetedPasswordModal () {}
-
 export function ResetPasswordModal ({isOpen, onClose, onSubmit, userAction}) {
+  const newPassword = randomPassword();
   return (
     <Modal show={isOpen} size="md" onClose={onClose} dismissible popup>
       <Modal.Header />
@@ -24,12 +23,16 @@ export function ResetPasswordModal ({isOpen, onClose, onSubmit, userAction}) {
             Você tem certeza que deseja resetar a senha deste usuário? <br/><b>{userAction.nome}</b>
           </h3>
           <div className="flex justify-center gap-4">
-            <Button color="failure" onClick={onSubmit(randomPassword())}>
+            <Button color="failure" onClick={()=> {
+              console.log('botão reset senha submit clicado')
+              console.log(newPassword)
+              console.log(userAction)
+              onSubmit(newPassword, userAction)}}>
               {"Sim, tenho certeza"}
             </Button>
             <Button color="gray" 
               onClick={onClose}>
-              Não, cancelar.
+              Não, cancelar.  
             </Button>
           </div>
         </div>
