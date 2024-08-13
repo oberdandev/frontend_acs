@@ -120,7 +120,8 @@ export default function PageFormManager() {
         btnStopSearch.classList.remove("hidden");
 
         const newShowList = list.filter((semana) => {
-            return dataSearchInicio <= semana.data_inicio && dataSearchFim >= semana.data_fim;
+            return dataSearchInicio <= Date.parse(semana.created_at) 
+                && dataSearchFim >= Date.parse(semana.updated_at);
         })
         setShowList(newShowList);
     }
