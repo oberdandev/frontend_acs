@@ -132,7 +132,8 @@ export default function PageForm() {
         buttonRetract.classList.add("disabled");
 
         const response = await sendForm(user.profissional.id);
-        toast.success("O relatório foi enviado!");
+        console.log(response.data);
+        toast.success(response.data);
 
         navigate("/form-manager");
       } catch (e) {

@@ -95,7 +95,7 @@ export default function PageFormManager() {
         // Inicializa lista de semanas
         async function fetchData() {
             try {
-                const response = await api.get('/resumosemanal');
+                const response = await api.get(`/resumosemanal/profissional/${user.profissional.id}`);
                 setList(response.data);
             } catch (e) {
                 console.log(e);
@@ -120,8 +120,8 @@ export default function PageFormManager() {
         btnStopSearch.classList.remove("hidden");
 
         const newShowList = list.filter((semana) => {
-            return dataSearchInicio <= Date.parse(semana.created_at) 
-                && dataSearchFim >= Date.parse(semana.updated_at);
+            return dataSearchInicio <= Date.parse(semana.semanaEpidemiologica.dt_inicio) 
+                && dataSearchFim >= Date.parse(semana.semanaEpidemiologica.dt_fim);
         })
         setShowList(newShowList);
     }
@@ -143,7 +143,6 @@ export default function PageFormManager() {
 
     async function deleteSemana() {
         try {
-            console.log("A")
             const responseDia = await api.delete(`/resumodiario/${semanaDelete}`);
             console.log(responseDia);
             const responseSemana = await api.delete(`/resumosemanal/${semanaDelete}`);
@@ -186,7 +185,7 @@ export default function PageFormManager() {
     // Integrar com semana epidemiologica para obter as datas
     const weekListItems = showList.map(item =>
         <SemanaItem key={item.id} id={item.id} semanaEpidemologica={item.semana_epidemiologica} 
-            dataInicio={item.created_at} dataFim={item.updated_at}
+            dataInicio={item.semanaEpidemiologica.dt_inicio} dataFim={item.semanaEpidemiologica.dt_fim}
             verificado={item.verificado} enviado={item.enviado}
             deleteSemana={() => {
                 setIsDeleteModalOpen(true);

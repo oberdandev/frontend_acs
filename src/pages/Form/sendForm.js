@@ -46,30 +46,8 @@ export const sendForm = async (profissionalID) => {
         
         const semana = [segParsed, terParsed, quaParsed, quiParsed, sexParsed];
 
-        const verify = await api.get(`/resumodiario/${localStorage.getItem('editWeek')}`);
-        console.log("sendForm.js - line 50:", verify);
-
-        if (verify.data.length !== 0) {
-            // Resumos diários encontrados, ativando modo de atualização
-            let i = 0;
-            for (const oldDia of verify.data) {
-                const response = await api.patch(`/resumodiario/${oldDia.id}`, semana[i]);
-                console.log(response)
-                if (response.status >= 500 && response.status < 599) {
-                    throw Error(response.toString())
-                }
-                i++;
-            }
-        } else {
-            for (const diaParsed of semana) {
-                const response = await api.post('/resumodiario', diaParsed);
-                console.log(response)
-                if (response.status !== 201) {
-                    throw Error(response.toString())
-                }
-            }
-        }
-        
+        const response = await api.put(`/resumodiario/`, semana);
+        return response;
     } catch (e) {
         throw Error(e);
     }

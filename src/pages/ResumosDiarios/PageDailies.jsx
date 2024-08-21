@@ -108,7 +108,7 @@ export default function PageDailies() {
         async function fetchData() {
             try {   
                 const response = await api.get(`/resumodiario/profissional/${user.profissional.id}`);
-                console.log(response);
+                console.log(response);  
                 setList(response.data);
                 setShowList(response.data);
             } catch (error) {
