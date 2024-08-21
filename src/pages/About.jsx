@@ -6,11 +6,41 @@ import svgPhone from '../assets/phone.svg';
 import ProfileCard from '../components/ProfileCard';
 import ListItem from '../components/ListItem';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../services/api';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { HiOutlineIdentification } from 'react-icons/hi';
 
 export const PageAbout = () => {
-
   const { user } = useAuth();
-  //console.log(user)
+  const [ listEquipe, setListEquipe ] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try { 
+        const response = await api.get(`/profissional/equipeIne/${user.profissional.equipe_ine}`);
+        setListEquipe(response.data);
+      } catch (e) {
+        console.log(e);
+        toast.error("Não foi possível consultar equipe");
+      }
+      
+    }
+
+    fetchData();
+  }, []);
+
+  const listEquipeHtml = listEquipe.map((profissional) => 
+    <li><ProfileCard imgSrc={`https://avatar.iran.liara.run/username?username=${profissional.nome}&bold=false&length=1`}
+      name={profissional.nome}
+      role={profissional.profissao.no_profissao}/></li>
+  )
+
+  let formatedCpf = user?.cpf.match(/^(\d{3})(\d{3})(\d{3})(\d{2})$/);
+
+  if (formatedCpf) {
+    formatedCpf = formatedCpf[1] + '.' + formatedCpf[2] + '.' + formatedCpf[3] + '-' + formatedCpf[4];
+  }
 
   return (
       <Container className='space-y-10'>
@@ -30,8 +60,8 @@ export const PageAbout = () => {
                 <p className='text-lg'>{user?.profissao?.no_profissao}</p>
               </li>
               <li className='flex items-center space-x-2'>
-                <img src={svgPhone} alt="Telefone" style={{'height': '22px'}}/> 
-                <p className='text-lg'>(92)99999-9999</p>
+                <HiOutlineIdentification size={22}/>
+                <p className='text-lg'>{formatedCpf}</p>
               </li>
           </ul>
         </Section>
@@ -49,17 +79,8 @@ export const PageAbout = () => {
           </Section>
           <Section className='space-y-2 bg-white border-2 border-white rounded-xl shadow-md text-center lg:col-span-1'>
             <h2 className='flex justify-center'><b className='border-b border-slate-600 w-48'>Equipe de Saúde</b></h2>
-            <ul className='p-4 min-h-72 overflow-scroll text-left space-y-2'>
-              <li>
-                <ProfileCard name="José Freitas" role="Agente de Campo" imgSrc="/img/templates/profile2.jpg" />
-              </li>
-              <li>
-                <ProfileCard name="Nazaré Ribeiro" role="Enfermeira" imgSrc="/img/templates/profile3.jpg"/>
-              </li>
-              <li>
-                <ProfileCard name="Ricardo Costa" role="Enfermeiro" imgSrc="/img/templates/profile4.jpg"/>
-              </li>
-              
+            <ul className='p-4 overflow-scroll text-left space-y-2' style={{height: '32rem'}}>
+              {listEquipeHtml}
             </ul>
           </Section>
         </div>
