@@ -18,6 +18,7 @@ import PageRegister from './pages/Register/Register.jsx'
 import HomePage from './pages/Home.jsx'
 import PrivateRoute from './hooks/PrivateRouter.jsx'
 import PageUsers from './pages/Users/PageUsers.jsx'
+import PageUnidades from './pages/UnidadeSaude/PageUnidades.jsx'
 
 
 const AppRoutes = () => {
@@ -57,6 +58,12 @@ const AppRoutes = () => {
             element={<PrivateRoute/>}
             errorElement={<PageException />}>
               <Route index element={<PageUsers />} />
+          </Route>
+          <Route
+            path="unidades"
+            element={<PrivateRoute/>}
+            errorElement={<PageException />}>
+              <Route index element={<PageUnidades />} />
           </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />

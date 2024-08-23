@@ -57,6 +57,11 @@ const Sidebar = ({children}) => {
       href: '/users',
     },
     {
+      title: "Gerenciar Unidades",
+      icon: <LiaUsersCogSolid size={24}/>,
+      href: '/unidades',
+    },
+    {
       title: "Sair",
       icon: <SquareChevronLeft />,
       href: '/',
