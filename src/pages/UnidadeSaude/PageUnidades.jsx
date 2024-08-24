@@ -92,14 +92,15 @@ export default function PageUnidades() {
 
   const onSubmitSaveUnidade = async (e) => {
     console.log(e)
-    const {cnes, nome, bairro, telefone, email, id} = e;
+    const {cnes, nome, bairro, telefone, email, status, id} = e;
     try {
       await api.patch(`/unidade/${id}`, {
         cnes,
         nome,
         bairro,
         telefone,
-        email
+        email,
+        status
       });
       toast.success('Unidade atualizada com sucesso');
       updateUnidadeList();

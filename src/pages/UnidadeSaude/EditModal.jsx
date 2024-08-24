@@ -14,11 +14,11 @@ const EditUnidadeModal = ({ isOpen, onClose, onSubmit, unidade }) => {
       <Modal.Body>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block mb-2 text-sm font-medium
+            <label htmlFor="nome" className="block mb-2 text-sm font-medium
              text-gray-900 dark:text-white">
               Nome
             </label>
-            <input hidden type="number" id="id" value={user.id} {...register('id')}/>
+            <input hidden type="number" id="id" value={unidade.id} {...register('id')}/>
             <input 
               id="nome"
               {...register('nome')}
@@ -29,7 +29,7 @@ const EditUnidadeModal = ({ isOpen, onClose, onSubmit, unidade }) => {
             />
           </div>
           <div>
-            <label htmlFor="cns" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label htmlFor="cnes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               CNES
             </label>
             <input
@@ -43,13 +43,13 @@ const EditUnidadeModal = ({ isOpen, onClose, onSubmit, unidade }) => {
             {errors.cns && <p className="text-red-500 text-sm">{errors.cns.message}</p>}
           </div>
           <div>
-            <label htmlFor="role" className="block mb-2 text-sm font-medium
+            <label htmlFor="bairro" className="block mb-2 text-sm font-medium
              text-gray-900 dark:text-white">
               Bairro
             </label>
             <input
               defaultValue={unidade.bairro}
-              id="cnes"
+              id="bairro"
               {...register('bairro')}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
               focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -57,14 +57,14 @@ const EditUnidadeModal = ({ isOpen, onClose, onSubmit, unidade }) => {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block mb-2 text-sm font-medium
+            <label htmlFor="telefone" className="block mb-2 text-sm font-medium
              text-gray-900 dark:text-white">
               Telefone
             </label>
             <input
               defaultValue={unidade.telefone}
-              id="email"
-              type="email"
+              id="telefone"
+              type="telefone"
               {...register('telefone')}
               className="bg-gray-50 border border-gray-300 text-gray-900 
               text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500
@@ -73,7 +73,7 @@ const EditUnidadeModal = ({ isOpen, onClose, onSubmit, unidade }) => {
             />
           </div>
           <div>
-            <label htmlFor="cns" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Email
             </label>
             <input
