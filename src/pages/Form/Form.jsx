@@ -13,10 +13,12 @@ import { useNavigate } from 'react-router-dom';
 function DayForm( {id, className} ) {
   return (
     <Section id={id} className={`transition-all duration-500 space-y-4 ${className}`}>
-      <div className='shadow-md p-2 py-1 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-3 lg:space-x-8 bg-white'>
+      <div className='shadow-md p-2 py-1 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
         <InputField id="sublocalidade" type='text' label='Sublocalidade: ' inputSize='lg' inputOnChange={(e) => inserirValor(e.target.value, 'sublocalidade')}/>
-        <InputField id="microarea" type='text' label='Microárea: ' inputSize='sm' inputOnChange={(e) => inserirValor(e.target.value, 'microarea')}/>        
-        <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
+        <div className='lg:grid lg:grid-cols-2 lg:space-x-8'>
+          <InputField id="microarea" type='text' label='Microárea: ' inputSize='sm' inputOnChange={(e) => inserirValor(e.target.value, 'microarea')}/>        
+          <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
+        </div>
       </div>
       <div className='space-y-4 lg:space-y-0 lg:grid lg:grid-cols-4 lg:space-x-4'>
         <div className='shadow-md space-y-2 p-2 py-1 border-2 rounded-xl border-white bg-white'>
