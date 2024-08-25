@@ -6,7 +6,6 @@ const parserToApiPattern = (obj, profissionalID) => {
         resSemanalID: localStorage.getItem('editWeek'),
         micro_area: obj.microarea,
         sub_local: obj.sublocalidade,
-        data: obj.dataAtividade,
         quadras_trabalhadas: obj.quarteiroes,
         imoveis_inspec: obj.inspecionados,
         imoveis_fechados: obj.fechados,
