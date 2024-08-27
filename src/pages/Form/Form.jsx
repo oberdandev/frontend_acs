@@ -97,6 +97,7 @@ export default function PageForm() {
     async function fetchData() {
       try { 
         const dayFormData = await api.get('/resumodiario/' + localStorage.getItem('editWeek'));
+        if (dayFormData.data.length === 0) return;
 
         const dayForm = document.querySelector(`#${currentForm}`);
 
