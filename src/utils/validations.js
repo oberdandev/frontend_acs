@@ -11,3 +11,9 @@ export const validateCNS = {
   minLength: { value: 15, message: 'O Cartão SUS deve ter 15 caracteres.' },
   maxLength: { value: 15, message: 'O Cartão SUS deve ter 15 caracteres.' }
 };
+
+export const validateCNES = {
+  required: 'Campo obrigatório',
+  minLength: { value: 7, message: 'O CNES deve ter 15 caracteres.' },
+  maxLength: { value: 7, message: 'O CNES ter 15 caracteres.' }
+}

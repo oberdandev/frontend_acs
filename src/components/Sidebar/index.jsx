@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { TbChartInfographic } from 'react-icons/tb';
 import { SquareChevronLeft } from 'lucide-react';
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
-import { FaCircleArrowLeft, FaMosquito  } from "react-icons/fa6";
+import { FaCircleArrowLeft, FaMosquito, FaRegBuilding  } from "react-icons/fa6";
 import { IoTodayOutline } from "react-icons/io5"; 
 import { useAuth } from '../../context/AuthContext';
 import { BsPersonCircle } from "react-icons/bs";
@@ -55,6 +55,11 @@ const Sidebar = ({children}) => {
       title: "Gerenciar Usuários",
       icon: <LiaUsersCogSolid size={24}/>,
       href: '/users',
+    },
+    {
+      title: "Gerenciar Unidades",
+      icon: <FaRegBuilding size={24}/>,
+      href: '/unidades',
     },
     {
       title: "Sair",
