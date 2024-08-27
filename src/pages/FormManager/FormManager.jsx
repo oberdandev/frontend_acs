@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Tooltip } from "react-tooltip";
 import { useForm } from 'react-hook-form';
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import { Label, Select } from "flowbite-react";
 import { useAuth } from "../../context/AuthContext";
@@ -194,8 +195,9 @@ export default function PageFormManager() {
     );
 
     return (
+        <>
             <div className='grid w-full min-h-screen h-full' style={{'gridTemplateRows': '7rem auto'}}>
-                <Section className='p-4 px-12 flex justify-between shadow-xl relative items-center'>    
+                <Section className='p-4 px-12 flex justify-between shadow-xl relative items-center'>
                     <div className='flex items-center'>
                         <SearchDate 
                             onChangeDataInicio={(e) => setDataSearchInicio(Date.parse(e.target.value.replace(/-/g, '\/')))}
@@ -210,6 +212,7 @@ export default function PageFormManager() {
                     </div>
                 </Section>
                 <Container id='week-list'>
+                    <ToastContainer />
                     <SemanaTable>
                         {weekListItems}
                     </SemanaTable>
@@ -249,5 +252,6 @@ export default function PageFormManager() {
                     </form>     
                 </Modal>
             </div>
+         </>
     );
 }

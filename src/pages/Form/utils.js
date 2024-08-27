@@ -1,7 +1,6 @@
 let microarea = '';
 let sublocalidade = '';
 
-let dataAtividade = '';
 let quarteiroes = '';
 
 let inspecionados = '';
@@ -33,9 +32,6 @@ export const inserirValor = (value, dataField) => {
             break;
         case 'sublocalidade':
             sublocalidade = value
-            break;
-        case 'dataAtividade':
-            dataAtividade = value
             break;
         case 'quarteiroes':
             quarteiroes = value
@@ -99,7 +95,6 @@ export const checkForm = ( diaSemana ) => {
 
     if (microarea.trim().length !== 0 && 
         sublocalidade.trim().length !== 0 && 
-        dataAtividade.trim().length !== 0 && 
         quarteiroes.trim().length !== 0 && !isNaN(quarteiroes) &&
         inspecionados.trim().length !== 0 && !isNaN(inspecionados) &&
         fechados.trim().length !== 0 && !isNaN(fechados) &&
@@ -122,7 +117,6 @@ export const checkForm = ( diaSemana ) => {
         const formDia = {
             microarea: microarea,
             sublocalidade: sublocalidade,
-            dataAtividade: dataAtividade,
             quarteiroes: quarteiroes,
             inspecionados: inspecionados,
             fechados: fechados,
@@ -145,7 +139,6 @@ export const checkForm = ( diaSemana ) => {
 
         microarea = "";
         sublocalidade = "";
-        dataAtividade = "";
         quarteiroes = "";
         inspecionados = "";
         fechados = "";
@@ -169,6 +162,8 @@ export const checkForm = ( diaSemana ) => {
 
         return true;
     }
+
+    console.error("O formulário não foi preenchido corretamente");
 
     return false;
 };

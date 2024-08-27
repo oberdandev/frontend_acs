@@ -4,9 +4,10 @@ import InputField from '../../components/InputField'
 import Button from '../../components/Button'
 import { useEffect, useState } from 'react';
 import { inserirValor, checkForm } from './utils.js';
-import { sendForm } from './sendForm.js'
-import ProgressBar from '../../components/ProgressBar'
-import { toast } from 'react-toastify'
+import { sendForm } from './sendForm.js';
+import ProgressBar from '../../components/ProgressBar';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../context/AuthContext.jsx'
 import { useNavigate } from 'react-router-dom';
 
@@ -109,9 +110,7 @@ export default function PageForm() {
     }
 
     if (checkForm( currentForm ) === false) {
-      toast.error("O formulário não foi preenchido corretamente", {
-        autoClose: 2500
-      });
+      toast.error("O formulário não foi preenchido corretamente");
       return;
     }
 
@@ -132,7 +131,8 @@ export default function PageForm() {
 
         const response = await sendForm(user.profissional.id);
         console.log(response.data);
-        toast.success(response.data);
+        setTimeout(() => toast.success(response.data), 
+          1000);
 
         navigate("/form-manager");
       } catch (e) {
@@ -209,7 +209,7 @@ export default function PageForm() {
           <Button id="button-retract" color="gray" label="Voltar" onButtonClick={() => retractForm()} />
           <Button id="button-advance" label="Avançar" onButtonClick={() => advanceForm()} />
         </div>
-        
+        <ToastContainer />
       </Container>
   );
 }
