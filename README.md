@@ -10,6 +10,6 @@ O controle vetorial desempenhado pelo Agente Comunitário de Saúde compreende u
 
 ![image](https://github.com/user-attachments/assets/78303c56-5adf-49a2-98f1-8af1ad64661b)
 
-## Tela de Formulário dos Relatório Diários
+## Tela de Formulário dos Relatórios Diários
 
 ![image](https://github.com/user-attachments/assets/424c0c88-be1c-4da8-960a-4b25a5030c13)
