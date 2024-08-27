@@ -26,65 +26,66 @@ let depPositivos = '';
 let depTratamento = '';
 
 export const inserirValor = (value, dataField) => {
+    console.log(dataField, value);
     switch (dataField) {
-        case 'microarea':
+        case 'micro_area':
             microarea = value
             break;
-        case 'sublocalidade':
+        case 'sub_local':
             sublocalidade = value
             break;
-        case 'quarteiroes':
+        case 'quadras_trabalhadas':
             quarteiroes = value
             break;
-        case 'inspecionados':
+        case 'imoveis_inspec':
             inspecionados = value
             break;
-        case 'fechados':
+        case 'imoveis_fechados':
             fechados = value
             break;
-        case 'positivos':
+        case 'imoveis_positivo':
             positivos = value
             break;
-        case 'checklists':
+        case 'checklist':
             checklists = value
             break;
-        case 'checkSim':
+        case 'monit_checklist_sim':
             checkSim = value
             break;
-        case 'checkNao':
+        case 'monit_checklist_nao':
             checkNao = value
             break;
-        case 'checkParcial':
+        case 'monit_checklist_parcial':
             checkParcial = value
             break;
-        case 'depA1':
+        case 'nu_dep_inspec_A1':
             depA1 = value
             break;
-        case 'depA2':
+        case 'nu_dep_inspec_A2':
             depA2 = value
             break;
-        case 'depB':
+        case 'nu_dep_inspec_B':
             depB = value
             break;
-        case 'depC':
+        case 'nu_dep_inspec_C':
             depC = value
             break;
-        case 'depD1':
+        case 'nu_dep_inspec_D1':
             depD1 = value
             break;
-        case 'depD2':
+        case 'nu_dep_inspec_D2':
             depD2 = value
             break;
-        case 'depE':
+        case 'nu_dep_inspec_E':
             depE = value
             break;
-        case 'depEliminados':
+        case 'nu_dep_eliminados':
             depEliminados = value
             break;
-        case 'depPositivos':
+        case 'nu_dep_positivo':
             depPositivos = value
             break;
-        case 'depTratamento':
+        case 'nu_encaminhados':
             depTratamento = value
             break;
     }
@@ -93,7 +94,9 @@ export const inserirValor = (value, dataField) => {
 export const checkForm = ( diaSemana ) => {
     //@TODO Exibir mensagens de erro mais significativas
 
-    if (microarea.trim().length !== 0 && 
+    console.log(microarea);
+
+    if (microarea.trim().length !== 0 && !isNaN(microarea) &&
         sublocalidade.trim().length !== 0 && 
         quarteiroes.trim().length !== 0 && !isNaN(quarteiroes) &&
         inspecionados.trim().length !== 0 && !isNaN(inspecionados) &&

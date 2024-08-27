@@ -1,6 +1,6 @@
 import { api } from "../../services/api";
 
-const parserToApiPattern = (obj, profissionalID) => {
+export const parserToApiPattern = (obj, profissionalID) => {
     return {
         profissionalID: profissionalID,
         resSemanalID: localStorage.getItem('editWeek'),

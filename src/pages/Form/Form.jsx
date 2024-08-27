@@ -4,41 +4,42 @@ import InputField from '../../components/InputField'
 import Button from '../../components/Button'
 import { useEffect, useState } from 'react';
 import { inserirValor, checkForm } from './utils.js';
-import { sendForm } from './sendForm.js';
+import { parserToApiPattern, sendForm } from './sendForm.js';
 import ProgressBar from '../../components/ProgressBar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../context/AuthContext.jsx'
 import { useNavigate } from 'react-router-dom';
+import { api } from '../../services/api.js';
 
 function DayForm( {id, className} ) {
   return (
     <Section id={id} className={`transition-all duration-500 space-y-4 ${className}`}>
       <div className='shadow-md p-2 py-1 pb-0 border-2 rounded-xl border-white lg:grid lg:grid-cols-2 lg:space-x-8 bg-white'>
-        <InputField id="sublocalidade" type='text' label='Sublocalidade: ' inputSize='lg' inputOnChange={(e) => inserirValor(e.target.value, 'sublocalidade')}/>
+        <InputField id="sub_local" type='text' label='Sublocalidade: ' inputSize='lg'/>
         <div className='lg:grid lg:grid-cols-2 lg:space-x-8'>
-          <InputField id="microarea" type='text' label='Microárea: ' inputSize='sm' inputOnChange={(e) => inserirValor(e.target.value, 'microarea')}/>        
-          <InputField id="quarteiroes" type='text' label='Quarteirões Trabalhados: '  inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'quarteiroes')}/>
+          <InputField id="micro_area" type='text' label='Microárea: ' inputSize='sm'/>        
+          <InputField id="quadras_trabalhadas" type='text' label='Quarteirões Trabalhados: '/>
         </div>
       </div>
       <div className='space-y-4 lg:space-y-0 lg:grid lg:grid-cols-4 lg:space-x-4'>
         <div className='shadow-md space-y-2 p-2 py-1 border-2 rounded-xl border-white bg-white'>
           <p>Total de imóveis:</p>
           <div>
-            <InputField id="inspecionados" type='text' label='Inspecionados: ' inputSize='sm' labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'inspecionados')}/>
-            <InputField id="fechados" type='text' label='Fechados: ' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'fechados')}/>
-            <InputField id="positivos" type='text' label='Positivos: ' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'positivos')}/>
+            <InputField id="imoveis_inspec" type='text' label='Inspecionados: ' inputSize='sm' labelPos="side"/>
+            <InputField id="imoveis_fechados" type='text' label='Fechados: ' inputSize="sm" labelPos="side"/>
+            <InputField id="imoveis_positivo" type='text' label='Positivos: ' inputSize="sm" labelPos="side"/>
           </div>   
         </div>
         <div className='shadow-md space-y-2 p-2 border-2 rounded-xl border-white bg-white'>
           <div>
-            <InputField id="checklists" type='text' label='Checklists implantados:' inputSize="sm" inputOnChange={(e) => inserirValor(e.target.value, 'checklists')}/>
+            <InputField id="checklist" type='text' label='Checklists implantados:' inputSize="sm"/>
           </div>
           <p>Monitoramento de adesão ao checklist:</p>
           <div>
-            <InputField id="checkSim" type='text' label='Sim' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'checkSim')}/>
-            <InputField id="checkNao" type='text' label='Não' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'checkNao')}/>
-            <InputField id="checkParcial" type='text' label='Parcial' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'checkParcial')}/>
+            <InputField id="monit_checklist_sim" type='text' label='Sim' inputSize="sm" labelPos="side"/>
+            <InputField id="monit_checklist_nao" type='text' label='Não' inputSize="sm" labelPos="side"/>
+            <InputField id="monit_checklist_parcial" type='text' label='Parcial' inputSize="sm" labelPos="side"/>
           </div>
         </div>
         <div className='shadow-md space-y-2 p-2 col-span-2 border-2 rounded-xl border-white bg-white'>
@@ -46,25 +47,25 @@ function DayForm( {id, className} ) {
           <div className='block'>
             <div className='grid grid-cols-3'>
               <div>
-                <InputField id="depA1" type='text' label='A1' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depA1')}/>
-                <InputField id="depA2" type='text' label='A2' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depA2')}/>
-                <InputField id="depB" type='text' label='B' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depB')}/>
+                <InputField id="nu_dep_inspec_A1" type='text' label='A1' inputSize="sm" labelPos="side"/>
+                <InputField id="nu_dep_inspec_A2" type='text' label='A2' inputSize="sm" labelPos="side"/>
+                <InputField id="nu_dep_inspec_B" type='text' label='B' inputSize="sm" labelPos="side"/>
               </div>
               <div> 
-                <InputField id="depC" type='text' label='C' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depC')}/>
-                <InputField id="depD1" type='text' label='D1' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depD1')}/>
-                <InputField id="depD2" type='text' label='D2' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depD2')}/>
+                <InputField id="nu_dep_inspec_C" type='text' label='C' inputSize="sm" labelPos="side"/>
+                <InputField id="nu_dep_inspec_D1" type='text' label='D1' inputSize="sm" labelPos="side"/>
+                <InputField id="nu_dep_inspec_D2" type='text' label='D2' inputSize="sm" labelPos="side"/>
               </div>
               <div>
-                <InputField id="depE" type='text' label='E' inputSize="sm" labelPos="side" inputOnChange={(e) => inserirValor(e.target.value, 'depE')}/>
+                <InputField id="nu_dep_inspec_E" type='text' label='E' inputSize="sm" labelPos="side"/>
               </div>
               
               
             </div>
             <div className='grid grid-cols-2'>
-              <InputField id="depEliminados" type='text' label='N° de depósitos eliminados:' inputSize='sm' inputOnChange={(e) => inserirValor(e.target.value, 'depEliminados')}/>
-              <InputField id="depPositivos" type='text' label='N° de depósitos positivos:' inputSize='sm' inputOnChange={(e) => inserirValor(e.target.value, 'depPositivos')}/>
-              <InputField id="depTratamento" className="col-span-2" type='text' label='N° de encaminhamentos p/ tratamento:' inputSize='sm' inputOnChange={(e) => inserirValor(e.target.value, 'depTratamento')}/>
+              <InputField id="nu_dep_eliminados" type='text' label='N° de depósitos eliminados:' inputSize='sm'/>
+              <InputField id="nu_dep_positivo" type='text' label='N° de depósitos positivos:' inputSize='sm'/>
+              <InputField id="nu_encaminhados" className="col-span-2" type='text' label='N° de encaminhamentos p/ tratamento:'/>
             </div>
           </div>
           
@@ -90,17 +91,27 @@ export default function PageForm() {
       //Troca a label do botão de avançar no fim do formulário
       document.querySelector('#button-advance').textContent = "Enviar";
     }
-
-    const dayForm = document.querySelector(`#${currentForm}`);
-    const dayJSONData = JSON.parse(localStorage.getItem(currentForm));
-
-    if (dayJSONData === null) 
-      return;
-
-    for (const input of dayForm.querySelectorAll('input')) {
-      input.value = dayJSONData[input.id];  
-    }
   });
+
+  useEffect(() => {
+    async function fetchData() {
+      try { 
+        const dayFormData = await api.get('/resumodiario/' + localStorage.getItem('editWeek'));
+
+        const dayForm = document.querySelector(`#${currentForm}`);
+
+        for (const input of dayForm.querySelectorAll('input')) {
+          input.value = dayFormData.data[progress][input.id];
+          input.dispatchEvent(new Event('change'));
+        }
+      } catch(err) {
+        toast.error('Não foi possível consultar dados do resumo diário');
+        console.error(err);
+      }
+    }
+
+    fetchData();
+  }, [progress])
 
   async function advanceForm() {
     const dayForm = document.querySelector(`#${currentForm}`);
